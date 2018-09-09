@@ -1,0 +1,56 @@
+	<th:block th:fragment="index-Ad" >
+		
+	<div id="index-ad" >
+		<div class="container" >
+			<div class="row">
+				<div class="col-sm-12 "  v-html="indexArticle.content">
+				</div>
+			</div>
+		</div>
+		<div style="background: #f0f8f3;">
+			<div class="container" >
+				<div class="row" style="padding-top:50px ;padding-bottom:20px;">
+					<div class="col-sm-12 text-center">
+						<img height="50" th:src="@{/static/templates/web/index/images/u-nz.png}" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<div style="display: flex;justify-content:space-between;flex-wrap:wrap;">
+							<div  v-for="att in attachments" style="padding-bottom:50px;">
+								<img :src="'/' + att.filePath"  height="200"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			new Vue({
+			el : '#index-ad',
+			data : {
+				indexArticle: {},
+				attachments:[]
+			},
+			created: function() {
+				var _this = this;
+				axios.get([[@{/article/api/urlTitle/index-ad}]], {
+				    params: {
+				     
+				    }
+				  }).then(function (response){
+					  _this.attachments = response.data.attachmentList;
+					  _this.indexArticle = response.data.article;
+				   
+				  }).catch(function (error) {
+				    console.log(error);
+				  }); 
+			}
+		})
+		/*]]>*/
+	</script>
+	
+</th:block>

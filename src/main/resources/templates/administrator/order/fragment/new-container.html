@@ -1,0 +1,271 @@
+<div class="container-fluid" th:fragment="content">
+	<script type="text/javascript" src="../../../static/plugin/ckeditor/ckeditor.js" th:src="@{/static/plugin/ckeditor/ckeditor.js}"></script>
+	<script src="../static/plugin/jquery/jquery.validate.min.js" type="text/javascript" th:src="@{/static/plugin/jquery/jquery.validate.min.js}" charset="utf-8"></script>
+	<script src="../static/plugin/jquery/additional-methods.min.js" type="text/javascript" th:src="@{/static/plugin/jquery/additional-methods.min.js}" charset="utf-8"></script>
+	<script th:src="@{/static/templates/web/index/js/jquery-ui.min.js}" src="js/jquery-ui.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../static/plugin/jquery/jquery-ui-1.9.2.custom.min.css" th:href="@{/static/plugin/jquery/jquery-ui-1.9.2.custom.min.css}"/>
+	
+	
+	<br/>
+		<div id="new-order">
+			<div class="row" v-if="companyName!=''">
+				<div class="col-sm-2 text-right">
+					<label></label>
+				</div>
+				<div class="col-sm-8">
+						<div >Company Name: <span v-html="companyName"></span></div>
+						<div style="color: red;">Discount: <span v-html="discount"></span></div>
+						<div >Phone: <span v-html="companyPhone"></span></div>
+						<div >Address: <span v-html="companyAddress"></span></div>
+				</div>
+			</div>
+			<div class="row"  >
+				<div class="col-sm-2 text-right">
+					<label></label>
+				</div>
+				<div class="col-sm-8" >
+					<table class="table">
+						<tr v-for="p in products">
+							<td>
+								<span v-html="p.mpn + ' # ' + p.productName"></span>
+							</td>
+							<td><span v-html="'$ '+ p.price1"></span></td>
+							<td><input  type="number"  style="width: 80px;" min="1" :value="p.qty" @change="updateQty(p.id,$event)" /></td>
+							<td><a href="javascipt:void(0);" @click="removeProduct(p.id)" >
+				 				 <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-remove fa-stack-1x"></i>
+									</span>
+				 				</a>
+				 			</td>
+						</tr>
+						<tr v-if="products.length>0">
+							<td></td>
+							<td>Total: $ <span v-html="totalprice"></span></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		
+			
+			<div class="row">
+				<div class="col-sm-2 text-right">
+					<label>Customer</label>
+				</div>
+				<div class="col-sm-8">
+					<div class="form-group input-group" >
+						<input class="form-control" autocomplete="off" id="companyName" placeholder="Company Name" v-model="companyName" @keypress="getCustomer()" type="text" name="companyName"  />
+						<input type="hidden" v-model="customerId" name="customerId"  />
+						<a href="javascipt:void(0);" onclick="newOpen()" >
+				 				 <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-plus fa-stack-1x"></i>
+									</span>
+				 				
+				 				</a>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-2 text-right">
+					<label>Product</label>
+				</div>
+				<div class="col-sm-8">
+					<div class="form-group input-group" >
+						<input class="form-control" autocomplete="off"   id="productName" v-model="searchQ"  placeholder="Product" type="text" name="productName"  @keypress="getProduct()"/>
+					</div>
+				</div>
+			</div>
+			<div class="row" >
+				<div class="col-sm-2 text-right">
+					<label>Admin msg</label>
+				</div>
+				<div class="col-sm-8">
+						<textarea class="form-control" rows="3" cols="" v-model="adminMsg"></textarea>
+				</div>
+			</div>
+			<br/>
+			<div class="row">
+				<div class="col-sm-2 col-sm-offset-2">
+					<div class="form-group input-group">
+						<button class="btn btn-primary" @click="saveOrder()">Submit</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		new Vue({
+			el : '#new-order',
+			data : {
+				companyName:'',
+				companyPhone:'',
+				companyAddress:'',
+				discount:'',
+				customerId:'',
+				adminMsg:'',
+				
+				products:[],
+				productId:'',
+				
+				searchQ:'',
+				
+				totalPrice: 0,
+				
+			},
+			created() {
+				var _this = this;
+				
+			},
+			computed : {
+				totalprice :function(){
+					var total = 0;
+					var _this = this;
+					if(_this.products.length>0){
+						_this.products.map((item) => {total += item.qty*item.price1})
+					}
+		            return (total*_this.discount).toFixed(2);
+				}
+			},
+			methods:{
+				getCustomer : function(){
+					var _this = this;
+					axios.get([[@{/management/customer/q}]], {
+					    params: {
+					    	q:_this.companyName,
+							size:10,
+					    }
+					  })
+					  .then(function (response){
+					   		var customerList = response.data;
+							
+							var availableTags = new Array();
+							for(var i=0;i<customerList.length;i++){ 
+								if(customerList[i].companyName !=null){
+									availableTags.push(customerList[i].companyName);
+								}
+						    }
+							$("#companyName" ).autocomplete({
+								source: availableTags,
+								select: function(event, ui){
+									for(var i=0;i<customerList.length;i++){  
+										if(customerList[i].companyName==ui.item.value){
+											_this.customerId = customerList[i].id;
+											
+											_this.companyName = customerList[i].companyName;
+											_this.companyPhone = customerList[i].phone;
+											_this.companyAddress = customerList[i].address;
+											_this.discount = customerList[i].discount;
+											break;
+										}
+								    }
+								}
+							});
+					   	})
+					  .catch(function (error) {
+					    	console.log(error);
+					  });
+				},
+
+				getProduct : function(){
+					var _this = this;
+					axios.get([[@{/api/management/product/q}]], {
+						params: {
+							q:_this.searchQ,
+							size:10,
+					    }
+					  })
+					  .then(function (response){
+						  var productList = response.data.content;
+						  var availableTags = new Array();
+							for(var i=0;i<productList.length;i++){ 
+								if(productList[i].productName !=null){
+									availableTags.push(productList[i].mpn + ' # ' + productList[i].productName);
+								}
+						    }
+							$("#productName" ).autocomplete({
+								source: availableTags,
+								select: function(event, ui){
+									for(var i=0;i<productList.length;i++){  
+										if((productList[i].mpn + ' # ' + productList[i].productName)==ui.item.value){
+											
+											productList[i].qty = 1;
+											_this.products.push(productList[i]);
+											ui.item.value = "";
+											break;
+										}
+								    }
+								}
+							});
+					  })
+					  .catch(function (error) {
+					     console.log(error);
+					  });  
+				},
+				//删除产品
+				removeProduct : function(productId){
+					var _this = this;
+					for(var i=0;i<_this.products.length;i++){  
+						if(_this.products[i].id==productId){
+							_this.products.splice(i,1);
+						}
+					}
+				},
+				//更新数量
+				updateQty : function(productId,event){
+					var _this = this;
+					for(var i=0;i<_this.products.length;i++){  
+						if(_this.products[i].id==productId){
+							_this.products[i].qty = event.currentTarget.value;
+						}
+					}
+				},
+				//保存订单
+				saveOrder : function(){
+					var _this = this;
+					if(_this.customerId==''){
+						return;
+					}
+					if(_this.products.length==0){
+						return;
+					}
+					var paramProduct = [];
+					for(var i=0;i<_this.products.length;i++){  
+						
+						paramProduct.push(_this.products[i].id + ":" + _this.products[i].qty);
+					}
+					
+					var params = new URLSearchParams();
+					params.append('customerId',_this.customerId);			
+					params.append('products',paramProduct);
+					params.append('adminMsg',_this.adminMsg);
+					
+					axios.post([[@{/management/order/add/save}]], params).then(function(response){
+					     window.location.reload();
+					  })
+					  .catch(function (error) {
+					     console.log(error);
+					  }); 
+					
+				}
+			}
+		})
+		/**
+		新增customer
+		**/
+		function newOpen(){
+			window.open([[@{/management/customer/new}]],'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+		}
+		  
+		/*]]>*/	
+	</script>
+	<style>
+		.input-group{
+			width: 100%;
+		}
+	</style>
+</div>

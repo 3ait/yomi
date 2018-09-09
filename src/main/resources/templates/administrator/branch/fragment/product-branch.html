@@ -1,0 +1,72 @@
+<div  th:fragment="content(productId)">
+    
+    <div th:id="|product-branch_${productId}|">
+    	<div  v-for="pb in productBranch" >
+    		<span>{{pb.branchName}}</span>&nbsp;:&nbsp;
+	    	<a  class="edit-name" th:attr="data-url=|@{/management/branchproduct/update/colomn/}|" v-bind:data-pk="pb.id" data-name="stock"  href="#"  >{{pb.stock}}</a>
+    	</div>
+    	<!-- 手工加库存 -->
+<!--     	<a class="branches" data-type="select" th:attr="data-pk=${productId}, data-url=|@{/management/branch/api/new/stock}|" data-name="branchId"  href="#"  >+</a> -->
+    </div>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		    
+		
+			new Vue({
+			el : '#product-branch_' + [[${productId}]],
+			data : {
+				productBranch:[],
+			},
+			created: function() {
+				var _this = this;
+				//获取所有branch
+				/* axios.get([[|@{/management/branch/api/all}|]] , {
+				    params: {
+				     
+				    }
+				  }).then(function (response){
+					  var data = response.data;
+					  var branches = new Array();
+					  for(var i=0;i<response.data.length;i++){
+						  var opt = {
+								  'value':data[i].id, 'text':data[i].branchName
+						  };
+						  branches.push(opt);
+					  }
+					  $('.branches').editable({
+					        value: -1,    
+					        source: branches,
+					    });
+				   
+				  }).catch(function (error) {
+				  	  console.log(error);
+				  });  */
+				
+				//获取所有产品branch
+				axios.get([[|@{/management/branch/api/stocks/}${productId}|]] , {
+				    params: {
+				     
+				    }
+				  }).then(function (response){
+					  _this.productBranch = response.data;
+				   
+				  }).catch(function (error) {
+				  	  console.log(error);
+				  }); 
+				
+				
+			},
+			methods:{
+				
+				updateNum : function(id,event){
+					var _this = this;
+				}
+			}
+		})
+		
+			
+		/*]]>*/	
+	</script>
+</div>

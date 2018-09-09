@@ -1,0 +1,140 @@
+
+<!-- content -->
+
+<div th:fragment="content" >
+	<div id="brandList">
+	
+	<div   v-for="article in articleData.content" >
+	
+		<div class="container-fluid" style="padding: 0;margin: 0;">
+			<!-- <div class="row" >
+				<div class="col-sm-12 col-xs-12 text-center" >
+					<img :alt="article.title" :src="'/'+article.defaultSrc">
+				</div>
+			</div> -->
+			<div class="row" >
+				<div class="col-sm-12 col-xs-12" v-html="article.content">
+				</div>
+			</div>
+			<div class="row" style="border-bottom: 1px solid #357363;">
+				<br/>
+			</div>
+		</div>
+		<div class="container" >
+			<div class="row" >
+				<div class="row">
+				<div class="col-sm-2 col-xs-6 product-list" v-for="(item, index) in productData.content" style="">
+					<a :href="'/product/'+ item.id" target="_blank" @click="addHistory(item.id,item.productName,item.productNameAlias,item.defaultSrc,item.price1)" >
+						<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive">
+					</a>
+				      <div class="caption" >
+				        <p>
+							<span v-if="item.price2>0" class="price-color" >NZD {{item.price2}}&nbsp;</span>
+							<span  :class="item.price2>0 ? 'price-del':'price-color'">NZD {{item.price1}}</span> 
+							
+				        </p>
+			        	<span style="color: grey;font-size: 12px;">{{item.productName}}</span>
+			        	
+				        <p style="margin-top: 10px;">
+							<span class="label label-danger">{{item.label}}</span>
+				        </p>
+				      </div>
+				</div>
+			</div> 
+				
+			</div>
+		</div>
+	</div>
+	</div>
+	<br/>
+	<style>
+		@media (min-width: 768px){
+					.product-list {
+						height: 280px;
+					}
+				}
+		@media (max-width: 768px){
+			.product-list {
+				height: 240px;
+			}
+		}
+		.product-list {
+			margin-top: 20px;
+			padding: 5px 15px;
+			transition: all .5s;
+			border: 1px solid #eee;
+		}
+		
+		.product-list:HOVER {
+			box-shadow: -3px 0 5px #9FA8AB, 0 -3px 5px #9FA8AB, 0 3px 5px #9FA8AB,3px 0 5px #9FA8AB;
+		}
+		.price-del{
+			font-size:12px;
+			text-decoration: line-through;
+		}
+		.price-color{
+			font-size:14px;
+			color: #e4393c;
+		}
+	</style>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+			new Vue({
+			el : '#brandList',
+			data : {
+				articleData:{},
+				productData:{},
+			},
+			components:{
+			},
+			created: function() {
+				var _this = this;
+				//获取品牌文章
+				axios.get([[@{/api/brand/}]] + [[${productAttrValueId}]], {
+					params: {
+				     page:0,
+				     size:60,
+				     sortBy:'position',
+				     sort:'asc',
+				    }
+				  })
+				  .then(function (response){
+					  _this.articleData = response.data;
+					  
+				  }).catch(function (error) {
+				    console.log(error);
+				  }); 
+				
+				//获取产品
+				axios.get([[@{/api/product/attrvalue/}]] + [[${productAttrValueId}]], {
+					params: {
+					     page:0,
+					     size:60,
+					     sortBy:'position',
+					     sort:'asc',
+				    }
+				  })
+				  .then(function (response){
+					  _this.productData = response.data;
+					  
+					  for(var i=0;i< _this.productData.content.length;i++){
+						  if (!isNaN(_this.productData.content[i].price1)) {
+							  _this.productData.content[i].price1 = _this.productData.content[i].price1.toFixed(2);
+					        }
+						  if (!isNaN(_this.productData.content[i].price2)) {
+							  _this.productData.content[i].price2 = _this.productData.content[i].price2.toFixed(2);
+					        }
+						  
+					  }
+					  
+				  }).catch(function (error) {
+				      console.log(error);
+				  }); 
+			},
+			
+		});
+	           
+		/*]]>*/
+	</script>
+</div>
+

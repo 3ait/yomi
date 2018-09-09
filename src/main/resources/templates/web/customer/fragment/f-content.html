@@ -1,0 +1,234 @@
+	<!-- content -->
+	
+	<div th:fragment="content" class="container" >
+		<div class="row"  >
+			<!-- start registration -->
+			<div class="registration col-sm-6">
+				<div class="registration_left">
+					<h2>
+						新用户？ <span> 创建账户 </span>
+					</h2>
+					
+					<div class="registration_form">
+						<!-- Form -->
+						<form id="registration_form" th:action="@{/customer/register}" method="post" >
+							<div>
+								<label> 
+									<input placeholder="登陆邮箱" type="email" name="customer.email"   />
+								</label>
+							</div>
+							
+							<div>
+								<label> 
+									<input placeholder="密码：" id="registerPassword" name="customer.password" type="password"   />
+								</label>
+							</div>
+							<div>
+								<label> 
+									<input placeholder="密码确认：" name="password1" type="password"    />
+								</label>
+							</div>
+							
+							<div>
+								<label> 
+								<input placeholder="姓名" type="text" name="customer.companyName"   />
+								</label>
+							</div>
+							<div>
+								<label> 
+								<input placeholder="身份证号 (跨境需核对身份证号，请正确填写。)" type="text" name="customer.identity"   />
+								</label>
+							</div>
+							<div>
+								<label> <input placeholder="电话" type="text" name="customer.phone" />
+								</label>
+							</div>
+							
+							
+							
+							<div>
+								<label> 
+									<select name="branchId">
+										<option th:each="branch: ${branchList}" th:value="${branch.id}" th:text="${branch.branchName}"></option>
+									</select>
+								</label>
+							</div>
+						
+							
+							
+							<div class="sky-form">
+								<label class="checkbox">
+									<input type="checkbox" name="loginAgree" checked="checked" />
+									<i></i>我同意  &nbsp;
+									<a class="terms" href="#">服务条款</a> </label>
+							</div>
+							<div>
+								<input type="submit" value="创建账户" />
+							</div>
+							
+						</form>
+						<!-- /Form -->
+					</div>
+				</div>
+				
+			</div>
+			<div class=" registration col-sm-6" >
+				<div class="registration_left">
+					<h2>登录</h2>
+					
+					<div class="registration_form" >
+						<!-- Form -->
+						<form name="login_form" th:action="@{/customer/login}" method="post"  onsubmit="saveEmailAndPass()" >
+							<div>
+								<label> 
+									<input id="loginEmail"  name="username"  placeholder="手机/电子邮件" maxlength="50" type="text" required="required"  />
+								</label>
+							</div>
+							<div>
+								<label> 
+									<input id="loginPassword" name="password"  placeholder="密码" type="password" required="required"  />
+								</label>
+							</div>
+							<div>
+								<span style="color: red;" th:text="${msg}">message</span>
+							</div>
+							<div>
+								<input  type="submit" value="登录"  />
+							</div>
+							<div class="forget">
+								<a th:href="@{/forgot/password}" target="_blank">忘记密码</a>
+							</div>
+						</form>
+						<!-- /Form -->
+					</div>
+				</div>
+			</div>
+			<!-- end registration -->
+		</div>
+		<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			  
+			$("#loginEmail").val(localStorage.getItem("email"));
+			$("#loginPassword").val(localStorage.getItem("password"));
+			 
+			
+			function saveEmailAndPass(){
+					localStorage.setItem("email", $("#loginEmail").val())
+					localStorage.setItem("password", $("#loginPassword").val())
+			}
+			    
+			
+			/*]]>*/	
+		</script>	
+		
+		<script src="../static/plugin/jquery/jquery.validate.min.js" type="text/javascript" th:src="@{/static/plugin/jquery/jquery.validate.min.js}" charset="utf-8"></script>
+		<script src="../static/plugin/jquery/additional-methods.min.js" type="text/javascript" th:src="@{/static/plugin/jquery/additional-methods.min.js}" charset="utf-8"></script>
+	
+				<script type="text/javascript" th:inline="javascript">
+					/*<![CDATA[*/
+						
+						//登录表单
+						$( "#registration_form" ).validate( {
+							rules: {
+								
+								'customer.email': {
+									required: true,
+									email: true,
+									minlength: 3,
+									maxlength: 50,
+									remote:{
+										async : false,
+										url: [[@{/customer/email/check}]],
+									}
+								},
+								
+								'customer.companyName': {
+									required: true,
+									minlength: 2,
+									maxlength: 50,
+								},
+								
+								'customer.phone': {
+									required: true,
+									minlength: 1,
+									maxlength: 50,
+								},
+								
+								'customer.password': {
+									required: true,
+									minlength: 1,
+									maxlength: 50,
+								},
+								'password1': {
+									required: true,
+									minlength: 1,
+									maxlength: 50,
+									equalTo: "#registerPassword"
+								},
+								
+								'customer.identity': {
+									required: true,
+									minlength: 1,
+									maxlength: 50,
+								},
+								loginAgree: "required"
+								
+							},
+							messages: {
+								
+								/* loginPassword:{
+									required: "Please provide a password",
+									minlength: "Your password must be at least 2 characters long"
+								} */
+								'customer.email':{
+									remote: "email existed, Please login.",
+								}
+								
+							},
+							
+							errorElement: "em",
+							errorPlacement: function ( error, element ) {
+								error.insertAfter(element.parent());
+							},
+							
+							success: function ( label, element ) {
+								$(element).addClass("border-green");
+							},
+							highlight: function ( element, errorClass, validClass ) {
+								
+								$(element).addClass("border-red").removeClass("border-green");
+								
+							},
+							unhighlight: function ( element, errorClass, validClass ) {
+								$(element).addClass("border-green").removeClass("border-red");
+								
+							}
+						} );
+						
+					/*]]>*/	
+				</script>
+				
+				<style>
+					.border-red{
+						border: red solid 1px !important;
+					}
+					.border-green{
+						border: green solid 1px !important;
+					}
+					
+					select{
+						padding: 8px;
+						display: block;
+						width: 100%;
+						outline: none;
+						font-family: 'Open Sans', sans-serif;
+						font-size: 0.8925em;
+						color: #333333;
+						-webkit-appearance: none;
+						background: #FFFFFF;
+						border: 1px solid rgb(231, 231, 231);
+						font-weight: normal;
+					}
+				</style>
+	</div>
+	

@@ -1,0 +1,153 @@
+<div class="container-fluid "  th:fragment="content">
+
+    <th:block th:replace="/administrator/content/fragment/search :: search('management/content')"></th:block>
+    <div class="row">
+        <div class="col-lg-12">
+        	<table class="table table-hover  table-striped">
+				 	<thead>
+				 		<tr>
+				 			<th></th>
+				 			<th>Img</th>
+				 			<th>ID</th>
+				 			<th>Category</th>
+				 			<th onclick="colomnSort('title')" class="sort-colomn">Title</th>
+				 			<th>UrlTitle</th>
+				 			<th onclick="colomnSort('status')" class="sort-colomn">Status</th>
+				 			<th>Keywords</th>
+				 			<th>ClickNum</th>
+				 			<th onclick="colomnSort('position')" class="sort-colomn">Position</th>
+				 			<th>CreateTime</th>
+				 			<th>
+				 				<a href="#" th:href="@{/management/content/new}" target="_blank">
+				 				 <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-plus fa-stack-1x"></i>
+									</span>
+				 				
+				 				</a>
+				 			</th>
+				 		</tr>
+				 		
+				 	</thead>
+				 		<tr th:each="article : ${articleList}" th:id="|tr_${article.id}|" >
+				 			<td >
+				 				<input type="checkbox" name="checkbox_del"  th:value="${article.id}" />
+				 			</td>
+				 			
+				 			<td style="width:100px;">
+				 				<img alt="" th:if="${article.defaultSrc!=null}" class="img-responsive img-thumbnail" src="#" th:src="|/${article.defaultSrc}|" />
+				 			</td>
+				 			<td th:text="${article.id}">ID</td>
+				 			<td th:text="${article.menu==null}?'':${article.menu.name}">CategoryName</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${article.id}, data-url=|@{/management/content/update/colomn/}|" data-name="title"  href="#"  class="edit-name"  th:text="${article.title}" >title</a>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${article.id}, data-url=|@{/management/content/update/colomn/}|" data-name="urlTitle"  href="#"  class="edit-name"  th:text="${article.urlTitle}" >urlTitle</a>
+				 			</td>
+				 			<td>
+					 			<a class="status" data-type="select" th:attr="data-pk=${article.id}, data-url=|@{/management/content/update/colomn/}|" data-name="status"  href="#"    th:text="${article.status==0?'Off line': 'On line'}" >status</a>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${article.id}, data-url=|@{/management/content/update/colomn/}|" data-name="keywords"  href="#"  class="edit-name"  th:text="${article.keywords}" >keywords</a>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${article.id}, data-url=|@{/management/content/update/colomn/}|" data-name="clickNum"  href="#"  class="edit-name"  th:text="${article.clickNum}" >clickNum</a>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${article.id}, data-url=|@{/management/content/update/colomn/}|" data-name="position"  href="#"  class="edit-name"  th:text="${article.position}" >position</a>
+				 			</td>
+				 			<td >
+				 				<span th:text="${#dates.format(article.createTime, 'HH:mm dd/MM/yyyy')}">createTime</span>
+				 			</td>
+				 			<td>
+				 				<a href="#" th:href="|@{/management/content/edit/}${article.id}|" target="_blank">
+				 					 <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-edit fa-stack-1x"></i>
+									</span>
+				 				</a>
+				 				<a href="javascript:void(0)" th:onclick="|copyContent(${article.id})|" title="Dupilcate" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-copy fa-stack-1x"></i>
+									</span></a>
+				 			</td>
+				 		</tr>
+				 		
+				 		<tr >
+				 			<td colspan="3">
+				 				<a href="#" aria-label="Delete" th:onclick="|delArticle()|" >
+									  <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-remove fa-stack-1x"></i>
+									</span>
+								</a>
+								
+				 			</td>
+				 			<td colspan="12" align="right">
+				 				<div th:replace="/administrator/fragment/f-page :: page"></div>
+				 			</td>
+				 		</tr>
+				</table>
+        </div>
+    </div>
+    <style>
+    	.sort-colomn{
+    		cursor: pointer;
+    		color: #c05a22;
+    		
+    	}
+    	
+    </style>
+    <script src="static/plugin/editable/js/bootstrap-editable.min.js"
+		type="text/javascript"
+		th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           //
+			$('.edit-name').editable();
+		
+			$('.status').editable({
+		        value: -1,    
+		        source: [
+		              {value: -1, text: '--Select--'},
+		              {value: 0, text: 'Off line'},
+		              {value: 1, text: 'On line'},
+		           ]
+		    });
+			
+			function delArticle(){
+				if(confirm("Confirm delete?")){
+					$("input[name='checkbox_del']").each(function(index,value){
+						if($(value).prop("checked")){
+							$.get([[@{/management/content/del/}]]+$(value).val());
+							$("#tr_" + $(value).val()).fadeOut('slow');
+						}
+					});
+					
+				}
+			}
+			/**
+			Duplicate 
+			**/
+			function copyContent(articleId){
+				if(!confirm("Confirm ?")){
+					return;
+				}
+				$.ajax({
+					url:[[@{/management/content/duplicate/}]] + articleId ,
+					method: "GET",
+					data:{
+					}
+				}).done(function(ret){
+					window.location.reload();
+				});
+			}
+		
+		/*]]>*/	
+	</script>
+</div>

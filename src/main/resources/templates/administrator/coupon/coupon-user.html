@@ -1,0 +1,42 @@
+<div class="container-fluid" th:fragment="content">
+	<th:block th:replace="/administrator/fragment/f-js-css :: public-css-js"></th:block>
+	
+	<table class="table">
+		<tr>
+			<th>CustomerId</th>
+			<th>Name</th>
+			<th>Phone</th>
+			<th>Create Time</th>
+		</tr>
+		<tr th:each="couponCustomer:${couponCustomerList}">
+			<th>
+				<span th:text="${couponCustomer.customer.id}"></span>
+			</th>
+			<th>
+				<span th:text="${couponCustomer.customer.name}"></span>
+			</th>
+			<th>
+				<span th:text="${couponCustomer.customer.phone}"></span>
+			</th>
+			<th>
+				<span th:text="${couponCustomer.customer.createTime}"></span>
+			</th>
+		</tr>
+	</table>
+	
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           
+		
+		
+		
+		/*]]>*/	
+	</script>
+	
+	
+	<style>
+		.input-group{
+			width: 100%;
+		}
+	</style>
+</div>

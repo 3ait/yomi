@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title><span th:replace="/administrator/fragment/f-company-name :: companyname"></span> | Customer</title>
+        <th:block th:replace="/administrator/fragment/f-js-css :: public-css-js"></th:block>
+         <script src="#" type="text/javascript" th:src="@{/static/plugin/vue/vue.js}" charset="utf-8"></script>
+		<script src="#" type="text/javascript" th:src="@{/static/plugin/vue/axios.min.js}" charset="utf-8"></script>
+		<script src="#" type="text/javascript" th:src="@{/static/plugin/vue/vue-form.js}" charset="utf-8"></script>
+        
+    </head>
+    
+    <body>
+	    	<!-- content -->
+          	<th:block th:replace="/administrator/order/fragment/new-container :: content"></th:block>
+          	
+    </body>
+</html>

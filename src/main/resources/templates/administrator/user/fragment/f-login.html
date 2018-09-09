@@ -1,0 +1,118 @@
+	<th:block th:fragment="login">
+			<div class="row">
+					<div class="col-sm-6" >
+						<div class="orange-left">
+							<h2 ><span class="dark"></span><span class="orange"> Administrator</span></h2>
+						</div>
+					</div>
+				</div>
+				<br/>
+				<br/>
+				<br/>
+				
+				<div id="login-div" class="row ">
+					<div class="col-sm-6" >
+						<form id="loginForm" class="form-horizontal" th:action="@{/login}"  method="post"  onsubmit="saveEmailAndPass()">
+						  <div class="form-group  ">
+						    <label for="loginEmail" class="col-sm-2 control-label">Email</label>
+						    <div class="input-group " >
+						      <span class="input-group-addon"><span class="glyphicon glyphicon-envelope" ></span></span>
+						      <input type="email" class="form-control " id="loginEmail" maxlength="50" name="username" placeholder="Email" />
+						    </div>
+						  </div>
+						 
+						  <div class="form-group">
+						    <label for="loginPassword" class="col-sm-2 control-label">Password</label>
+						    <div class="input-group" >
+						      <span class="input-group-addon"><span class="glyphicon glyphicon-lock" ></span></span>
+						      <input type="password" class="form-control" id="loginPassword" maxlength="20" name="password"  placeholder="Password" />
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="loginPassword" class="col-sm-2 control-label"></label>
+						    <div class="input-group" >
+						      <button type="submit" class="btn btn-primary" >&nbsp;&nbsp;Login&nbsp;&nbsp;</button>
+						    </div>
+						  </div>
+						 </form>
+					</div>
+				</div>
+				
+		
+				<script type="text/javascript" th:inline="javascript">
+					/*<![CDATA[*/
+						
+				    	$("#loginEmail").val(localStorage.getItem("adminLoginEmail"));
+						$("#loginPassword").val(localStorage.getItem("adminLoginPassword"));
+						 
+						
+						function saveEmailAndPass(){
+								localStorage.setItem("adminLoginEmail", $("#loginEmail").val())
+								localStorage.setItem("adminLoginPassword", $("#loginPassword").val())
+						}
+			    
+					           
+						//登录表单
+						$( "#loginForm" ).validate( {
+							rules: {
+								
+								loginEmail: {
+									required: true,
+									email: true,
+									minlength: 3,
+									maxlength: 50,
+								},
+								loginPassword: {
+									required: true,
+									minlength: 5
+								},
+								loginAgree: "required"
+							},
+							messages: {
+								
+								/* loginPassword:{
+									required: "Please provide a password",
+									minlength: "Your password must be at least 2 characters long"
+								} */
+								
+							},
+							
+							errorElement: "em",
+							errorPlacement: function ( error, element ) {
+								// Add the `help-block` class to the error element
+								error.addClass( "help-block col-sm-offset-2" );
+
+								// Add `has-feedback` class to the parent div.form-group
+								// in order to add icons to inputs
+								element.parents( ".input-group" ).addClass( "has-feedback" );
+
+								if ( element.prop( "type" ) === "checkbox" ) {
+									error.insertAfter( element.parent( "label" ) );
+								} else {
+									error.insertAfter( element.parents( ".input-group" ) );
+								}
+
+								// Add the span element, if doesn't exists, and apply the icon classes to it.
+								if ( !element.next( "span" )[ 0 ] ) {
+									$( "<span class='glyphicon glyphicon-remove form-control-feedback'></span>" ).insertAfter( element );
+								}
+							},
+							success: function ( label, element ) {
+								// Add the span element, if doesn't exists, and apply the icon classes to it.
+								if ( !$( element ).next( "span" )[ 0 ] ) {
+									$( "<span class='glyphicon glyphicon-ok form-control-feedback'></span>" ).insertAfter( $( element ) );
+								}
+							},
+							highlight: function ( element, errorClass, validClass ) {
+								$( element ).parents( ".input-group" ).addClass( "has-error" ).removeClass( "has-success" );
+								$( element ).next( "span" ).addClass( "glyphicon-remove" ).removeClass( "glyphicon-ok" );
+							},
+							unhighlight: function ( element, errorClass, validClass ) {
+								$( element ).parents( ".input-group" ).addClass( "has-success" ).removeClass( "has-error" );
+								$( element ).next( "span" ).addClass( "glyphicon-ok" ).removeClass( "glyphicon-remove" );
+							}
+						} );
+						
+					/*]]>*/	
+				</script>
+</th:block>

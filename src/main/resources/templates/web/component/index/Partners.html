@@ -1,0 +1,44 @@
+	<th:block th:fragment="partner" >
+		
+	<div id="partner" >
+		<div class="container" >
+			<div class="row">
+				<div class="col-sm-12 " style="padding: 0;">
+				<h3 style="color: #357363;">合作伙伴</h3>
+				<hr style="background: #357363;height: 2px;border: none;"/>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12 "  v-html="partnerArticle.content">
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			new Vue({
+			el : '#partner',
+			data : {
+				partnerArticle : '',
+				attachments:[]
+			},
+			created: function() {
+				var _this = this;
+				axios.get([[@{/article/api/urlTitle/partner}]], {
+				    params: {
+				     
+				    }
+				  }).then(function (response){
+					  _this.partnerArticle = response.data.article;
+				   
+				  }).catch(function (error) {
+				    console.log(error);
+				  }); 
+			}
+		})
+		/*]]>*/
+	</script>
+	
+</th:block>

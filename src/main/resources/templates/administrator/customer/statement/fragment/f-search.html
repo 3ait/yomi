@@ -1,0 +1,44 @@
+	<th:block th:fragment="search(formAction)">
+		
+		<!-- row 查询表单 -->
+		<div class="row">
+			<div class="col-sm-12">
+				<form  class="form-inline" id="searchForm" th:action="|@{/}${formAction}|" >
+					
+					<div class="form-group">
+					     <label for="dateFrom">From:</label>
+					      <input type="date" id="dateFrom" name="dateFrom" th:value="${searchForm.dateFrom}" class="form-control" />
+				  	</div>
+				  	&nbsp;
+					<div class="form-group">
+					     <label for="dateTo">To:</label>
+					      <input type="date" id="dateTo" name="dateTo"  th:value="${searchForm.dateTo}" class="form-control" />
+				  	</div>
+				  	&nbsp;
+					<div class="form-group">
+					     <label for="exampleInputName2"></label>
+					     <input type="submit" value="Search" class="form-control btn-primary" />
+				  	</div>
+				  </form>
+			</div>
+		</div>
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+	      /**
+			Sort 排序
+			**/
+			function colomnSort(colomnName){
+				//获取search表单排序字段及赋值
+				$("#sortBy").val(colomnName);
+				if($("#sort").val()=="" || $("#sort").val()=="DESC"){
+					$("#sort").val("ASC");
+				}else{
+					$("#sort").val("DESC");
+				}
+				document.getElementById("searchForm").submit();
+			}
+		           
+		/*]]>*/	
+	</script>
+</th:block>

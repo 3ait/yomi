@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        
+        <th:block th:replace="/web/fragment/f-js-css :: public-css-js"></th:block>
+		
+    </head>
+
+
+<body>
+
+	<header th:replace="/web/fragment/f-header :: header"></header>
+	
+	<div th:replace="/web/customer/fragment/info-content :: content"></div>
+	
+	<footer  id="footer-div"  ></footer>
+	
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+    	$(document).ready(function(){
+			$("#footer-div").load([[@{/footer/nav}]]);
+		});
+    	$.get([[@{/log/pv/save}]]);
+	/*]]>*/	
+	</script>
+</body>
+</html>

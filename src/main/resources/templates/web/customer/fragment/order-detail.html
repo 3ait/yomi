@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        
+        <td:block th:replace="/web/fragment/f-js-css :: public-css-js"></th:block>
+		
+    </head>
+
+
+<body>
+
+<div class="container-fluid "  th:fragment="content">
+	
+    <div class="row">
+        <div class="col-lg-12">
+        	<table class="table   table-striped">
+				 	
+				 		<tr >
+				 			<td class="col-sm-2 text-right">订单号</td>
+				 			<td >
+				 				<span th:text="${order.id}">ID</span>
+				 			</td>
+				 		</tr>
+				 		<tr >
+				 			<td ></td>
+				 			<td>
+				 				<table class="table">
+									<tr th:each="orderItem : ${order.orderItems}">
+										<td class="col-sm-1">
+											<a target="_blank" th:href="|@{/product/}${orderItem.product.id}|">
+											<img th:src="|/${orderItem.productDefaultSrc}|" class="img-responsive" style="max-width: 50px;"/>
+											</a>
+										</td>
+										<td  class="col-sm-3">
+											<a target="_blank" th:href="|@{/product/}${orderItem.product.id}|">
+											<span th:text="${orderItem.productNameCn}"></span>
+											</a>	
+										</td>
+										<td  class="col-sm-1">$<span th:text="${orderItem.productPrice}"></span></td>
+										<td  class="col-sm-1">*<span th:text="${orderItem.num}"></span></td>
+										<td></td>
+									</tr>
+								</table>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<td class="text-right">
+				 			<span class="label label-primary">收件人</span></td>
+				 			<td >
+				 				<span th:text="${order.toCustomerName}" >toCustomerName</span>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<td class="text-right">
+				 			<span class="label label-primary">电话</span></td>
+				 			<td >
+				 				<span th:text="${order.toPhone}" >toPhone</span>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<td class="text-right">
+				 			<span class="label label-primary">省 市 区</span></td>
+				 			<td >
+				 				<span th:text="${order.toProvince}" >toProvince</span> &nbsp;
+				 				<span th:text="${order.toCity}" >toCity</span> &nbsp;
+				 				<span th:text="${order.toDistrict}" >toDistrict</span>
+				 			</td>
+				 		</tr>
+				 		
+				 		<tr>
+				 			<td class="text-right">
+				 			<span class="label label-primary">地址</span></td>
+				 			<td >
+				 				<span th:text="${order.toShippingAddress}" >toShippingAddress</span>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<td class="text-right">
+				 			<span class="label label-primary">客户留言</span></td>
+				 			<td data-type="textarea"  th:text="${order.customerMsg}">Customer Msg</td>
+				 		</tr>
+				 		<tr>
+				 			<td class="text-right">快递号</td>
+				 			
+				 			<td >
+				 				<span th:text="${order.trackingNum}" >trackingNum</span>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<td class="text-right">金额</td>
+				 			
+				 			<td >
+				 				<span th:text="${order.totalProductPrice}" >totalProductPrice</span>
+				 			</td>
+				 			
+				 		</tr>
+				 		<tr>
+				 			<td class="text-right">运费</td>
+				 			
+				 			<td >
+				 				<span th:text="${order.totalFreight}" >totalFreight</span>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<td class="text-right">状态</td>
+				 			
+				 			<td >
+				 				 <td:block th:replace="/web/customer/fragment/order-status :: content(${order})"></th:block>
+				 			</td>
+				 			
+				 		</tr>
+				 		<tr>
+				 			<td class="text-right">支付状态</td>
+				 			
+				 			<td >
+				 				<span  th:text="${order.isPaid!=2?'未支付': '已支付'}" >isPaid</span>
+				 			</td>
+				 			
+				 		</tr>
+				 		
+				 		<tr>
+				 			<td class="text-right">系统信息</td>
+				 			
+				 			<td >
+				 				<span  th:text="${order.adminMsg}" >adminMsg</span>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<td class="text-right">订单时间</td>
+				 			<td>
+				 				<span th:text="${#dates.format(order.createTime, 'HH:mm dd/MM/yyyy')}" ></span><br/>
+				 			</td>
+				 		</tr>
+				 		
+				</table>
+        </div>
+    </div>
+    
+    
+     <script src="static/plugin/editable/js/bootstrap-editable.min.js"  
+     	type="text/javascript" th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           //
+			$('.edit-name').editable();
+
+			$('.isPaid').editable({
+		        value: 0,    
+		        source: [
+		              {value: 0, text: 'Unpaid'},
+		              {value: 2, text: 'Paid'},
+		           ]
+		    });
+			$('.orderStatus').editable({
+		        value: 0,    
+		        source: [
+		              {value: 0, text: 'New Order'},
+		              {value: 1, text: 'Processing'},
+		              {value: 2, text: 'Complete'},
+		              {value: -1, text: 'Deleted'},
+		           ]
+		    });
+			
+			
+			
+		
+		/*]]>*/	
+	</script>
+</div>
+	
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+    
+	/*]]>*/	
+	</script>
+</body>
+</html>
+

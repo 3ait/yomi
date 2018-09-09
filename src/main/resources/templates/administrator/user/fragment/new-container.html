@@ -1,0 +1,182 @@
+<div class="container-fluid" th:fragment="content">
+	<script type="text/javascript" src="../../../static/plugin/ckeditor/ckeditor.js" th:src="@{/static/plugin/ckeditor/ckeditor.js}"></script>
+	
+	<hr />
+	<form th:action="@{/management/user/new/save}" id="userForm" enctype="multipart/form-data" method="post" >
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Email:</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<input type="email" maxlength="200" class="form-control" name="email" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Name:</label>
+			</div>
+			
+			<div class="col-sm-6">
+				<div class="form-group input-group">
+				<input type="text" maxlength="200" class="form-control" name="name"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Password:</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group">
+				<input type="password" maxlength="200" class="form-control" name="password"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Phone:</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group">
+				<input type="text" maxlength="200" class="form-control" name="phone"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Status:</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group">
+				<select class="form-control" name="status">
+					<option value="inactive">Active</option>
+					<option value="active">In-active</option>
+					<option value="cancelled">Canceled</option>
+				</select>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 col-sm-offset-2">
+				<div class="form-group input-group">
+					<button class="btn btn-primary">Submit</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           
+		
+		/**
+		**/
+		function deleteImg(id_pre,imgId){
+			if(confirm("delete ?")){
+				$.ajax({
+					url: [[@{/administrator/article/edit/ajax/delimg/}]]+imgId,
+					method: "POST",
+					data: { 
+						"imgId" : imgId,
+						}
+				}).done(function(ret){
+					if(ret=="success"){
+						$("#"+id_pre + imgId).remove();
+					}
+				});
+			}
+		}
+		
+		
+		
+		/*]]>*/	
+	</script>
+	
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			
+			//登录表单
+			$( "#userForm" ).validate( {
+				rules: {
+					'email': {
+						required: true,
+						email: true,
+						minlength: 1,
+						maxlength: 50,
+						remote:[[@{/management/user/email/check}]],
+					},
+					'name': {
+						required: true,
+						minlength: 1,
+						maxlength: 50,
+					},
+					'password': {
+						required: true,
+						minlength: 1,
+						maxlength: 50,
+					},
+					'phone': {
+						required: true,
+						minlength: 1,
+						maxlength: 50,
+					},
+					
+				},
+				messages: {
+					
+					/* loginPassword:{
+						required: "Please provide a password",
+						minlength: "Your password must be at least 2 characters long"
+					} */
+					'email': {
+						remote:'email has existed.',
+					},
+				},
+				
+				errorElement: "em",
+				errorPlacement: function ( error, element ) {
+					// Add the `help-block` class to the error element
+					error.addClass( "help-block col-sm-offset-2" );
+
+					// Add `has-feedback` class to the parent div.form-group
+					// in order to add icons to inputs
+					element.parents( ".input-group" ).addClass( "has-feedback" );
+
+					if ( element.prop( "type" ) === "checkbox" ) {
+						error.insertAfter( element.parent( "label" ) );
+					} else {
+						error.insertAfter( element.parents( ".input-group" ) );
+					}
+
+					// Add the span element, if doesn't exists, and apply the icon classes to it.
+					if ( !element.next( "span" )[ 0 ] ) {
+						$( "<span class='glyphicon glyphicon-remove form-control-feedback'></span>" ).insertAfter( element );
+					}
+				},
+				success: function ( label, element ) {
+					// Add the span element, if doesn't exists, and apply the icon classes to it.
+					if ( !$( element ).next( "span" )[ 0 ] ) {
+						$( "<span class='glyphicon glyphicon-ok form-control-feedback'></span>" ).insertAfter( $( element ) );
+					}
+				},
+				highlight: function ( element, errorClass, validClass ) {
+					$( element ).parents( ".input-group" ).addClass( "has-error" ).removeClass( "has-success" );
+					$( element ).next( "span" ).addClass( "glyphicon-remove" ).removeClass( "glyphicon-ok" );
+				},
+				unhighlight: function ( element, errorClass, validClass ) {
+					$( element ).parents( ".input-group" ).addClass( "has-success" ).removeClass( "has-error" );
+					$( element ).next( "span" ).addClass( "glyphicon-ok" ).removeClass( "glyphicon-remove" );
+				}
+			} );
+			
+		/*]]>*/	
+	</script>
+	<style>
+		.input-group{
+			width: 100%;
+		}
+	</style>
+</div>

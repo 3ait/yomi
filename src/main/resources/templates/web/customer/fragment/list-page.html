@@ -1,0 +1,78 @@
+<div th:fragment="page">
+			<span th:text="|${number}|"></span>/<span th:text="${totalPages}"></span>
+			<input id="hidden_pageNum" type="hidden" th:value="${number}"  />
+			
+			&nbsp;
+			<span class="page-btn" th:onclick="|prePage()|">
+				&nbsp;<i class="fa fa-chevron-left "></i>&nbsp;
+			</span>
+			<span class="page-btn" th:onclick="|nextPage()|">
+				 &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i>&nbsp;
+			</span>&nbsp;
+			
+			<input id="pageGo" style="width:50px;" type="number" min="1" step="1" th:value="${number}" />&nbsp; 
+			
+			<span class="page-btn" id="fontPage" th:onclick="|go()|" >
+				Go
+			</span>
+		
+		
+		<style>
+			.page-btn{
+				border: 1px solid #e7e7e7;
+				padding: 4px 5px ;
+				cursor: pointer;
+				transition: all .5s;
+			}
+			.page-btn:HOVER {
+				background: #357363;
+				color: white;
+			}
+		</style>
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+
+		    //上翻页
+			function prePage(){
+				if($("#hidden_pageNum").val()<=1){
+					return false;
+				}
+				var pageNum = parseInt($("#hidden_pageNum").val()-1);
+				$("#hidden_pageNum").val(pageNum);
+				
+				window.location.href=[[@{/customer/history?}]]+ "page=" +pageNum;
+			}
+		
+			//下翻页
+			function nextPage(){
+				if((parseInt($("#hidden_pageNum").val()))>=[[${totalPages}]]){
+					return false;
+				}
+				var pageNum = parseInt($("#hidden_pageNum").val())+1;
+				$("#hidden_pageNum").val(pageNum);
+
+				window.location.href=[[@{/customer/history?}]]+ "page=" +pageNum;
+				
+			}
+			
+			//页面条跳转
+			function go(){
+				var pageNum = parseInt($("#pageGo").val());
+
+				if(isNaN(pageNum)){
+					return false;
+				}
+				if(pageNum<1){
+					return false;
+				}
+				if(pageNum>[[${totalPages}]]){
+					return false;
+				}
+				
+				$("#hidden_pageNum").val(pageNum);
+				
+				window.location.href=[[@{/customer/history?}]]+ "page=" +pageNum;
+			}
+		/*]]>*/	
+	</script>
+</div>

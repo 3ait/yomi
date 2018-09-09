@@ -1,0 +1,24 @@
+<header th:fragment="header">
+	
+	<!-- header top -->
+	
+	<header th:replace="/web/fragment/f-header-top :: header-top"></header>
+	<!-- header nav -->
+	<header th:replace="/web/fragment/f-header-nav :: header-nav"></header>
+
+	<script th:src="@{/static/templates/web/shoppingcart/shoppingcart.js}" src="#"></script>
+
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		     //loadnavtop
+     		$(document).ready(function() {
+				$(".header_bg").load([[@{/header/nav}]]);
+  				$(".top_bg").load([[@{/header/top}]]);
+			});
+		
+		
+		
+		/*]]>*/	
+		</script>
+		
+</header>

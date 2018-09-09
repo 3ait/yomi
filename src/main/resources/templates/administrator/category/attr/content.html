@@ -1,0 +1,190 @@
+<div class="container-fluid " th:fragment="content">
+	<script src="static/plugin/editable/js/bootstrap-editable.min.js"
+		type="text/javascript"
+		th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+	<!-- 拖动 -->
+	<script src="static/plugin/jquery/Sortable.min.js"
+		type="text/javascript"
+		th:src="@{/static/plugin/jquery/Sortable.min.js}" charset="utf-8"></script>		
+	<hr />
+	<div class="row">
+		<!-- level1 -->
+		<div class="col-sm-3 ">
+			<div class="col-sm-12" id="category1List">
+				<ul class="list-group"  th:fragment="attrKeys" id="attrKeys">
+					<li class="list-group-item " data-id="0">
+						<lable class="active" >Product Attribute key</lable>
+					</li>
+					<li class="list-group-item" th:each="productAttrKey :${productAttrKeyList}"  th:onclick="|loadValue(${productAttrKey.id}, this)|"  th:attr="data-id=${productAttrKey.id}" >
+						<a  th:attr="data-pk=${productAttrKey.id}, data-url=|@{/management/attribute/key/update/}|"   href="#"  class="edit-name"  th:text="${productAttrKey.attrKey}" >superuser</a>
+						<a href="#" th:onclick="|deletekeyById(${productAttrKey.id})|"><i class="fa fa-remove  pull-right fa-2x " aria-hidden="true"></i></a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="col-sm-10">
+				<input class="form-control"  id="attrKey" placeholder="name" />
+			</div>
+			<div class="col-sm-2">
+				<button class="btn btn-primary" onclick="newKey()">
+					<i class="fa fa-plus" aria-hidden="true"></i>
+				</button>
+			</div>
+		</div>
+		
+		<!-- level2 -->
+		<input class="form-control"  type="hidden" id="productAttrKeyId" />
+		<div class="col-sm-3 " >
+			<div class="col-sm-12" id="category2List">
+				<ul class="list-group"  th:fragment="attrValues" id="attrValues" >
+					<li class="list-group-item " data-id="0">
+						<lable class="active" >Product Attribute Value</lable>
+					</li>
+					<li th:each="productAttrValue :${productAttrValueList}" class="list-group-item" >
+						<a th:attr="data-pk=${productAttrValue.id}, data-url=|@{/management/attribute/value/update/}|"  class="edit-name" href="#"  th:text="${productAttrValue.attrValue}">attrValue</a>
+						<a href="#" th:onclick="|deleteValueById(${productAttrValue.id})|"><i class="fa fa-remove pull-right fa-2x" aria-hidden="true"></i></a>
+					</li>
+					<script type="text/javascript" th:inline="javascript">
+						/*<![CDATA[*/
+						$('.edit-name').editable();
+						/*]]>*/	
+					</script>
+				</ul>
+				
+			</div>
+			
+			<div >
+				<div class="col-sm-10">
+					<input class="form-control"  id="attrValue" placeholder="Value"/>
+				</div>
+				<div class="col-sm-2">
+					<button class="btn btn-primary" onclick="newValue()">
+						<i class="fa fa-plus" aria-hidden="true"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+
+
+
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           
+          var sortable3 = Sortable.create(document.getElementById('attrKeys'),{ 
+			animation: 500,
+			store: {
+				get: function (sortable) {
+					var order = localStorage.getItem(sortable.options.group.name);
+					return order ? order.split('|') : [];
+				},
+				/**
+				 * Save the order of elements. Called onEnd (when the item is dropped).
+				 * @param {Sortable}  sortable
+				 */
+				set: function (sortable) {
+					var order = sortable.toArray();
+					localStorage.setItem(sortable.options.group.name, order.join('|'));
+					$.ajax({
+						url:[[@{/management/attribute/key/sort}]],
+						method: "GET",
+						data:{
+							'ids':order.toString(),
+						}
+					});
+				}
+			}
+			
+		});
+		$('.edit-name').editable();
+		
+		
+		/**
+		添加属性 key
+		**/
+		function newKey(){
+			var attrKey = $("#attrKey").val();
+			$("#attrKeys").load([[@{/management/attribute/newkey}]],
+					{
+						'attrKey':attrKey,
+					});
+		}
+		
+		/**
+			删除属性 key
+		***/
+		function deletekeyById(attrKeyId){
+			if(confirm("All the values will be deleted, confim?")){
+				$("#attrKeys").load([[@{/management/attribute/del/key/}]] + attrKeyId );
+				
+			}
+		}
+		
+		/**
+		加载属性
+		**/
+		function loadValue(attrKeyId, _self){
+			$("#attrValues").load([[@{/management/attribute/load/}]]+ attrKeyId );
+			$("#productAttrKeyId").val(attrKeyId);
+			
+			$(_self).siblings().css("background","white");
+			$(_self).css("background","#e7e7e7");
+		}
+		
+		/**
+			增加属性value
+		**/
+		function newValue(){
+			var productAttrKeyId = $("#productAttrKeyId").val();
+			var attrValue = $("#attrValue").val();
+			
+			if(attrValue.trim()==""){
+				$("#attrValue").focus();
+				return;
+			}
+			if(productAttrKeyId ==null || productAttrKeyId ==""){
+				alert("please select attribute key");
+				return;
+			}
+			$("#attrValues").load([[@{/management/attribute/newvalue}]],
+					{
+						'attrValue':attrValue,
+						'attrkeyId':parseInt(productAttrKeyId),
+					});
+			$("#attrValue").val("");
+		}
+		
+		
+		/***
+			删除value值
+		**/
+		function deleteValueById(productAttrValueId){
+			
+			if(confirm("confirm?")){
+				var productAttrKeyId = $("#productAttrKeyId").val();
+
+				if(productAttrKeyId ==null || productAttrKeyId ==""){
+					alert("please select attribute key");
+					return;
+				}
+				
+				$("#attrValues").load([[@{/management/attribute/del/}]] + productAttrKeyId + "/" + productAttrValueId);
+			}
+		}
+		
+		
+		
+		/*]]>*/	
+	</script>
+	<style>
+		.category:hover {
+			background: #e1e1e1;
+			cursor: pointer;
+		}
+	</style>
+
+
+
+</div>

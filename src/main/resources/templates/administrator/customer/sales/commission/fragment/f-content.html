@@ -1,0 +1,242 @@
+<div class="container-fluid "  th:fragment="content">
+    <div th:replace="/administrator/customer/sales/commission/fragment/f-search :: search(|management/customer/sales/commission/${customer.id}|)"></div>
+    <div class="row">
+        <div class="col-lg-12">
+        	<table class="table table-hover  table-striped">
+				 	<thead>
+				 		<tr>
+				 			<th></th>
+				 			<th>OrderId</th>
+				 			<th>ToCustomerName</th>
+				 			<th>OrderTotalPrice</th>
+				 			<th>Percentage</th>
+				 			<th>PayStatus</th>
+				 			<th>Sales</th>
+				 			<th>CommissionPaid</th>
+				 			<th>Memo</th>
+				 			<th>CreateTime</th>
+				 			<th>Operator</th>
+				 		</tr>
+				 		
+				 	</thead>
+				 		<tr th:each="commissionView :${commissionViewList}">
+				 			<td>
+				 				<input name="checkbox_email" type="checkbox" th:value="${commissionView.order.id}" th:if="${commissionView.order!=null}" th:attr="data-price=${commissionView.order.totalProductPrice},data-percentage=${commissionView.order.salesCommissionPercentage} " />
+				 			</td>
+				 			<td>
+				 				 <a th:href="|@{/management/order/}${commissionView.order.id}|" target="_blank" th:if="${commissionView.order!=null}"><span    th:text="${commissionView.order.id}" ></span></a>
+				 			</td>
+				 			<td >
+				 				<span  th:text="${commissionView.order.toCustomerName}"  th:if="${commissionView.order!=null}"></span>
+				 			</td>
+				 			<td >
+				 				 <span  th:text="|$${commissionView.order.totalProductPrice}|"  th:if="${commissionView.order!=null}"></span>
+				 			</td>
+				 			<td>
+				 				<span   th:text="${#numbers.formatPercent(commissionView.order.salesCommissionPercentage,0,0)}"  th:if="${commissionView.order!=null}" ></span>
+				 			</td>
+				 			<td>
+				 				 <a data-type="select"  th:attr="data-pk=${commissionView.order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="salesCommissionStatus"  href="#"  class="salesCommissionStatus"  th:text="${commissionView.order.salesCommissionStatus==0?'Unpaid': 'Paid'}" th:if="${commissionView.order!=null}">salesCommissionStatus</a>
+				 			</td>
+				 			<td>
+				 				<th:block  th:if="${commissionView.customerCommission!=null} " >
+				 				 	<span th:text="${commissionView.customerCommission.user.name}"  th:if="${commissionView.customerCommission.user!=null} " >customer.name</span>
+				 				</th:block>
+				 			</td>
+				 			<td >
+				 				<th:block  th:if="${commissionView.customerCommission!=null}" >
+				 				$<a th:attr="data-pk=${commissionView.customerCommission.id}, data-url=|@{/management/customer/sales/commission/update/colomn/}|" data-name="commission"  href="#"  class="edit-name" th:text="|${commissionView.customerCommission.commission}|" >commission</a>
+				 				</th:block>
+				 			</td>
+				 			<td >
+				 				<a data-type="textarea"  data-placement="bottom" th:attr="data-pk=${commissionView.customerCommission.id}, data-url=|@{/management/customer/sales/commission/update/colomn/}|" data-name="memo"  href="#"  class="edit-name" th:text="${commissionView.customerCommission.memo}"  th:if="${commissionView.customerCommission!=null}" >memo</a>
+				 			</td>
+				 			<td >
+				 				 <span th:text="${#dates.format(commissionView.createTime, 'HH:mm dd/MM/yyyy')}" >createTime</span>
+				 			</td>
+				 			<td >
+				 				
+				 				 <span th:text="${commissionView.customerCommission.customer.name}"  th:if="${commissionView.customerCommission!=null}">customer.name</span>
+				 			</td>
+				 		</tr>
+				 		
+				 		<tr>
+				 			<td >
+				 				<input type="checkbox" onclick="checkAll(this)" />&nbsp;
+				 			</td>
+				 			
+				 			<td colspan="10" >
+				 				<a href="javascript:void(0)"  target="_blank" title="Pay commission" th:onclick="|payCommission()|">
+								<span class="fa-stack"> <i
+									class="fa fa-square-o fa-stack-2x"></i> <i
+									class="fa fa-plus fa-stack-1x"></i>
+									</span></a>
+				 				
+				 			</td>
+				 			
+				 		</tr>
+				</table>
+        </div>
+    </div>
+    
+     <!-- new payment -->
+	<div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Commission Payment</h4>
+				</div>
+				<div class="modal-body">
+					<form id="saveForm" th:action="@{/management/customer/sales/commission/save}"
+						method="post">
+						<div class="form-group">
+							<label for="orderIds" class="control-label">OrderId:</label> 
+							<input type="text" class="form-control" id="orderIds" readonly="readonly"  name="orderIds"/>
+						</div>
+						<div class="form-group">
+							<label class="control-label">SalesName:</label>
+							<input class="form-control" id="companyName"  readonly="readonly" th:value="${customer.name}" />
+							<input type="hidden" id="hiddenId" name="customer.id" th:value="${customer.id}"/>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label">Commission:</label>
+							<input class="form-control" id="commission" name="commission" />
+						</div>
+						
+						
+						<div class="form-group">
+							<label for="Payment" class="control-label">PaymentMethord</label>
+							<select class="form-control"
+								name="paymentMethod">
+								<option value="Eftpos">Eftpos</option>
+								<option value="Cash">Cash</option>
+								<option value="Cheque">Cheque</option>
+								<option value="Banks">Banks</option>
+								<option value="Other">Other</option>
+							</select>
+
+						</div>
+						<div class="form-group">
+							<label for="Memo" class="control-label">Memo:</label>
+							<textarea class="form-control" id="memo" name="memo"
+								maxlength="1000"></textarea>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" onclick="save()">Save</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+    
+    
+    
+     <script src="static/plugin/editable/js/bootstrap-editable.min.js"  
+     	type="text/javascript" th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           //
+			$('.edit-name').editable();
+			$('.salesCommissionStatus').editable({
+		        value: -2,    
+		        source: [
+		              {value: -2, text: '--Select--'},
+		              {value: 0, text: 'Unpaid'},
+		              {value: 1, text: 'Paid'},
+		           ]
+		    });
+			
+			/**
+			**/
+			function email(customerId,dateFrom,dateTo){
+				if(!confirm("Confirm ?")){
+					return;
+				}
+				$.ajax({
+					url:[[@{/management/customer/statement/pdf/email/}]] + customerId +  "?dateFrom="+dateFrom + "&dateTo=" + dateTo,
+					method: "GET",
+					data:{
+					}
+				}).done(function(ret){
+					if(ret=='true'){
+						alert("Success.");
+					}else{
+						alert(ret);
+					}
+				});
+			}
+			
+			/**
+			全选
+			**/
+			function checkAll(obj){
+				if($(obj).prop("checked")){
+					$("input[name='checkbox_email']").prop("checked",true);
+				}else{
+					$("input[name='checkbox_email']").prop("checked",false) ;
+				}
+			}
+			
+			
+			
+			
+			/**
+			增加Payment
+			**/
+			function payCommission(){
+				
+				$("#memo").val("");
+				var selectedBox = $("input[name='checkbox_email']");
+				
+				var  orderIds = "";
+				var totalCommission = 0;
+				$('#myModal').modal('show').on('shown.bs.modal', function (e) {
+					selectedBox.each(function(i,index){
+						if($(index).prop("checked")){
+							$("#memo").val($("#memo").val()+ $(index).val() + ":" + $(index).data("price") + "*" + $(index).data("percentage") + ",    ") ;
+							totalCommission += (parseFloat($(index).data("price"))*parseFloat($(index).data("percentage")));
+							
+							orderIds += $(index).val()+",";
+						}
+					});  
+				  $("#orderIds").val(orderIds);
+				  $("#commission").val(totalCommission.toFixed(2));
+					
+					 	
+				  selectedBox.length = 0;
+				});
+				
+			}
+			
+			
+		/**
+			payment save
+		**/
+		function save(){
+			
+			if($("#hiddenId").val()==""){
+				$("#companyName").focus();
+				return ;
+			}
+			$("#saveForm").submit();
+			$('#myModal').modal('hide');
+			
+		}
+	
+			
+		/*]]>*/	
+	</script>
+</div>

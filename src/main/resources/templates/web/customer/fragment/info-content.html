@@ -1,0 +1,90 @@
+
+<!-- content -->
+
+<div th:fragment="content" class="container">
+
+	<div class="row" style="margin:30px 0;">
+		<div class="col-md-2 ">
+			<th:block th:replace="/web/customer/fragment/customer-menu :: left-menu('info')"></th:block>
+		</div>
+
+
+		<div class="col-md-10 w_content">
+		
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>个人信息</th>
+						<th></th>
+					</tr>
+				</thead>
+				
+				<tr  >
+					<td  >登陆邮箱</td>
+					<td> <span  th:text="${customer.Email}"></span></td>
+				</tr>
+				<tr  >
+					<td  >密码</td>
+					<td >
+						<a  th:attr="data-pk=${customer.id}, data-url=|@{/customer/update/colomn/}|" data-name="password"  href="#"  class="edit-name"   >******</a>
+					</td>
+				</tr>
+				<tr  >
+					<td  >姓名</td>
+					<td  >
+						<a  th:attr="data-pk=${customer.id}, data-url=|@{/customer/update/colomn/}|" data-name="name"  href="#"  class="edit-name"  th:text="${customer.name}" >customer.name</a>
+					</td>
+					
+				</tr>
+				<tr  >
+					<td  >身份证号</td>
+					<td  >
+						<a  th:attr="data-pk=${customer.id}, data-url=|@{/customer/update/colomn/}|" data-name="identity"  href="#"  class="edit-name"  th:text="${customer.identity}" >identity</a>
+					</td>
+				</tr>
+				
+				<tr  >
+					<td  >电话</td>
+					<td  >
+						<a  th:attr="data-pk=${customer.id}, data-url=|@{/customer/update/colomn/}|" data-name="phone"  href="#"  class="edit-name"  th:text="${customer.phone}" >customer.phone</a>
+					</td>
+					
+				</tr>
+				
+				<tr >
+					<td  >地址</td>
+					<td  >
+						<a  data-type="textarea" th:attr="data-pk=${customer.id}, data-url=|@{/customer/update/colomn/}|" data-name="shippingAddress"  href="#"  class="edit-name"  th:text="${customer.shippingAddress}" >shippingAddress</a>
+					</td>
+				</tr>
+				<tr  >
+					<td  >账户余额</td>
+					<td   >$<span th:text="${customer.balance}"></span></td>
+				</tr>
+				<tr  >
+					<td  >创建时间</td>
+					<td  th:text="${#dates.format(customer.createTime, 'yyyy-MM-dd hh:mm:ss')} " ></td>
+				</tr>
+				
+			</table>
+
+		</div>
+	</div>
+
+	<script   type="text/javascript" th:src="@{/static/plugin/bootstrap-3.3.7/js/bootstrap.js}" charset="utf-8"></script>
+
+	 <script  type="text/javascript" th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}" charset="utf-8"></script>
+
+
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		
+		           $('.edit-name').editable();
+		
+		
+		/*]]>*/
+	</script>
+
+
+</div>
+

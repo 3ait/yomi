@@ -1,0 +1,218 @@
+<div class="container-fluid "  th:fragment="content">
+	
+
+    <div class="row">
+        <div class="col-sm-12">
+        	<table class="table   table-striped">
+				 	
+				 		<tr >
+				 			<th class="col-sm-2">Invoice-Id</th>
+				 			<td th:text="${invoiceView.invoice.aliasId}">
+				 			</td>
+				 		</tr>
+				 		<tr >
+				 			<th class="col-sm-2">Order Id</th>
+				 			<td >
+				 				<span  th:if="${invoiceView.invoice.order}!=null" th:text="${invoiceView.invoice.order.id}"></span>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th>Status</th>
+				 			
+				 			<td >
+				 				<a class="status" data-type="select" th:attr="data-pk=${invoiceView.invoice.id}, data-url=|@{/management/invoice/update/colomn/}|" data-name="status"  href="#"    
+									th:text="${invoiceView.invoice.status==1?'New Invoice': (invoiceView.invoice.status==2?'Emailed':(invoiceView.invoice.status==3?'Completed':'Cancelled'))}" >status</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th>Pay Status</th>
+				 			
+				 			<td >
+				 				<a class="isPaid" data-type="select" th:attr="data-pk=${invoiceView.invoice.id}, data-url=|@{/management/invoice/update/colomn/}|" data-name="paid"  href="#"    
+									th:text="${invoiceView.invoice.paid==0?'Unpaid':(invoiceView.invoice.paid==1?'PaidInPart':'Paid')}">isPaid</a>
+				 			</td>
+				 		</tr>
+				 		<!--startprint-->
+				 		<tr>
+				 			<th >Company Name</th>
+				 			<td >
+				 				 <a  th:attr="data-pk=${invoiceView.invoice.id}, data-url=|@{/management/invoice/update/colomn/}|" data-name="customerCompanyName"  href="#"  class="edit-name"  th:text="${invoiceView.invoice.customerCompanyName}" >customerCompanyName</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th >Company Phone</th>
+				 			<td >
+				 				 <a  th:attr="data-pk=${invoiceView.invoice.id}, data-url=|@{/management/invoice/update/colomn/}|" data-name="customerCompanyPhone"  href="#"  class="edit-name"  th:text="${invoiceView.invoice.customerCompanyPhone}" >customerCompanyPhone</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th >Company Address</th>
+				 			<td >
+				 				 <a  th:attr="data-pk=${invoiceView.invoice.id}, data-url=|@{/management/invoice/update/colomn/}|" data-name="customerCompanyAddress"  href="#"  class="edit-name"  th:text="${invoiceView.invoice.customerCompanyAddress}" >customerCompanyAddress</a>
+				 			</td>
+				 		</tr>
+				 		<!--endprint-->
+				 		<tr>
+				 			<th >Customer Email</th>
+				 			<td >
+				 				 <a  th:attr="data-pk=${invoiceView.invoice.id}, data-url=|@{/management/invoice/update/colomn/}|" data-name="customerEmail"  href="#"  class="edit-name"  th:text="${invoiceView.invoice.customerEmail}" >CustomerEmail</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th >Company Fax</th>
+				 			<td >
+				 				 <a  th:attr="data-pk=${invoiceView.invoice.id}, data-url=|@{/management/invoice/update/colomn/}|" data-name="customerCompanyFax"  href="#"  class="edit-name"  th:text="${invoiceView.invoice.customerCompanyFax}" >customerCompanyFax</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th >Company Mobile</th>
+				 			<td >
+				 				 <a  th:attr="data-pk=${invoiceView.invoice.id}, data-url=|@{/management/invoice/update/colomn/}|" data-name="customerCompanyMobile"  href="#"  class="edit-name"  th:text="${invoiceView.invoice.customerCompanyMobile}" >customerCompanyMobile</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th >Admin Msg</th>
+				 			<td >
+				 				 <a data-type="textarea" th:attr="data-pk=${invoiceView.invoice.id}, data-url=|@{/management/invoice/update/colomn/}|" data-name="adminInfo"  href="#"  class="edit-name"  th:text="${invoiceView.invoice.adminInfo}" >adminInfo</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th >Email Info</th>
+				 			<td >
+				 				 <a data-type="textarea"  th:attr="data-pk=${invoiceView.invoice.id}, data-url=|@{/management/invoice/update/colomn/}|" data-name="emailInfo"  href="#"  class="edit-name"  th:text="${invoiceView.invoice.emailInfo}" >emailInfo</a>
+				 			</td>
+				 		</tr>
+				 		
+				 		
+				 		<tr>
+				 			<th>Operator</th>
+				 			<td>
+				 				<span th:if="${invoiceView.invoice.user!=null}" th:text="${invoiceView.invoice.user.name}"></span>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th>Create Time<br/>Modify Time</th>
+				 			<td>
+				 				<span th:text="${#dates.format(invoiceView.invoice.createTime, 'HH:mm dd/MM/yyyy')}" ></span><br/>
+<!-- 				 				<span th:text="${#dates.format(invoiceView.invoice.modifyTime, 'HH:mm dd/MM/yyyy')}" ></span> -->
+				 				
+				 				<a href="#" data-placement="right" th:attr="data-pk=${invoiceView.invoice.id}, data-url=|@{/management/invoice/update/colomn/}|" data-type="date"  class="edit-name" data-name="modifyTime" th:text="${#dates.format(invoiceView.invoice.modifyTime, 'HH:mm dd/MM/yyyy')}">Empty</a>
+				 			</td>
+				 		</tr>
+				 		
+				 		
+				</table>
+        </div>
+    </div>
+    <div class="row">
+    	<div class="col-sm-12">
+			<table class="table text-right" >
+					<tr >
+						<td>Title</td>
+						<td>Qty.</td>
+						<td>Unit Price</td>
+					</tr>
+					<tr th:each="invoiceItem : ${invoiceView.invoiceItemList}">
+						<td  class="col-sm-1">*<span th:text="${invoiceItem.title}"></span></td>
+						<td  class="col-sm-1"><span th:text="${invoiceItem.quantity}"></span></td>
+						<td  class="col-sm-1">$<span th:text="${invoiceItem.unitPrice}"></span></td>
+					</tr>
+					<tr>
+						<td colspan="2" class="text-right">Discount:</td>
+						<td ><span  th:text="${invoiceView.invoice.discount}" ></span></td>
+					</tr>
+					<tr>
+						<td colspan="2" class="text-right">Freight</td>
+						<td >  $<span  th:text="${invoiceView.invoice.freight}" ></span></td>
+					</tr>
+					<tr>
+						<td colspan="2" class="text-right">GST</td>
+						<td >  $<span  th:text="${invoiceView.invoice.gst}" ></span></td>
+					</tr>
+					<tr>
+						<td style=""></td>
+						<td ></td>
+						<td >$<span  th:text="${invoiceView.invoice.total}" ></span></td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td ></td>
+						<td >
+							<a href="javascript:void(0)" th:onclick="|printAddress()|" title="PrintAddress" >
+				 				<span class="fa-stack" >
+								  <i class="fa fa-square-o fa-stack-2x"></i>
+								  <i class="fa fa-print fa-stack-1x"></i>
+								</span></a>
+							<a href="javascript:void(0)" th:onclick="|email(${invoiceView.invoice.id})|" title="Email" >
+			 				<span class="fa-stack" >
+								  <i class="fa fa-square-o fa-stack-2x"></i>
+								  <i class="fa fa-envelope-o fa-stack-1x"></i>
+								</span></a>
+			 				<a target="_blank" th:href="|@{/management/invoice/pdf/view/}${invoiceView.invoice.id}.pdf|" title="View" >
+			 					<span class="fa-stack" >
+								  <i class="fa fa-square-o fa-stack-2x"></i>
+								  <i class="fa fa-file-pdf-o fa-stack-1x"></i>
+								</span></a>
+			 				<a href="javascript:void(0)"  th:href="|@{/management/invoice/pdf/view/}${invoiceView.invoice.id}.pdf|" th:attr="download=|${invoiceView.invoice.aliasId}.pdf|"  title="Download" >
+			 					<span class="fa-stack" >
+								  <i class="fa fa-square-o fa-stack-2x"></i>
+								  <i class="fa fa-download fa-stack-1x"></i>
+								</span></a>
+						</td>
+					</tr>
+				</table>
+    	</div>
+    </div>
+    
+    
+     <script src="static/plugin/editable/js/bootstrap-editable.min.js"   type="text/javascript" th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}" charset="utf-8"></script>
+		
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           //
+			$('.edit-name').editable();
+
+
+			$('.isPaid').editable({
+		        value: -1,    
+		        source: [
+		              {value: -1, text: '--Select--'},
+		              {value: 1, text: 'PaidInPart'},
+		              {value: 2, text: 'Paid'},
+		              {value: 0, text: 'Unpaid'},
+		           ],
+				 	success: function(response, newValue) {
+			        	   window.location.reload();
+			           }
+		    });
+			
+			$('.status').editable({
+		        value: -1,    
+		        source: [
+		              {value: -1, text: '--Select--'},
+		              {value: 1, text: 'New Invoice'},
+		              {value: 2, text: 'Emailed'},
+		              {value: 3, text: 'Completed'},
+		              {value: 0, text: 'Canceled'},
+		           ],
+				 	success: function(response, newValue) {
+			        	   window.location.reload();
+			           }
+		    });
+			
+			
+			function printAddress(){ 
+				var bdhtml=window.document.body.innerHTML; 
+				var content = "<h1 style='font-size: 50px;text-align:center;text-decoration: underline;' >" + [[${invoiceView.invoice.customerCompanyName}]] + "</h1> <h3 style='font-size: 50px;text-align:center'>" + [[${invoiceView.invoice.customerCompanyAddress}]]  +  "</h3> <h3 style='font-size: 50px;text-align:center'>" + [[${invoiceView.invoice.customerCompanyPhone}]]  +  "</h3>";
+				content += "<br/><br/><br/><br/><br/><br/><br/>"
+				content += " <h1 style='font-size: 30px;text-align:center'>From: Frontier International Trading Ltd<br/>PO Box 305079 Triton Plaza, Auckland</h1>"
+				window.document.body.innerHTML= content; //把需要打印的指定内容赋给body.innerHTML
+				window.print(); //调用浏览器的打印功能打印指定区域
+				window.document.body.innerHTML=bdhtml; // 最后还原页面
+			}
+		
+			
+		
+		/*]]>*/	
+	</script>
+</div>

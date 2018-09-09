@@ -1,0 +1,180 @@
+<div class="container-fluid "  th:fragment="content(order,orderItemList)">
+
+<style>
+		.td-bottom {
+			border-bottom: 1px solid #ddd;
+		}
+</style>
+    <div class="row">
+        <div class="col-sm-12">
+        	<table class="table   table-striped" style="width: 100%;text-align: left;">
+				 	
+				 		<tr >
+				 			<th class=" " width="200">Order ID</th>
+				 			<td th:text="${order.id}">
+				 			</td>
+				 		</tr>
+				 		
+			 			<tr>
+				 			<th class="">
+				 			<span class="label label-primary">Company Name</span></th>
+				 			<td  >
+				 				<label style="font-weight: bold;" th:text="${order.toCustomerCompanyName}"></label>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="">
+				 			<span class="label label-primary">Tel</span></th>
+				 			<td th:text="${order.toTel}" >
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="">
+				 			<span class="label label-primary">Phone</span></th>
+				 			<td th:text="${order.toPhone}" >
+				 			</td>
+				 		</tr>
+				 		<!-- <tr>
+				 			<th class="">
+				 			<span class="label label-primary">Invoice address</span></th>
+				 			<td  th:text="${order.toAddress}">
+				 			</td>
+				 		</tr> -->
+				 		<tr>
+				 			<th class="">
+				 			<span class="label label-primary">Shipping address</span></th>
+				 			<td  th:text="${order.toShippingAddress}">
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="">
+				 			<span class="label label-primary">Customer Msg</span></th>
+				 			<td data-type="textarea"  th:text="${order.customerMsg}">Customer Msg</td>
+				 		</tr>
+				 		<!-- <tr>
+				 			<th class="">Total Freight</th>
+				 			
+				 			<td th:text="${order.totalFreight}" >
+				 				<a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="totalFreight"  href="#"  class="edit-name"  th:text="${order.totalFreight}" >Total Freight</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="">Status</th>
+				 			
+				 			<td >
+				 				<th:block th:replace="/administrator/order/fragment/order-status :: content(${order})"></th:block>
+				 			</td>
+				 			
+				 		</tr>
+				 		<tr>
+				 			<th class="">Pay Status</th>
+				 			
+				 			<td >
+				 				<a class="isPaid" data-type="select" th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="isPaid"  href="#"    th:text="${order.isPaid==0?'Unpaid': 'Paid'}" >status</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="">
+				 				<span class="label label-primary">Sales</span></th>
+				 			
+				 			<td >
+				 				<a data-type="select"  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="customerBySalesId"  href="#"  class="customerBySalesId"  th:text="${order.customerBySalesId.name}" th:if="${order.customerBySalesId}!=null">customerBySalesId</a>
+				 				<a data-type="select"  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="customerBySalesId"  href="#"  class="customerBySalesId"  th:text="${order.customerBySalesId}" th:if="${order.customerBySalesId}==null">customerBySalesId</a>
+				 				<br/>
+				 				<a data-type="select"  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="salesCommissionPercentage"  href="#"  class="salesCommissionPercentage"  th:text="${#numbers.formatPercent(order.salesCommissionPercentage,0,0)}" >salesCommissionPercentage</a>
+		
+				 			</td>
+				 		</tr> -->
+				 		
+				 		<tr>
+				 			<th class="">Admin Msg</th>
+				 			
+				 			<td  th:text="${order.adminMsg}">
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th >Create Time</th>
+				 			<td>
+				 				<span th:text="${#dates.format(order.createTime, 'HH:mm dd/MM/yyyy')}" ></span><br/>
+				 				
+				 			</td>
+				 		</tr>
+				 		
+				 	
+				 		
+				</table>
+				
+        </div>
+        <div class="col-sm-10 col-sm-offset-2" style="margin-left: 200px;">
+        	<table class="table" style="width: 100%;">
+        		<tr>
+        			<th  class="td-bottom">Name</th>
+        			<th  class="td-bottom">Qty.</th>
+        			<th  class="td-bottom">Location</th>
+        			<th  class="td-bottom">Barcode</th>
+        		</tr>
+				 			<tr th:each="orderItem : ${orderItemList}" >
+<!-- 								<td > -->
+<!-- 									<img th:src="|/${orderItem.productDefaultSrc}|" class="img-responsive" style="max-width: 50px;"/> -->
+<!-- 								</td> -->
+								<td  class="td-bottom">
+									<span th:text="${orderItem.productNameCn}"></span>
+								</td>
+								<td class="td-bottom" >
+									<span th:text="${orderItem.num}"></span>
+								</td>
+								
+								<td  class="td-bottom">
+									<span th:text="${orderItem.product.location}"></span>
+								</td>
+								<td  class="td-bottom">
+									<span th:text="${orderItem.product.mpn}"></span> 
+								</td>
+							</tr>
+				</table> 
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    
+     <script src="static/plugin/editable/js/bootstrap-editable.min.js"  
+     	type="text/javascript" th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           //
+			$('.edit-name').editable();
+
+			$('.isPaid').editable({
+		        value: 0,    
+		        source: [
+		              {value: 0, text: 'Unpaid'},
+		              {value: 2, text: 'Paid'},
+		           ]
+		    });
+			
+			$('.salesCommissionPercentage').editable({
+		        value: -1,    
+		        source: [
+		              {value: -1, text: '--Select--'},
+		              {value: 0.00, text: '0%'},
+		              {value: 0.05, text: '5%'},
+		              {value: 0.10, text: '10%'},
+		              {value: 0.15, text: '15%'},
+		              {value: 0.20, text: '20%'},
+		           ]
+		    });
+			
+			$('.customerBySalesId').editable({
+		        value: -1,    
+		        source: [[${salesArray}]],
+		    });
+			
+		
+		/*]]>*/	
+	</script>
+</div>

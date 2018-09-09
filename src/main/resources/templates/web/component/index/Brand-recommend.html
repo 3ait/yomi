@@ -1,0 +1,54 @@
+	<th:block th:fragment="brand-recommend" >
+		
+	<div id="brand-recommend" >
+		
+			<div class="container" >
+				<div class="row" style="padding-top:20px ;padding-bottom:20px;">
+					<div class="col-sm-2 text-center article-list" v-for="article in recommendArticles">
+						<a :href="'/brand/'+article.productAttrValueId" target="_blank">
+							<img class="img-responsive" :src="article.defaultSrc"/>
+						</a>
+					</div>
+				</div>
+				
+			</div>
+	</div>
+	<style>
+		.article-list {
+			margin-top: 20px;
+			padding: 5px 15px;
+			transition: all .5s;
+			border: 1px solid #eee;
+		}
+		
+		.article-list:HOVER {
+			box-shadow: -3px 0 5px #9FA8AB, 0 -3px 5px #9FA8AB, 0 3px 5px #9FA8AB,3px 0 5px #9FA8AB;
+		}
+		
+	</style>
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			new Vue({
+			el : '#brand-recommend',
+			data : {
+				recommendArticles: {},
+			},
+			
+			created: function() {
+				var _this = this;
+				axios.get([[|@{/article/api/recommend}|]] , {
+				    params: {
+				     
+				    }
+				  }).then(function (response){
+					  _this.recommendArticles = response.data;
+				   
+				  }).catch(function (error) {
+				  	  console.log(error);
+				  }); 
+			}
+		})
+		/*]]>*/
+	</script>
+	
+</th:block>

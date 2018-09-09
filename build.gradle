@@ -1,0 +1,88 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
+    }
+}
+
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'war'
+
+jar {
+    baseName = 'wholesale'
+    version =  'demo'
+}
+
+war {
+    baseName = 'wholesale'
+    version =  'demo'
+}
+
+compileJava{
+	options.encoding = 'UTF-8'
+}
+compileTestJava{
+	options.encoding = 'UTF-8'
+}
+
+
+javadoc {  
+   options.encoding = 'UTF-8'
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+	//test
+    testCompile("junit:junit")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("org.springframework.security:spring-security-test")
+
+    compile("org.springframework.security.oauth:spring-security-oauth2")
+    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    //thymeleaf
+    compile("org.thymeleaf:thymeleaf:3.0.9.RELEASE")
+    compile("org.thymeleaf:thymeleaf-spring4:3.0.9.RELEASE")
+    
+    //DB
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("com.h2database:h2")
+    runtime('mysql:mysql-connector-java')
+    
+    //TOMCAT支持
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    
+    
+    //qr-code
+	compile group: 'com.google.zxing', name: 'core', version: '3.3.0'
+	compile group: 'com.google.zxing', name: 'javase', version: '3.3.0'
+	
+    //PDF
+    compile 'com.itextpdf:itextpdf:5.5.9'
+	compile 'com.itextpdf.tool:xmlworker:5.5.9'
+	compile 'com.itextpdf:itext-asian:5.2.0'
+	
+	//email
+	compile 'javax.mail:mail:1.5.0-b01'
+	
+	// https://mvnrepository.com/artifact/org.json/json
+	compile group: 'org.json', name: 'json', version: '20160810'
+	
+	//JWT TOKEN
+	// https://mvnrepository.com/artifact/com.auth0/java-jwt
+	compile group: 'com.auth0', name: 'java-jwt', version: '3.3.0'
+
+	
+}

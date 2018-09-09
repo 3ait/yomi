@@ -1,0 +1,344 @@
+<div class="container-fluid" th:fragment="content">
+	
+	<script type="text/javascript" src="../../../static/plugin/ckeditor/ckeditor.js" th:src="@{/static/plugin/ckeditor/ckeditor.js}"></script>
+	
+	<hr />
+	<form th:action="@{/management/content/new/save}" id="contentForm" enctype="multipart/form-data" method="post" >
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Category:</label>
+			</div>
+			<div class="col-sm-6">
+				<!-- content -->
+				<th:block th:replace="/administrator/content/fragment/category-select :: category-select"></th:block>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Title:</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<input type="text" maxlength="200" class="form-control" name="article.title" />
+			</div>
+			</div>
+		</div>
+		
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Sub title</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group">
+				<input type="text" maxlength="200" class="form-control" name="article.subTitle"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Url title</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group">
+				<input type="text" maxlength="200" class="form-control" name="article.urlTitle"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Author :</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group">
+				<input type="text" maxlength="50" class="form-control" name="article.author"/>
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>keywords:</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group">
+				<input type="text" maxlength="50" class="form-control" name="article.keywords"/>
+			</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Default Img:</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group">
+				<input type="file" class="form-control" name="defaultImg" />
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Slider Img:</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group">
+				<input type="file" class="form-control" name="sliderImg" multiple="multiple" />
+			</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Status:</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group">
+					<label class="radio-inline"> 
+						<input type="radio" name="article.status" value="1" checked="checked" /> On Line
+					</label> 
+					<label class="radio-inline"> 
+						<input type="radio" name="article.status" value="0" /> Off Line
+					</label>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label></label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group">
+					<label class="checkbox-inline"> 
+						<input type="checkbox" name="article.hot" value="1" /> Hot
+					</label> 
+					
+					<label class="checkbox-inline"> 
+						<input type="checkbox" name="article.recommend" value="1" /> Recommend
+					</label>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row" th:each="attrKeyValue : ${attrKeyValueList}">
+			<div class="col-sm-2 text-right">
+				<label th:text="${attrKeyValue.productAttrKey.attrKey}">Attribute:</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group">
+					<label class="checkbox-inline" th:each="productAttrValue : ${attrKeyValue.productAttrValueList}"> 
+						<input type="radio" name="article.productAttrValueId"  th:value="${productAttrValue.id}" /> <span th:text="${productAttrValue.attrValue}">Attr value</span>
+					</label> 
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Position:</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group">
+				<input type="number" maxlength="50" class="form-control" name="article.position" value="0"/>
+			</div>
+			</div>
+		</div>
+		
+		
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Click Num:</label>
+			</div>
+			<div class="col-sm-2">
+				<div class="form-group input-group">
+					<input type="number" min="0" max="100000" class="form-control" value="0" name="article.clickNum" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>SEO Keywords:</label>
+			</div>
+			<div class="col-sm-10">
+				<div class="form-group input-group">
+					<input type="text" maxlength="500" class="form-control"  name="article.seoKeywords"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>SEO Description:</label>
+			</div>
+			<div class="col-sm-10">
+				<div class="form-group input-group">
+					<input type="text" maxlength="1000" class="form-control" name="article.seoDesc"/>
+				</div>
+			</div>
+		</div>
+	
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Description:</label>
+			</div>
+			<div class="col-sm-10">
+				<div class="form-group input-group">
+				<!-- 编辑框 -->
+					<textarea id="txtDefaultHtmlArea"  maxlength="20000"  name="article.content"></textarea>
+	                  <script th:inline="javascript">
+	                      CKEDITOR.replace( 'txtDefaultHtmlArea', {
+	                      	filebrowserBrowseUrl: /*[[@{/management/attachment/ckediter/select/}]]*/,
+	                      	allowedContent: true,
+	                      } );
+	                  </script>
+				<!-- 编辑框结束 -->
+				</div>
+		                        
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 col-sm-offset-2">
+				<div class="form-group input-group">
+					<button class="btn btn-primary">Submit</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           
+		
+		/**
+		**/
+		function deleteImg(id_pre,imgId){
+			if(confirm("delete ?")){
+				$.ajax({
+					url: [[@{/administrator/article/edit/ajax/delimg/}]]+imgId,
+					method: "POST",
+					data: { 
+						"imgId" : imgId,
+						}
+				}).done(function(ret){
+					if(ret=="success"){
+						$("#"+id_pre + imgId).remove();
+					}
+				});
+			}
+		}
+		
+		/**
+		复制一个文章
+		**/
+		function duplicate(){
+			if(confirm("confirm ?")){
+				window.location.href = [[@{/administrator/article/edit/duplicate/}]] + document.getElementById("article.id").value;
+			}
+		}
+		
+		/**
+		**/
+		function readImg(divId,obj){
+			$("#"+divId).empty();
+			for(var i=0;i<obj.files.length;i++){
+				var reader  = new FileReader();
+				reader.readAsDataURL(obj.files[i]);
+				reader.onload = function(e){
+					$("#"+divId).append("<img class='col-xs-1 img-thumbnail img-responsive' src='" + this.result  +  "'></img>");
+				}
+			}
+		}
+		
+		
+		/*]]>*/	
+	</script>
+	
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			
+			//登录表单
+			$( "#contentForm" ).validate( {
+				rules: {
+					'article.title': {
+						required: true,
+						minlength: 1,
+						maxlength: 50,
+					},
+					'article.subTitle': {
+						minlength: 0,
+						maxlength: 200,
+					},
+					'article.urlTitle': {
+						minlength: 0,
+						maxlength: 200,
+					},
+					'article.author': {
+						minlength: 0,
+						maxlength: 50,
+					},
+					'article.keywords': {
+						minlength: 0,
+						maxlength: 1000,
+					},
+					
+					'article.clickNum': {
+						digits: true,
+						min:0,
+						max:10000,
+					},
+				},
+				messages: {
+					
+					/* loginPassword:{
+						required: "Please provide a password",
+						minlength: "Your password must be at least 2 characters long"
+					} */
+					
+				},
+				
+				errorElement: "em",
+				errorPlacement: function ( error, element ) {
+					// Add the `help-block` class to the error element
+					error.addClass( "help-block col-sm-offset-2" );
+
+					// Add `has-feedback` class to the parent div.form-group
+					// in order to add icons to inputs
+					element.parents( ".input-group" ).addClass( "has-feedback" );
+
+					if ( element.prop( "type" ) === "checkbox" ) {
+						error.insertAfter( element.parent( "label" ) );
+					} else {
+						error.insertAfter( element.parents( ".input-group" ) );
+					}
+
+					// Add the span element, if doesn't exists, and apply the icon classes to it.
+					if ( !element.next( "span" )[ 0 ] ) {
+						$( "<span class='glyphicon glyphicon-remove form-control-feedback'></span>" ).insertAfter( element );
+					}
+				},
+				success: function ( label, element ) {
+					// Add the span element, if doesn't exists, and apply the icon classes to it.
+					if ( !$( element ).next( "span" )[ 0 ] ) {
+						$( "<span class='glyphicon glyphicon-ok form-control-feedback'></span>" ).insertAfter( $( element ) );
+					}
+				},
+				highlight: function ( element, errorClass, validClass ) {
+					$( element ).parents( ".input-group" ).addClass( "has-error" ).removeClass( "has-success" );
+					$( element ).next( "span" ).addClass( "glyphicon-remove" ).removeClass( "glyphicon-ok" );
+				},
+				unhighlight: function ( element, errorClass, validClass ) {
+					$( element ).parents( ".input-group" ).addClass( "has-success" ).removeClass( "has-error" );
+					$( element ).next( "span" ).addClass( "glyphicon-ok" ).removeClass( "glyphicon-remove" );
+				}
+			} );
+			
+		/*]]>*/	
+	</script>
+	<style>
+		.input-group{
+			width: 100%;
+		}
+	</style>
+</div>

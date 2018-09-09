@@ -1,0 +1,352 @@
+<div class="container-fluid " th:fragment="content">
+<!-- 	<th:block th:replace="/administrator/category/fragment/f-content-menu-list :: menu-list"></th:block> -->
+
+	<hr />
+	<div class="row">
+		<!-- level1 -->
+		<div class="col-sm-4 ">
+			<div class="col-sm-12" id="category1List">
+				<ul class="list-group"  th:fragment="categoryList1" id="sortLevel1List">
+					<li class="list-group-item " data-id="0">
+						<lable class="active" >Category Level 1</lable>
+					</li>
+					<li th:each="menu :${menuList}" class="list-group-item" th:onclick="|loadCategory2(${menu.id},this)|" th:attr="data-id=${menu.id}">
+						<a  class="edit-name" href="#" data-type="text" date-placement="bottom" data-name="name" th:attr="data-pk=${menu.id}, data-url=|@{/management/category/update/}|"  data-original-title="Edit"  th:text="${menu.name}">name</a>
+						<a href="#" th:onclick="|deleteCategoryById('category1List',${menu.id},1)|"><i class="fa fa-remove  pull-right fa-2x " aria-hidden="true"></i></a>
+						<span  class="label label-default pull-right" th:text="${menu.menuType}">Menu Type</span>
+						<a  class="status pull-right" href="#" data-type="select" date-placement="bottom" data-name="status" th:attr="data-pk=${menu.id}, data-url=|@{/management/category/update/}|"  data-original-title="Edit"  th:text="|${menu.status}&nbsp;&nbsp;|">status</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="col-sm-7">
+				<input class="form-control"  id="leve1NameEn" placeholder="level1 category" />
+			</div>
+			<div class="col-sm-4">
+				<select class="form-control" id="menuType">
+					<option value="-1">--Type--</option>
+					<option value="product">Product</option>
+					<option value="article">Article</option>
+				</select>
+			</div>
+			<div class="col-sm-1">
+				<button class="btn btn-primary" onclick="newCategory1()">
+					<i class="fa fa-plus" aria-hidden="true"></i>
+				</button>
+			</div>
+		</div>
+		
+		<!-- level2 -->
+		<input type="hidden" id="leve2FatherId" />
+		<div class="col-sm-3 " >
+			<div class="col-sm-12" id="category2List">
+				<ul class="list-group"  th:fragment="categoryList2" id="sortLevel2List" th:if="${leve2FatherId!=0}" >
+					<li class="list-group-item " data-id="0">
+						<lable class="active" >Category Level 2</lable>
+					</li>
+					<li th:each="menu :${menuList}" class="list-group-item"   th:attr="data-id=${menu.id}" th:onclick="|loadCategory3(${menu.id},this)|">
+						<a  class="edit-name" href="#" data-type="text" date-placement="bottom" data-name="name" th:attr="data-pk=${menu.id}, data-url=|@{/management/category/update/}|"  data-original-title="Edit"  th:text="${menu.name}">superuser</a>
+						<a href="#" th:onclick="|deleteCategoryById('category2List',${menu.id},2)|"><i class="fa fa-remove pull-right fa-2x" aria-hidden="true"></i></a>
+					</li>
+					
+					<script type="text/javascript" th:inline="javascript">
+						/*<![CDATA[*/
+						var sortable2 = Sortable.create(document.getElementById('sortLevel2List'), { 
+							animation: 500,
+							store: {
+								get: function (sortable) {
+									var order = localStorage.getItem(sortable.options.group.name);
+									return order ? order.split('|') : [];
+								},
+								/**
+								 * Save the order of elements. Called onEnd (when the item is dropped).
+								 * @param {Sortable}  sortable
+								 */
+								set: function (sortable) {
+									var order = sortable.toArray();
+									localStorage.setItem(sortable.options.group.name, order.join('|'));
+									$.ajax({
+										url:[[@{/management/category/sort}]],
+										method: "GET",
+										data:{
+											'ids':order.toString(),
+										}
+									});
+								}
+							}
+							
+						});
+						$('.edit-name').editable();
+						
+						//'bottom','hidden','top','other','default','disable'
+						$('.status').editable({
+					        value: '',    
+					        source: [
+					              {value: '', text: '--position--'},
+					              {value: 'top', text: 'top'},
+					              {value: 'hidden', text: 'hidden'},
+					              {value: 'bottom', text: 'bottom'},
+					              {value: 'other', text: 'other'},
+					              {value: 'default', text: 'default'},
+					              {value: 'disable', text: 'disable'},
+					           ],
+						 	success: function(response, newValue) {
+				        	   window.location.reload();
+				           }
+					    });
+						
+					/*]]>*/	
+					</script>
+				</ul>
+			</div>
+			
+			<div >
+				<div class="col-sm-10">
+					<input class="form-control"  id="leve2NameEn" placeholder="new level 2 category"/>
+				</div>
+				<div class="col-sm-2">
+					<button class="btn btn-primary" onclick="newCategory2()">
+						<i class="fa fa-plus" aria-hidden="true"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+		
+		
+		<!-- level3 -->
+		<div class="col-sm-3 "  >
+			<input type="hidden" id="leve3FatherId" />
+			<div class="col-sm-12" id="category3List">
+				
+				<ul class="list-group"  th:fragment="categoryList3" id="sortLevel3List" th:if="${leve3FatherId!=0}">
+					<li class="list-group-item " data-id="0">
+						<lable class="active" >Category Level 3</lable>
+					</li>
+					<li th:each="menu :${menuList}" class="list-group-item"  th:attr="data-id=${menu.id}" th:onclick="|loadCategory4(${menu.id},this)|">
+						<a  class="edit-name" href="#" data-type="text" date-placement="bottom" data-name="name" th:attr="data-pk=${menu.id}, data-url=|@{/management/category/update/}|"  data-original-title="Edit"  th:text="${menu.name}">superuser</a>
+						
+						<a href="#" th:onclick="|deleteCategoryById('category3List',${menu.id},3)|"><i class="fa fa-remove fa-2x pull-right" aria-hidden="true"></i></a>
+					</li>
+					<script type="text/javascript" th:inline="javascript">
+						/*<![CDATA[*/
+					var sortable3 = Sortable.create(document.getElementById('sortLevel3List'),{ 
+						animation: 500,
+						store: {
+							get: function (sortable) {
+								var order = localStorage.getItem(sortable.options.group.name);
+								return order ? order.split('|') : [];
+							},
+							/**
+							 * Save the order of elements. Called onEnd (when the item is dropped).
+							 * @param {Sortable}  sortable
+							 */
+							set: function (sortable) {
+								var order = sortable.toArray();
+								localStorage.setItem(sortable.options.group.name, order.join('|'));
+								$.ajax({
+									url:[[@{/management/category/sort}]],
+									method: "GET",
+									data:{
+										'ids':order.toString(),
+									}
+								});
+							}
+						}
+						
+					});
+					$('.edit-name').editable();
+					
+					/*]]>*/	
+					</script>
+				</ul>
+			</div>
+
+			<div class="col-sm-10">
+				<input class="form-control"  id="leve3NameEn" placeholder="new level 3 category"/>
+			</div>
+			<div class="col-sm-2">
+				<button class="btn btn-primary" onclick="newCategory3()">
+					<i class="fa fa-plus" aria-hidden="true"></i>
+				</button>
+			</div>
+		</div>
+		
+		
+	</div>
+
+
+	<!-- 拖动 -->
+	<script src="static/plugin/jquery/Sortable.min.js"
+		type="text/javascript"
+		th:src="@{/static/plugin/jquery/Sortable.min.js}" charset="utf-8"></script>
+	<script src="static/plugin/editable/js/bootstrap-editable.min.js"
+		type="text/javascript"
+		th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+
+
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           
+		var sortable1 = Sortable.create(document.getElementById('sortLevel1List'),
+				{ 
+					animation: 500,
+					store: {
+						get: function (sortable) {
+							var order = localStorage.getItem(sortable.options.group.name);
+							return order ? order.split('|') : [];
+						},
+						/**
+						 * Save the order of elements. Called onEnd (when the item is dropped).
+						 * @param {Sortable}  sortable
+						 */
+						set: function (sortable) {
+							var order = sortable.toArray();
+							localStorage.setItem(sortable.options.group.name, order.join('|'));
+							$.ajax({
+								url:[[@{/management/category/sort}]],
+								method: "GET",
+								data:{
+									'ids':order.toString(),
+								}
+							});
+						}
+					}
+				});
+		
+		/**
+		**/
+		$(document).ready(function() {
+			$('.edit-name').editable();
+		});
+		
+		
+		/**
+			添加一级		
+		**/
+		function newCategory1(){
+			var leve1CategoryValue = $("#leve1NameEn").val();
+			var menuType = $("#menuType").val();
+			if(menuType=="-1"){
+				$("#menuType").focus();
+				return;
+			}
+			$("#category1List").load([[@{/management/category/save}]],
+					{
+						'nameEn':leve1CategoryValue,
+						'fatherId':0,
+						'level':1,
+						'menuType':menuType,
+					});
+			$("#leve1NameEn").val("");
+		}
+		
+		
+		/**
+		选择一级分类 加载二级分类
+		**/
+		function loadCategory2(fatherId,_this){
+			$("#leve2FatherId").val(fatherId);
+			$("#category2List").load([[@{/management/category/load/2/}]]+ fatherId)
+			
+			$(_this).siblings().css("background","white");
+			$(_this).css("background","#e7e7e7");
+		}
+		
+		
+		/**
+			添加二级分类	
+		**/
+		function newCategory2(){
+			var nameEn = $("#leve2NameEn").val();
+			var fatherId = $("#leve2FatherId").val().trim();
+			
+			if(fatherId ==null || fatherId ==""){
+				alert("please select father menu");
+				return;
+			}
+			$("#category2List").load([[@{/management/category/save}]],
+					{
+						'nameEn':nameEn,
+						'fatherId':parseInt(fatherId),
+						'level':2,
+					});
+			$("#leve2NameEn").val("");
+		}
+		
+		/**
+		选择二级分类 加载分类3
+		**/
+		function loadCategory3(fatherId,_this){
+			
+			
+			$("#leve3FatherId").val(fatherId);
+			$("#category3List").load([[@{/management/category/load/3/}]]+ fatherId);
+			
+			$(_this).siblings().css("background","white");
+			$(_this).css("background","#e7e7e7");
+		}
+		
+		
+		/**
+		添加三级分类	
+		**/
+		function newCategory3(){
+			var nameEn = $("#leve3NameEn").val();
+			var fatherId = $("#leve3FatherId").val().trim();
+			
+			if(fatherId ==null || fatherId ==""){
+				alert("please select father menu");
+				return;
+			}
+			$("#category3List").load([[@{/management/category/save}]],
+				{
+					'nameEn':nameEn,
+					'fatherId':parseInt(fatherId),
+					'level':3,
+				});
+			$("#leve3NameEn").val("");
+		}
+		
+		/**
+		选择三级分类 
+		**/
+		function loadCategory4(fatherId,_this){
+			
+			$(_this).siblings().css("background","white");
+			$(_this).css("background","#e7e7e7");
+		}
+		/**
+		删除分类
+		***/
+		function deleteCategoryById(categoryLevel,menuId,level){
+			if(confirm("All the sub categories will be deleted,confim?")){
+				var fatherId = 0;
+				if(level==2){
+					fatherId = $("#leve2FatherId").val().trim();
+				}else if(level==3){
+					fatherId = $("#leve3FatherId").val().trim();
+				}
+				
+				$("#"+categoryLevel).load([[@{/management/category/del/}]],
+				{
+					'menuId':parseInt(menuId),
+					'fatherId':parseInt(fatherId),
+					'level':level,
+				});
+				
+			}
+		}
+		
+		/*]]>*/	
+	</script>
+	<style>
+		.category:hover {
+			background: #e1e1e1;
+			cursor: pointer;
+		}
+	</style>
+
+
+
+</div>

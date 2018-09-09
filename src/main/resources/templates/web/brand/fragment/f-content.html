@@ -1,0 +1,109 @@
+
+<!-- content -->
+<div th:fragment="content">
+	<div>
+		<img alt="" class="img-responsive" src="/static/templates/web/brandlist/brand-top.jpg" />
+	</div>
+	<br/>
+	<div id="brandList">
+		<div  class="container" >
+			
+			<div class="row" >
+				<div class="col-sm-12 col-xs-12"  v-for="recommendBrand in recommendBrands">
+					<div v-html="recommendBrand.content"></div>
+				</div>
+			</div>
+		</div>
+		<div style="background: #f0f8f3;">
+			<div  class="container" >
+			<div class="row" >
+				<div class="col-sm-3 col-xs-6 article-list" style="padding-bottom: 20px;padding-top: 20px;" v-for="article in brands" >
+					<div >
+	<!-- 					<a  :href="'/brand/' + article.productAttrValueId" target="_blank" v-on:mouseover="mouseOver"> -->
+						<a  :href="'/brand/' + article.productAttrValueId" target="_blank" >
+							<img  height="160" class="img-responsive" alt="" :src="'/'+article.defaultSrc" >
+<!-- 							<div  style="background: #357363;color: white;display: flex;align-items: center;justify-content:center; ">{{article.title}}</div> -->
+						</a>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
+	<style>
+		.article-list {
+			margin-top: 20px;
+			padding: 5px 15px;
+			transition: all .5s;
+			border: 1px solid #eee;
+		}
+		
+		.article-list:HOVER {
+			box-shadow: -3px 0 5px #9FA8AB, 0 -3px 5px #9FA8AB, 0 3px 5px #9FA8AB,3px 0 5px #9FA8AB;
+		}
+		
+	</style>
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		        
+		           
+				new Vue({
+				el : '#brandList',
+				data : {
+					recommendBrands:[],
+					brands:[]
+				},
+				components:{
+					
+				},
+				created: function() {
+					var _this = this;
+					
+					axios.get([[@{/api/brand/list}]], {
+						params: {
+						 categoryId:[[${categoryId}]],
+					     page:0,
+					     size:60,
+					     sortBy:'position',
+					     sort:'asc',
+					    }
+					  })
+					  .then(function (response){
+						  _this.brands = response.data.content;
+					  })
+					  .catch(function (error) {
+					    console.log(error);
+					  }); 
+					
+					axios.get([[@{/api/brand/recommend/}]]+[[${categoryId}]], {
+						params: {
+					     page:0,
+					     size:60,
+					     sortBy:'position',
+					     sort:'asc',
+					    }
+					  })
+					  .then(function (response){
+						  _this.recommendBrands = response.data.content;
+					  })
+					  .catch(function (error) {
+					    console.log(error);
+					  }); 
+				},
+				methods:{
+					addCart: function(id,productName,productNameAlias,mpn,defaultSrc,price,num){
+						productAdd(id, productName, productNameAlias, mpn, defaultSrc, price, num);
+					},
+					mouseOver: function(event){
+						var _this = this;
+						event.currentTarget.children[0].className += " hidden";
+						
+					}
+					
+				}
+			});
+		           
+			/*]]>*/
+		</script>
+</div>
+

@@ -1,0 +1,34 @@
+<th:block th:fragment="content(urlTitle)" >
+		
+		
+	<div id="article"  >
+		<span class="col-xs-6 col-sm-2" v-for="item in items" >
+			<a style="color: #666;font-size: 14px;line-height: 30px;"  :href="'/brand/' + article.id" target="_blank">{{article.title}}</a>
+		</span>
+	</div>
+
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			new Vue({
+			el : '#article',
+			data : {
+				article:{}
+			},
+			created: function() {
+				var _this = this;
+				axios.get([[|@{/article/api/urlTitle/}${urlTitle}|]] , {
+				    params: {
+				     
+				    }
+				  })
+				  .then(function (response){
+					  _this.items = response.data.content;
+				  })
+				  .catch(function (error) {
+				    console.log(error);
+				  }); 
+			}
+		})
+	/*]]>*/
+</script>
+</th:block>

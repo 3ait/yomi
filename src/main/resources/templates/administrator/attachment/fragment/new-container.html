@@ -1,0 +1,162 @@
+<div class="container-fluid" th:fragment="content">
+	<th:block th:replace="/administrator/fragment/f-js-css :: public-css-js"></th:block>
+	<script type="text/javascript" src="../../../static/plugin/ckeditor/ckeditor.js" th:src="@{/static/plugin/ckeditor/ckeditor.js}"></script>
+	
+	<hr />
+	<form th:action="@{/management/attachment/new/save}" id="saveForm" enctype="multipart/form-data" method="post" >
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Category:</label>
+			</div>
+			<div class="col-sm-6">
+				<!-- content -->
+				<th:block th:replace="/administrator/content/fragment/category-select :: category-select"></th:block>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Attachment:</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group">
+				<input type="file" class="form-control" name="attachments" multiple="multiple" />
+			</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Title:</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<select  class="form-control" name="attachment.title">
+		              <option value="indexSlider">IndexSlider(Home page Slider)</option>
+		              <option value="indexAd">IndexAd(Home page Ad 750*300)</option>
+		              <option value="others">Others</option>
+					</select>
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Href:</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<input type="text" maxlength="200" class="form-control" name="attachment.href" />
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>position</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group">
+				<input type="number" class="form-control" name="attachment.position"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>description</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group">
+				<textarea class="form-control"  maxlength="20000"  name="attachment.description"></textarea>
+			</div>
+			</div>
+		</div>
+		
+		
+		
+		<div class="row">
+			<div class="col-sm-2 col-sm-offset-2">
+				<div class="form-group input-group">
+					<button class="btn btn-primary">Submit</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           
+		
+		
+		
+		/*]]>*/	
+	</script>
+	
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			
+			//登录表单
+			$( "#saveForm" ).validate( {
+				rules: {
+					'attachment.title': {
+						minlength: 1,
+						maxlength: 50,
+					},
+					'article.position': {
+						number: true,
+						minlength: 1
+					},
+					'article.description': {
+						required: true,
+						maxlength: 5000,
+					},
+				},
+				messages: {
+					
+					/* loginPassword:{
+						required: "Please provide a password",
+						minlength: "Your password must be at least 2 characters long"
+					} */
+					
+				},
+				
+				errorElement: "em",
+				errorPlacement: function ( error, element ) {
+					// Add the `help-block` class to the error element
+					error.addClass( "help-block col-sm-offset-2" );
+
+					// Add `has-feedback` class to the parent div.form-group
+					// in order to add icons to inputs
+					element.parents( ".input-group" ).addClass( "has-feedback" );
+
+					if ( element.prop( "type" ) === "checkbox" ) {
+						error.insertAfter( element.parent( "label" ) );
+					} else {
+						error.insertAfter( element.parents( ".input-group" ) );
+					}
+
+					// Add the span element, if doesn't exists, and apply the icon classes to it.
+					if ( !element.next( "span" )[ 0 ] ) {
+						$( "<span class='glyphicon glyphicon-remove form-control-feedback'></span>" ).insertAfter( element );
+					}
+				},
+				success: function ( label, element ) {
+					// Add the span element, if doesn't exists, and apply the icon classes to it.
+					if ( !$( element ).next( "span" )[ 0 ] ) {
+						$( "<span class='glyphicon glyphicon-ok form-control-feedback'></span>" ).insertAfter( $( element ) );
+					}
+				},
+				highlight: function ( element, errorClass, validClass ) {
+					$( element ).parents( ".input-group" ).addClass( "has-error" ).removeClass( "has-success" );
+					$( element ).next( "span" ).addClass( "glyphicon-remove" ).removeClass( "glyphicon-ok" );
+				},
+				unhighlight: function ( element, errorClass, validClass ) {
+					$( element ).parents( ".input-group" ).addClass( "has-success" ).removeClass( "has-error" );
+					$( element ).next( "span" ).addClass( "glyphicon-ok" ).removeClass( "glyphicon-remove" );
+				}
+			} );
+			
+		/*]]>*/	
+	</script>
+	<style>
+		.input-group{
+			width: 100%;
+		}
+	</style>
+</div>

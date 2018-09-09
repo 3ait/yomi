@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+ <th:block th:replace="/administrator/fragment/f-js-css :: public-css-js"></th:block>
+<title><span th:replace="/administrator/fragment/f-company-name :: companyname"></span> | Invoice</title>
+</head>
+<body>
+<style>
+		.td-bottom {
+			border-bottom: 1px solid #ddd;
+		}
+</style>
+		<!--startprint-->
+	<div th:each=" invoiceView : ${invoiceViewList}">
+		<table style="width: 100%;">
+			<thead>
+				<tr style="text-align: center;">
+					<td><h3><span th:text="${invoiceView.userCompany.name}"></span></h3></td>
+				</tr>
+				
+				<tr style="text-align: center;">
+					<td><span th:text="${invoiceView.userCompany.tel}"></span></td>
+				</tr>
+				<tr style="text-align: center;">
+					<td><span th:text="${invoiceView.userCompany.mobile}"></span></td>
+				</tr>
+				<tr style="text-align: center;">
+					<td><span th:text="${invoiceView.userCompany.email}"></span></td>
+				</tr>
+				<tr style="text-align: center;">
+					<td><span th:text="${invoiceView.userCompany.website}"></span></td>
+				</tr>
+				<tr style="text-align: center;">
+					<td>GST-No:<span th:text="${invoiceView.userCompany.gstNo}"></span></td>
+				</tr>
+				<tr style="text-align: center;">
+					<td><span th:text="${invoiceView.userCompany.bankAccount}"></span></td>
+				</tr>
+				<tr style="text-align: center;">
+					<td><span th:text="${invoiceView.userCompany.address}"></span></td>
+				</tr>
+			</thead>
+		</table>
+		<table style="width: 100%;" >
+			<thead>
+				<tr>
+					<td>
+						<table style="text-align: left;width: 100%;">
+							<tr>
+								<td th:text="${invoiceView.invoice.customerCompanyName}"></td>
+							</tr>
+							<tr>
+								<td th:text="${invoiceView.invoice.customerCompanyAddress}"></td>
+							</tr>
+							<tr>
+								<td th:text="${invoiceView.invoice.customerEmail}"></td>
+							</tr>
+							<tr>
+								<td th:text="${invoiceView.invoice.userCompanyTel}"></td>
+							</tr>
+						</table>
+					</td>
+					<td>
+						<table style="width: 100%;text-align: right;">
+							<tr>
+								<td style="width: 30%;">Invoice:   </td>
+								<td><span th:text="${invoiceView.invoice.aliasId}"></span></td>
+							</tr>
+							<tr>
+								<td> Date:</td>
+								<td> <span  th:text="${#dates.format(invoiceView.invoice.modifyTime, 'dd/MM/yyyy')}"></span></td>
+							</tr>
+							<tr>
+								<td> P/O No: </td>
+								
+								<td><span th:text="${invoiceView.invoice.adminInfo}"></span></td>
+							</tr>
+						</table>
+						
+					</td>
+					
+				</tr>
+				
+			</thead>
+		</table>
+		
+		<div style="height: 30px;"></div>
+		<table style="width: 100%;" >
+			<thead>
+				<tr>
+					<th class="td-bottom" style="width: 30%;">Name</th>
+					<th class="td-bottom" style="width: 30%;">Qty.</th>
+					<th class="td-bottom" style="width: 20%;">Unit Price</th>
+					<th class="td-bottom" style="width: 20%;">Amount</th>
+				</tr>
+			</thead>
+			<tr th:each="invoiceItem : ${invoiceView.invoiceItemList}">
+				<td class="td-bottom"><span th:text="${invoiceItem.title}"></span></td>
+				<td class="td-bottom"><span th:text="${invoiceItem.quantity}"></span></td>
+				<td class="td-bottom">$<span th:text="${invoiceItem.unitPrice}"></span></td>
+				<td class="td-bottom">$<span th:text="${#numbers.formatDecimal(invoiceItem.unitPrice*invoiceItem.quantity,0,2)}"></span></td>
+			</tr>
+			<tr th:if="${invoiceView.invoice.discount!=1}">
+				<td class="td-bottom" colspan="3" style="text-align: right;">Discount:</td>
+				<td class="td-bottom"><span
+					th:text="${invoiceView.invoice.discount}"></span></td>
+			</tr>
+			<tr>
+				<td class="td-bottom" colspan="3" style="text-align: right;" >Sale:</td>
+				<td  class="td-bottom" >$<span th:text="${#numbers.formatDecimal(invoiceView.invoice.total-invoiceView.invoice.gst-invoiceView.invoice.freight,1,2)}"></span></td>
+			</tr>
+			<tr>
+				<td  class="td-bottom" colspan="3" style="text-align: right;">Freight:</td>
+				<td class="td-bottom">$<span
+					th:text="${#numbers.formatDecimal(invoiceView.invoice.freight,1,2)}"></span></td>
+			</tr>
+			<tr>
+				<td class="td-bottom"  colspan="3" style="text-align: right;">GST:</td>
+				<td class="td-bottom" >$<span th:text="${invoiceView.invoice.gst}"></span></td>
+			</tr>
+			<tr>
+				<td class="td-bottom" colspan="3" style="text-align: right;">Total:</td>
+				<td class="td-bottom">
+					$<span th:text="${#numbers.formatDecimal(invoiceView.invoice.total,1,2)}"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="td-bottom" colspan="3" style="text-align: right;">Due Date:</td>
+				<td class="td-bottom">
+					<span th:text="${#dates.format(dueDate,'dd/MM/yyyy')}" ></span>
+				</td>
+			</tr>
+		</table>
+		
+		<div style="height: 30px;"></div>
+		
+		<div  th:utext="${invoiceView.invoice.invoiceTermsConditions}">
+			Terms &amp; conditions
+		</div>
+		<!-- 分页 -->
+		<div style="page-break-after: always;"></div>
+	</div>
+	<!--endprint-->
+	
+	
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		
+			function printInvoice(){ 
+				var bdhtml=window.document.body.innerHTML; 
+				sprnstr="<!--startprint-->"; //开始打印标识字符串有17个字符
+				eprnstr="<!--endprint-->"; //结束打印标识字符串
+				prnhtml=bdhtml.substr(bdhtml.indexOf(sprnstr)+17); //从开始打印标识之后的内容
+				prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr)); //截取开始标识和结束标识之间的内容
+				window.document.body.innerHTML=prnhtml; //把需要打印的指定内容赋给body.innerHTML
+				window.print(); //调用浏览器的打印功能打印指定区域
+				window.document.body.innerHTML=bdhtml; // 最后还原页面
+			}
+		
+		
+		/*]]>*/	
+	</script>
+	
+</body>
+</html>

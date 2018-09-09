@@ -1,0 +1,129 @@
+<div class="container-fluid "  th:fragment="content">
+    <div th:replace="/administrator/customer/fragment/f-search :: search('management/branch')"></div>
+    
+    <div class="row">
+        <div class="col-lg-12">
+        	<table class="table table-hover  ">
+				 	<thead>
+				 		<tr>
+				 			<th>ID</th>
+				 			<th>Branch Name</th>
+				 			<th>Contact Name</th>
+				 			<th  >Email</th>
+				 			<th>Tel</th>
+				 			<th>Mobile</th>
+				 			<th >Status</th>
+				 			<th >Address</th>
+				 			<th >Description</th>
+				 			<th ><a href="javascipt:void(0);" onclick="newOpen()" >
+				 				 <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-plus fa-stack-1x"></i>
+									</span>
+				 				
+				 				</a></th>
+				 		</tr>
+				 		
+				 	</thead>
+				 		<tr th:each="branch :${branchList}" th:id="|tr_${branch.id}|" >
+				 			<td >
+				 				<span th:text="${branch.id}"></span>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${branch.id}, data-url=|@{/management/branch/update/colomn/}|" data-name="branchName"  href="#"  class="edit-name"  th:text="${branch.branchName}" >branchName</a>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${branch.id}, data-url=|@{/management/branch/update/colomn/}|" data-name="contactName"  href="#"  class="edit-name"  th:text="${branch.contactName}" >contactName</a>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${branch.id}, data-url=|@{/management/branch/update/colomn/}|" data-name="email"  href="#"  class="edit-name"  th:text="${branch.email}" >email</a>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${branch.id}, data-url=|@{/management/branch/update/colomn/}|" data-name="tel"  href="#"  class="edit-name"  th:text="${branch.tel}" >tel</a>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${branch.id}, data-url=|@{/management/branch/update/colomn/}|" data-name="mobile"  href="#"  class="edit-name"  th:text="${branch.mobile}" >contactName</a>
+				 			</td>
+				 			<td >
+				 				<a class="status" data-type="select" th:attr="data-pk=${branch.id}, data-url=|@{/management/branch/update/colomn/}|" data-name="status"  href="#"    th:text="${branch.status==0?'In-active': 'Active'}" >status</a>
+				 			</td>
+				 			<td >
+				 				<a  data-type="textarea" data-placement="bottom" th:attr="data-pk=${branch.id}, data-url=|@{/management/branch/update/colomn/}|" data-name="address"  href="#"  class="edit-name"  th:text="${branch.address}" >address</a>
+				 			</td>
+				 			<td >
+				 				<a data-type="textarea" data-placement="bottom" th:attr="data-pk=${branch.id}, data-url=|@{/management/branch/update/colomn/}|" data-name="description"  href="#"  class="edit-name"  th:text="${branch.description}" >Description</a>
+				 			</td>
+				 			<td >
+				 				<a href="javascript:void(0)" th:onclick="|del('${branch.id}')|" title="Delete" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-remove fa-stack-1x"></i>
+									</span>
+				 			</td>
+				 		</tr>
+				 		
+				 		<tr >
+				 			<td colspan="3" >
+				 				
+				 			</td>
+				 			<td colspan="10" align="right">
+				 				<div th:replace="/administrator/fragment/f-page :: page"></div>
+				 			</td>
+				 		</tr>
+				</table>
+        </div>
+    </div>
+    
+    
+     <style>
+    	.sort-colomn{
+    		cursor: pointer;
+    		color: #c05a22;
+    	}
+    	
+    </style>
+     <script src="static/plugin/editable/js/bootstrap-editable.min.js"  
+     	type="text/javascript" th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           //
+			$('.edit-name').editable();
+
+			$('.status').editable({
+		        value: -1,    
+		        source: [
+		              {value: 0, text: 'In-active'},
+		              {value: 1, text: 'Active'},
+		           ]
+		    });
+			$('.customerType').editable({
+		        value: "",    
+		        source: [
+		              {value: "", text: '--select--'},
+		              {value: 'customer', text: 'customer'},
+		              {value: 'sales', text: 'sales'},
+		           ]
+		    });
+			
+			/**
+			新增
+			**/
+			function newOpen(){
+				window.open([[@{/management/branch/new}]],'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			}
+			/**
+			**/
+			function del(branchId){
+				if(confirm("Confirm?")){
+					$.get([[@{/management/branch/del/}]]+branchId);
+					$("#tr_" + branchId).fadeOut('slow');
+					
+				}
+			}
+			
+		/*]]>*/	
+	</script>
+</div>

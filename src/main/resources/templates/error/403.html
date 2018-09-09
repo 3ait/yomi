@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<head>
+			<title><span th:replace="/administrator/fragment/f-company-name :: companyname"></span> | Administrator</title>
+        <th:block th:replace="/administrator/fragment/f-js-css :: public-css-js"></th:block>
+	</head>
+	<body>
+		
+		<div th:style="|height: 100%;padding-top:80px; background:  url('@{/static/templates/administrator/bg.png}') ; background-size:cover;|">
+			<div class="container bg-white" style="padding: 0 30px;" >
+				<div class="row">
+					<h2>&nbsp;</h2>
+					<h3><a href="javascript:window.history.back(-1)"> 403 no permission. click to return.</a></h3>
+				</div>
+					
+			</div>
+		</div>
+
+		
+		
+	</body>
+	<style>
+		.orange-left{
+			border-left: 6px #d9682a solid;padding-left: 20px;
+		}
+		.hr-4{
+			height: 4px ;border-top: 4px solid grey;
+		}
+		.bg-white{
+			background: white;
+			padding: 40px 40px;
+			min-height: 600px;
+		}
+	</style>	
+	
+</html>

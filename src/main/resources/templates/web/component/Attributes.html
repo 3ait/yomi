@@ -1,0 +1,36 @@
+	<th:block th:fragment="content" >
+		
+		
+	<div id="attribute"  >
+		<span class="col-xs-6 col-sm-2" v-for="item in items" >
+			<a style="color: #666;font-size: 14px;line-height: 30px;"  :href="'/brand/' + item.id" target="_blank">{{item.attrValue}}</a>
+		</span>
+	</div>
+
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			new Vue({
+			el : '#attribute',
+			data : {
+				items:[
+				]
+			},
+			created: function() {
+				var _this = this;
+				axios.get([[@{/api/product/attribute/brand}]], {
+				    params: {
+				     
+				    }
+				  })
+				  .then(function (response){
+					  _this.items = response.data.content;
+				  })
+				  .catch(function (error) {
+				    console.log(error);
+				  }); 
+				
+			}
+		})
+	/*]]>*/
+</script>
+</th:block>

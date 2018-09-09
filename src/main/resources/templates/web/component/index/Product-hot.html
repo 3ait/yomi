@@ -1,0 +1,106 @@
+	<th:block th:fragment="product-hot" >
+		
+	<div  class="container" id="product-hot" >
+			
+			<br/>
+			<div class="row">
+				<div class="col-sm-12 " style="padding: 0;">
+				<h3 style="color: #357363;">热销产品</h3>
+				<hr style="background: #357363;height: 2px;border: none;"/>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2 col-xs-6 product-list" v-for="(item, index) in hotProductList" style="">
+					<a :href="'/product/'+ item.id" target="_blank" @click="addHistory(item.id,item.productName,item.productNameAlias,item.defaultSrc,item.price1)" >
+						<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive">
+					</a>
+				       <div class="caption" >
+				        <p>
+							<span v-if="item.price2>0" class="price-color" >NZD {{item.price2}}&nbsp;</span>
+							<span  :class="item.price2>0 ? 'price-del':'price-color'">NZD {{item.price1}}</span> 
+							
+				        </p>
+			        	<span style="color: grey;font-size: 12px;">{{item.productName}}</span>
+			        	
+				        <p style="margin-top: 10px;">
+							<span class="label label-danger">{{item.label}}</span>
+				        </p>
+				      </div>
+				</div>
+			</div> 
+			<br/>
+		</div>
+			<style>
+				hr{
+					margin-top: 0;
+					margin-bottom: 0;
+				}
+				@media (min-width: 768px){
+					.product-list {
+						height: 280px;
+					}
+				}
+				@media (max-width: 768px){
+					.product-list {
+						height: 240px;
+					}
+				}
+				.product-list {
+					margin-top: 20px;
+					padding: 5px 15px;
+					transition: all .5s;
+					border: 1px solid #eee;
+				}
+				
+				.product-list:HOVER {
+					box-shadow: -3px 0 5px #9FA8AB, 0 -3px 5px #9FA8AB, 0 3px 5px #9FA8AB,3px 0 5px #9FA8AB;
+				}
+				.price-del{
+					font-size: 12px;
+					text-decoration: line-through;
+				}
+				.price-color{
+					font-size:14px;
+					color: #e4393c;
+				}
+			</style>
+			
+
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			new Vue({
+			el : '#product-hot',
+			data : {
+				hotProductList:[
+				]
+			},
+			created: function() {
+				var _this = this;
+				axios.get([[@{/api/web/product/list/hot?size=24&sortBy=position}]], {
+				    params: {
+				     
+				    }
+				  }).then(function (response){
+					  _this.hotProductList = response.data.content;
+					  for(var i=0;i< _this.hotProductList.length;i++){
+						  if (!isNaN(_this.hotProductList[i].price1)) {
+							  _this.hotProductList[i].price1 = _this.hotProductList[i].price1.toFixed(2);
+					        }
+						  if (!isNaN(_this.hotProductList[i].price2)) {
+							  _this.hotProductList[i].price2 = _this.hotProductList[i].price2.toFixed(2);
+					        }
+						  
+					  }
+				   
+				  }).catch(function (error) {
+				    console.log(error);
+				  }); 
+			},
+			methods:{
+				
+			}
+		})
+		/*]]>*/
+	</script>
+	
+</th:block>

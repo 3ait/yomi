@@ -1,0 +1,257 @@
+<div class="container-fluid "  th:fragment="content">
+    <div th:replace="/administrator/customer/fragment/f-search :: search('management/customer')"></div>
+    
+    <div class="row">
+        <div class="col-lg-12">
+        	<table class="table table-hover  ">
+				 	<thead>
+				 		<tr>
+				 			<th>ID<br/>CustomerType</th>
+				 			<th>Company Name<br/>Account Email</th>
+				 			<th  onclick="colomnSort('balance')" class="sort-colomn">Balance</th>
+				 			<th>Customer Name<br/> Phone<br/> Mobile</th>
+				 			<th>Company Address
+				 				<br/>
+				 				Shipping Address
+				 			</th>
+				 			<th>Login Email <br/>Password <br/> <span onclick="colomnSort('status')" class="sort-colomn">Status</span></th>
+				 			<th  onclick="colomnSort('discount')" class="sort-colomn">Discount</th>
+				 			<th >Memo</th>
+				 			<th>Create Time<br/>Modify Time</th>
+				 			<th><a href="javascipt:void(0);" onclick="newOpen()" >
+				 				 <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-plus fa-stack-1x"></i>
+									</span>
+				 				
+				 				</a></th>
+				 		</tr>
+				 		
+				 	</thead>
+				 		<tr th:each="customer :${customerList}" th:id="|tr_${customer.id}|" th:class="${#dates.format(customer.modifyTime, 'dd/MM/yyyy')}==${#dates.format(new java.util.Date().getTime(), 'dd/MM/yyyy')}?'':alert-info">
+				 			<td >
+				 				<input name="checkbox_email" type="checkbox" th:value="${customer.id}" /><br/>
+				 				<span th:text="${customer.id}"></span>
+				 				<br/>
+				 				<a  data-type="select" th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="customerType"  href="#"  class="customerType"  th:text="${customer.customerType}" >customerType</a>
+				 			</td>
+				 			<td >
+				 				<a  style="text-transform: capitalize;"  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="companyName"  href="#"  class="edit-name"  th:text="${customer.companyName}" >companyName</a>
+				 			<br/>
+				 				<a  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="companyEmail"  href="#"  class="edit-name"  th:text="${customer.companyEmail}" >companyEmail</a>
+				 			</td>
+				 			<td >
+<!-- 				 				<a  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="balance"  href="#"  class="edit-name"  th:text="${customer.balance}" >balance</a> -->
+				 				<span th:text="${#numbers.formatDecimal(customer.balance,0,2)}" >Balance</span>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="companyName"  href="#"  class="edit-name"  th:text="${customer.name}" >companyName</a>
+				 				<br/>
+				 				<a  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="phone"  href="#"  class="edit-name"  th:text="${customer.phone}" >phone</a>
+				 				<br/>
+				 				<a  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="tel"  href="#"  class="edit-name"  th:text="${customer.tel}" >mobile</a>
+				 			</td>
+				 			<td >
+				 				<a  data-type="textarea" data-placement="bottom" th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="address"  href="#"  class="edit-name"  th:text="${customer.address}" >address</a>
+				 				<br/>
+				 				<a  data-type="textarea" data-placement="bottom" th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="shippingAddress"  href="#"  class="edit-name"  th:text="${customer.shippingAddress}" >address</a>
+				 			</td>
+				 			
+				 			<td >
+				 				<a  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="email"  href="#"  class="edit-name"  th:text="${customer.email}" >email</a>
+				 				<br/>
+				 				<a  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="password"  href="#"  class="edit-name"  >********</a>
+				 				<br/>
+				 				<a class="status" data-type="select" th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="status"  href="#"    th:text="${customer.status==0?'In-active': 'Active'}" >status</a>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="discount"  href="#"  class="edit-name"  th:text="${customer.discount}" >phone</a>
+				 			</td>
+				 			
+				 			<!-- 
+				 			-->
+				 			<td style="width: 100px;">
+				 				<a   data-type="textarea" data-placement="bottom" th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="memo"  href="#"  class="edit-name"  th:utext="${customer.memo}" >memo</a>
+				 			</td> 
+				 			<td >
+				 				
+				 				<span th:text="${#dates.format(customer.createTime, 'HH:mm dd/MM/yyyy')}" ></span><br/>
+				 				<span  th:text="${#dates.format(customer.modifyTime, 'HH:mm dd/MM/yyyy')}" ></span>
+				 			</td>
+
+				 			<td >
+				 				<a href="javascript:void(0)" th:href="|@{/management/customer/statement/}${customer.id}|" title="Statement" target="_blank" >
+				 					<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-file-text-o fa-stack-1x"></i>
+									</span></a>
+								&nbsp;
+								<a href="javascript:void(0)" th:onclick="|showModel('','','${customer.id}','${customer.name}')|" title="Payment"  target="_blank">
+								<span class="fa-stack"> <i
+									class="fa fa-square-o fa-stack-2x"></i> <i
+									class="fa fa-plus fa-stack-1x"></i>
+									</span></a>
+									<a href="javascript:void(0)" th:onclick="|delCustomer('${customer.id}')|" title="Delete Customer" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-remove fa-stack-1x"></i>
+									</span></a>
+				 			</td>
+				 		</tr>
+				 		
+				 		<tr >
+				 			<td colspan="3" >
+				 				<input type="checkbox" onclick="checkAll(this)" />&nbsp;
+				 				<a href="javascript:void(0)" th:onclick="|emailBatch('${searchForm.dateFrom}','${searchForm.dateTo}')|" title="EmailBatch" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-envelope-o fa-stack-1x"></i>
+									</span></a>
+									&nbsp;
+									<a href="javascript:void(0)" th:onclick="|batchPrint('${searchForm.dateFrom}','${searchForm.dateTo}')|" title="EmailBatch" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-print fa-stack-1x"></i>
+									</span></a>
+									
+				 			</td>
+				 			<td colspan="10" align="right">
+				 				<div th:replace="/administrator/fragment/f-page :: page"></div>
+				 			</td>
+				 		</tr>
+				</table>
+        </div>
+    </div>
+    
+    <th:block th:replace="/administrator/invoice/fragment/new-payment :: content"></th:block>
+    
+     <style>
+    	.sort-colomn{
+    		cursor: pointer;
+    		color: #c05a22;
+    	}
+    	
+    </style>
+     <script src="static/plugin/editable/js/bootstrap-editable.min.js"  
+     	type="text/javascript" th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           //
+			$('.edit-name').editable();
+
+			$('.status').editable({
+		        value: -1,    
+		        source: [
+		              {value: 0, text: 'In-active'},
+		              {value: 1, text: 'Active'},
+		           ]
+		    });
+			$('.customerType').editable({
+		        value: "",    
+		        source: [
+		              {value: "", text: '--select--'},
+		              {value: 'customer', text: 'customer'},
+		              {value: 'sales', text: 'sales'},
+		           ]
+		    });
+			
+			/**
+			**/
+			function email(customerId,dateFrom,dateTo){
+				if(!confirm("Confirm ?")){
+					return;
+				}
+				$.ajax({
+					url:[[@{/management/customer/statement/pdf/email/}]] + customerId +  "?dateFrom="+dateFrom + "&dateTo=" + dateTo,
+					method: "GET",
+					data:{
+					}
+				}).done(function(ret){
+					if(ret=='true'){
+						alert("Success.");
+					}else{
+						alert(ret);
+					}
+				});
+			}
+		
+			
+			/**
+			全选
+			**/
+			function checkAll(obj){
+				if($(obj).prop("checked")){
+					$("input[name='checkbox_email']").prop("checked",true);
+				}else{
+					$("input[name='checkbox_email']").prop("checked",false) ;
+				}
+			}
+			/**
+			批量发送邮件
+			**/
+			function emailBatch(dateFrom,dateTo){
+				if(confirm("Confirm?")){
+					$("input[name='checkbox_email']").each(function(index,value){
+						if($(value).prop("checked")){
+							$.ajax({
+								url:[[@{/management/customer/statement/pdf/email/}]] + $(value).val() +  "?dateFrom="+dateFrom + "&dateTo=" + dateTo,
+								method: "GET",
+								data:{
+								}
+							}).done(function(ret){
+								if(ret=='success'){
+									$("#tr_"+$(value).val()).addClass("alert-info");
+								}else{
+									$("#tr_"+$(value).val()).addClass("alert-danger");
+								}
+							});
+						}
+					});
+				}
+			}
+			
+			/**
+			  批量打印Statement
+			**/
+			function batchPrint(dateFrom,dateTo){
+				var customerIds = new Array();
+				$("input[name='checkbox_email']").each(function(index,value){
+					if($(value).prop("checked")){
+						customerIds.push(value.value);
+					}
+				});
+				if(customerIds.length<1){
+					return;
+				}
+				
+				if(confirm("Confirm?")){
+					var data = {
+							'customerIds':customerIds,
+							'dateFrom' : dateFrom,
+							'dateTo' : dateTo
+					}
+					window.open([[@{/management/customer/statement/batch/print/preview?}]] + $.param(data,true),'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+				}
+			}
+			
+			/**
+			新增
+			**/
+			function newOpen(){
+				window.open([[@{/management/customer/new}]],'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			}
+			/**
+			**/
+			function delCustomer(customerId){
+				if(confirm("Confirm?")){
+					$.get([[@{/management/customer/del/}]]+customerId);
+					$("#tr_" + customerId).fadeOut('slow');
+					
+				}
+			}
+		/*]]>*/	
+	</script>
+</div>

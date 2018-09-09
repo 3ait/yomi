@@ -1,0 +1,69 @@
+<div class="container"  th:fragment="content">
+	<div class="row" style="margin:30px 0;">
+		<div class="col-md-2 ">
+			<th:block th:replace="/web/customer/fragment/customer-menu :: left-menu('payment')"></th:block>
+		</div>
+	
+       <div class="col-md-10 w_content">
+			
+			<div th:replace="/web/customer/fragment/f-search :: search(|customer/commission|)"></div>
+        	<table class="table table-hover  table-striped">
+				 	<thead>
+				 		<tr>
+				 			<th>OrderId</th>
+				 			<th>Customer</th>
+				 			<th>Commission</th>
+<!-- 				 			<th>PayStatus</th> -->
+				 			<th>CommissionPaid(<span th:text="${#numbers.formatDecimal(totalCommission,0,2)}"  ></span>)</th>
+				 			<th>Memo</th>
+				 			<th>CreateTime <br/>Operator</th>
+				 		</tr>
+				 		
+				 	</thead>
+				 		<tr th:each="commissionView :${commissionViewList}">
+				 			<td>
+				 				 <a href="javascript:void(0)" th:onclick="|viewOrder(${commissionView.order.id})|" target="_blank" th:if="${commissionView.order!=null}"><span    th:text="${commissionView.order.id}" ></span></a>
+				 			</td>
+				 			<td >
+				 				<span  th:text="${commissionView.order.toCustomerName}"  th:if="${commissionView.order!=null}"></span>
+				 			</td>
+				 			<td >
+				 				 <th:block   th:if="${commissionView.order!=null}" >
+				 				 <span  th:text="|$${commissionView.order.totalProductPrice}|" ></span> *
+				 				 <span   th:text="${#numbers.formatPercent(commissionView.order.salesCommissionPercentage,0,0)}"  ></span>
+				 				 </th:block>
+				 			</td>
+				 			<!-- <td>
+				 				<span th:text="${commissionView.order.salesCommissionStatus==0?'Unpaid': 'Paid'}" th:if="${commissionView.order!=null}"></span>
+				 			</td>
+				 			 -->
+				 			<td >
+				 				<th:block  th:if="${commissionView.customerCommission!=null}" >
+				 				$<span th:text="|${commissionView.customerCommission.commission}|" ></span>
+				 				</th:block>
+				 			</td>
+				 			<td >
+				 				<span th:text="${commissionView.customerCommission.memo}"  th:if="${commissionView.customerCommission!=null}"></span>
+				 			</td>
+				 			<td >
+				 				 <span th:text="${#dates.format(commissionView.createTime, 'HH:mm dd/MM/yyyy')}" >createTime</span>
+				 			<br/>
+				 				
+				 				 <span th:text="${commissionView.customerCommission.customer.name}"  th:if="${commissionView.customerCommission!=null}">customer.name</span>
+				 			</td>
+				 		</tr>
+				 		
+				</table>
+        </div>
+    </div>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		  function viewOrder(orderId){
+				window.open([[@{/customer/commission/}]]+orderId,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			}
+			
+		/*]]>*/	
+	</script>
+</div>

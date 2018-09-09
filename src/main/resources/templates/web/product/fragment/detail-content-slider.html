@@ -1,0 +1,35 @@
+<div th:fragment="slider" class="container">
+	<link rel="stylesheet" type="text/css" th:href="@{/static/templates/web/index/css/etalage.css}" href="css/etalage.css"></link>
+	<script th:src="@{/static/templates/web/index/js/jquery.etalage.min.js}" src="js/jquery.etalage.min.js"></script>
+
+	<script>
+			jQuery(document).ready(function($){
+
+				$('#etalage').etalage({
+  					thumb_image_width: 400, 
+  					thumb_image_height: 400,
+					source_image_width: 900,
+					source_image_height: 900,
+					show_hint: true,
+					click_callback: function(image_anchor, instance_id){
+						alert('Callback example:\nYou clicked on an image with the anchor: "'+image_anchor+'"\n(in Etalage instance: "'+instance_id+'")');
+					}
+				});
+
+			});
+	</script>
+	
+		<!-- 
+		 -->
+		<ul id="etalage">
+		<li>
+				<img class="etalage_source_image img-responsive" th:src="|/${productEditView.product.defaultSrc}|"  src="#"  title="" />
+				<img class="etalage_thumb_image img-responsive" th:src="|/${productEditView.product.defaultSrc}|" src="#" />
+			</li>
+			<li th:each="attachment: ${productEditView.attachmentList}">
+				<img class="etalage_source_image img-responsive" 	th:src="|/${attachment.filePath}|" src="#" title="" />
+				<img class="etalage_thumb_image img-responsive"  th:src="|/${attachment.filePath}|" src="#" alt="c"/> 
+			</li>
+				
+		</ul>
+</div>

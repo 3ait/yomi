@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title><span th:replace="/administrator/fragment/f-company-name :: companyname"></span> | Administrator</title>
+        <th:block th:replace="/administrator/fragment/f-js-css :: public-css-js"></th:block>
+    </head>
+    
+    <body>
+    
+    	<div th:style="|min-height: 700px;padding-top:50px; background:  url('@{/static/templates/administrator/bg.png}') ; background-size:cover;|">
+			<div class="container bg-white"  >
+				<div th:replace="/administrator/user/fragment/f-login :: login"></div>
+			</div>
+		</div>
+		
+
+		<footer th:replace="/administrator/fragment/f-footer :: footer">
+		</footer>
+    </body>
+    
+    <style>
+    	.bg-white{
+			background: white;
+			padding: 50px 50px;
+			min-height: 600px;
+		}
+		
+    </style>
+</html>

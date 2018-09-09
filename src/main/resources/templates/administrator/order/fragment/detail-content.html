@@ -1,0 +1,399 @@
+<div class="container-fluid "  th:fragment="content">
+    <div class="row">
+        <div class="col-lg-12">
+        	<table class="table   table-striped">
+				 	
+				 		<tr >
+				 			<th class="col-sm-2 text-right">
+				 			<a href="javascript:void(0)" th:onclick="|transferInvoice(${order.id})|" title="Transfer into Invoice" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-paste fa-stack-1x"></i>
+									</span></a>
+			 				<a href="javascript:void(0)" th:onclick="|printSingleOrder(${order.id})|" title="Print" >
+			 				<span class="fa-stack" >
+								  <i class="fa fa-square-o fa-stack-2x"></i>
+								  <i class="fa fa-print fa-stack-1x"></i>
+								</span></a>
+				 			
+				 			ID</th>
+				 			<td >
+				 				<a target="_blank" href="#" th:href="|@{/management/order/}${order.id}|" th:text="${order.id}">Id</a>
+				 			</td>
+				 		</tr>
+				 		<tr >
+				 			<th ></th>
+				 			<td>
+				 				<table class="table " >
+				 					<tr>
+				 						<th></th>
+				 						<th>Product Name</th>
+				 						<th>Price</th>
+				 						<th>Qty.</th>
+				 						<th></th>
+				 						<th></th>
+				 					</tr>
+									<tr th:each="orderItem : ${orderItems}">
+										
+										<td >
+											<a target="_blank" th:href="|@{/product/}${orderItem.product.id}|">
+											<img th:src="|/${orderItem.productDefaultSrc}|" class="img-responsive" style="max-width: 50px;"/>
+											</a>
+										</td>
+										<td  >
+											<a target="_blank" th:href="|@{/product/}${orderItem.product.id}|">
+											<span th:text="${orderItem.productNameCn}"></span>
+											</a>	
+										</td>
+										<td  >$<span th:text="${orderItem.productPrice}"></span></td>
+											
+										<td  >
+										<a  th:attr="data-pk=${orderItem.id}, data-url=|@{/management/order/orderitem/update/colomn/}|" data-placement="bottom" data-name="num"  href="#"  class="edit-name"  th:text="${orderItem.num}" >orderItem.num</a>
+										</td>
+										<td ><span th:text="${orderItem.product.location}"></span></td>
+										<td>
+											<a title="Remove" href="javascript:void(0)" th:onclick="|removeOrderItem(${orderItem.id})|">
+						 					<span class="fa-stack">
+											  <i class="fa fa-square-o fa-stack-2x"></i>
+											  <i class="fa fa-remove fa-stack-1x"></i>
+											</span></a>
+										</td>
+									</tr>
+									<tfoot id="searchProduct">
+										
+										<tr>
+											<td colspan="6">
+											<input type="text" v-model="searchQ"  maxlength="30" placeholder="" v-on:keypress="enterSubmit"  />
+											<input  id="orderId" type="hidden" th:value="${order.id}"  />
+												<a title="Search"  >
+							 					<span class="fa-stack" v-on:click="searchProduct">
+												  <i class="fa fa-square-o fa-stack-2x"></i>
+												  <i class="fa fa-search fa-stack-1x"></i>
+												</span></a> 
+												&nbsp;<a href="javascript:window.location.reload();"><button>Confirm</button></a> 
+												</td>
+										</tr>
+										<tr v-if="products.length > 0" v-for="product in products">
+											<td><img :src="'/'+product.defaultSrc" class="img-responsive" style="max-width: 50px;"/></td>
+											<td>{{product.productName}}</td>
+											<td>{{product.price1}}</td>
+											<td>{{product.location}}</td>
+											<td></td>
+											<td>
+												<a title="Add"  ><span class="fa-stack" v-on:click="addProductToOrder(product.id,$event)">
+												  <i class="fa fa-square-o fa-stack-2x"></i>
+												  <i class="fa fa-plus fa-stack-1x"></i>
+												</span></a></td>
+										</tr>
+									</tfoot>
+								</table>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">
+				 				<span class="label label-primary">Company</span>
+				 				</th>
+				 			<td >
+				 				 <a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="toCustomerCompanyName"  href="#"  class="edit-name"  th:text="${order.toCustomerCompanyName}" >toCustomerCompanyName</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">
+				 			<span class="label label-primary">Recipient ID</span></th>
+				 			<td >
+				 				 <a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="customerByCustomerId"  href="#"  class="edit-name"  th:text="${order.customerByCustomerId.id}" >toCustomerName</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">
+				 			<span class="label label-primary">Recipient</span></th>
+				 			<td >
+				 				 <a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="toCustomerName"  href="#"  class="edit-name"  th:text="${order.toCustomerName}" >toCustomerName</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">
+				 			<span class="label label-primary">Recipient's tel</span></th>
+				 			<td >
+				 				 <a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="toTel"  href="#"  class="edit-name"  th:text="${order.toTel}" >toPhone</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">
+				 			<span class="label label-primary">Recipient's Email</span></th>
+				 			<td >
+				 				 <a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="toEmail"  href="#"  class="edit-name"  th:text="${order.toEmail}" >toEmail</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">
+				 			<span class="label label-primary">Recipient's phone</span></th>
+				 			<td >
+				 				 <a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="toPhone"  href="#"  class="edit-name"  th:text="${order.toPhone}" >toPhone</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">
+				 			<span class="label label-primary">Recipient's Province</span></th>
+				 			<td >
+				 				 <a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="toProvince"  href="#"  class="edit-name"  th:text="${order.toProvince}" >toProvince</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">
+				 			<span class="label label-primary">Recipient's City</span></th>
+				 			<td >
+				 				 <a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="toCity"  href="#"  class="edit-name"  th:text="${order.toCity}" >toCity</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">
+				 			<span class="label label-primary">Recipient's District</span></th>
+				 			<td >
+				 				 <a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="toDistrict"  href="#"  class="edit-name"  th:text="${order.toDistrict}" >toDistrict</a>
+				 			</td>
+				 		</tr>
+<!-- 				 		<tr>
+				 			<th class="text-right">
+				 			<span class="label label-primary">Invoice address</span></th>
+				 			<td >
+				 				 <a data-type="textarea" th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="toAddress"  href="#"  class="edit-name"  th:text="${order.toAddress}" >toAddress</a>
+				 			</td>
+				 		</tr> -->
+				 		<tr>
+				 			<th class="text-right">
+				 			<span class="label label-primary">Shipping address</span></th>
+				 			<td >
+				 				 <a  data-type="textarea"  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="toShippingAddress"  href="#"  class="edit-name"  th:text="${order.toShippingAddress}" >toShippingAddress</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">
+				 			<span class="label label-primary">Customer Msg</span></th>
+				 			<td data-type="textarea"  th:text="${order.customerMsg}">Customer Msg</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">TrackingNum</th>
+				 			
+				 			<td >
+				 				<a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="trackingNum"  href="#"  class="edit-name"  th:text="${order.trackingNum}" >Tracking Num</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">Discount</th>
+				 			
+				 			<td >
+				 				<span th:text="${order.discount}"></span>
+				 			</td>
+				 			
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">Total Product Price</th>
+				 			
+				 			<td >
+				 				$<a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="totalProductPrice"  href="#"  class="edit-name"  th:text="|${#numbers.formatDecimal(order.totalProductPrice,0,2)}|" >Total Price</a>
+				 			</td>
+				 			
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">Total Freight</th>
+				 			
+				 			<td >
+				 				<a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="totalFreight"  href="#"  class="edit-name"  th:text="${order.totalFreight}" >Total Freight</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">Status</th>
+				 			
+				 			<td >
+				 			<th:block th:replace="/administrator/order/fragment/order-status :: content(${order})"></th:block>
+				 			</td>
+				 			
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">Pay Status</th>
+				 			
+				 			<td >
+				 				<a class="isPaid" data-type="select" th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="isPaid"  href="#"    th:text="${order.isPaid==0?'Unpaid': 'Paid'}" >status</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">
+				 				<span class="label label-primary">Sales</span></th>
+				 			
+				 			<td >
+				 				<a data-type="select"  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="customerBySalesId"  href="#"  class="customerBySalesId"  th:text="${order.customerBySalesId.name}" th:if="${order.customerBySalesId}!=null">customerBySalesId</a>
+				 				<a data-type="select"  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="customerBySalesId"  href="#"  class="customerBySalesId"  th:text="${order.customerBySalesId}" th:if="${order.customerBySalesId}==null">customerBySalesId</a>
+				 				<br/>
+				 				<a data-type="select"  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="salesCommissionPercentage"  href="#"  class="salesCommissionPercentage"  th:text="${#numbers.formatPercent(order.salesCommissionPercentage,0,0)}" >salesCommissionPercentage</a>
+		
+				 			</td>
+				 		</tr>
+				 		
+				 		<tr>
+				 			<th class="text-right">Admin Msg</th>
+				 			
+				 			<td >
+				 				<a  data-type="textarea"  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="adminMsg"  href="#"  class="edit-name"  th:text="${order.adminMsg}" >Admin Msg</a>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">Operator</th>
+				 			<td>
+				 				<span th:if="${order.user!=null}" th:text="${order.user.name}"></span>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<th class="text-right">Create Time<br/>Modify Time</th>
+				 			<td>
+				 				<span th:text="${#dates.format(order.createTime, 'HH:mm dd/MM/yyyy')}" ></span><br/>
+				 				<span th:text="${#dates.format(order.modifyTime, 'HH:mm dd/MM/yyyy')}" ></span>
+				 			</td>
+				 		</tr>
+				 		
+				</table>
+        </div>
+    </div>
+    
+    
+     <script src="static/plugin/editable/js/bootstrap-editable.min.js"  
+     	type="text/javascript" th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           //
+			$('.edit-name').editable();
+
+			$('.isPaid').editable({
+		        value: 0,    
+		        source: [
+		              {value: 0, text: 'Unpaid'},
+		              {value: 2, text: 'Paid'},
+		           ]
+		    });
+			$('.salesCommissionPercentage').editable({
+		        value: -1,    
+		        source: [
+		              {value: -1, text: '--Select--'},
+		              {value: 0.00, text: '0%'},
+		              {value: 0.05, text: '5%'},
+		              {value: 0.10, text: '10%'},
+		              {value: 0.15, text: '15%'},
+		              {value: 0.20, text: '20%'},
+		           ]
+		    });
+			
+			$('.customerBySalesId').editable({
+		        value: -1,    
+		        source: [[${salesArray}]],
+		    });
+			
+			/**
+			打印单个订单
+			**/
+			function printSingleOrder(orderId){
+				window.open([[@{/management/order/print.pdf}]] +"?orderIds=" +orderId,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			}		
+			
+			/**
+			订单转换为Invoice
+			**/
+			function transferInvoice(orderId){
+				
+				$.ajax({
+					url:[[@{/management/order/transfer/}]] + orderId ,
+					method: "GET",
+					data:{
+					}
+				}).done(function(ret){
+					if(ret==true){
+						alert("Success.");
+					}else{
+						alert("Error.");
+					}
+				});
+			}
+			
+			/**
+			删除订单
+			**/
+			function removeOrderItem(orderItemId){
+				if(confirm("confirm?")){
+					$.ajax({
+						url:[[@{/management/order/item/remove/}]]  + orderItemId,
+						method: "GET",
+						data:{
+						}
+					}).done(function(ret){
+						window.location.reload();
+					});
+				}
+			}
+			
+			new Vue({
+				el : '#searchProduct',
+				data : {
+					products: null,
+					searchQ:"",
+				},
+				created: function() {
+					
+				},
+				methods:{
+					searchProduct : function(){
+						var _this = this;
+						axios.get([[@{/api/management/product/q}]], {
+							params: {
+								q:_this.searchQ,
+						    }
+						  })
+						  .then(function (response){
+							  _this.products = response.data.content;
+						  })
+						  .catch(function (error) {
+						     console.log(error);
+						  });  
+						
+					},
+					addProductToOrder : function(productId,e){
+						var _this = this;
+						  e.currentTarget.style.color = 'blue';
+						axios.get([[@{/api/management/order/add/item/}]]+ document.getElementById("orderId").value + "/" + productId, {
+							params: {
+						    }
+						  })
+						  .then(function (response){
+							  //window.location.reload();
+							  //_this.products.push(response.data);
+						  })
+						  .catch(function (error) {
+						    console.log(error);
+						  });  
+						
+					},
+					enterSubmit: function(){
+						if(event.keyCode == 13){
+							var _this = this;
+							axios.get([[@{/api/management/product/q}]], {
+								params: {
+									q:_this.searchQ,
+							    }
+							  })
+							  .then(function (response){
+								  _this.products = response.data.content;
+							  })
+							  .catch(function (error) {
+							     console.log(error);
+							  });  
+							
+						}
+					}
+				}
+				
+			})
+			
+		/*]]>*/	
+	</script>
+</div>

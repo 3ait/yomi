@@ -1,0 +1,59 @@
+	<th:block th:fragment="page">
+		
+		<a class="a-page" th:onclick="|prePage()|">Prev</a>&nbsp;
+		<span th:text="|${number}|"></span>/<span th:text="${totalPages}"></span>(<span th:text="${totalNum}"></span>)
+		
+		&nbsp;<a class="a-page"  th:onclick="|nextPage()|">Next</a>&nbsp;
+		
+		<input id="pageGo" style="width:50px;" type="number" min="1" step="1" />&nbsp;
+		<button class="btn btn-default"  id="fontPage" type="button" th:onclick="|go()|" >Go</button>&nbsp;
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+
+		    //上翻页
+			function prePage(){
+				if($("#hidden_pageNum").val()<=1){
+					return false;
+				}
+				var pageNum = parseInt($("#hidden_pageNum").val()-1);
+				$("#hidden_pageNum").val(pageNum);
+				document.getElementById("searchForm").submit();
+			}
+		
+			//下翻页
+			function nextPage(){
+				if((parseInt($("#hidden_pageNum").val()))>=[[${totalPages}]]){
+					return false;
+				}
+				var pageNum = parseInt($("#hidden_pageNum").val())+1;
+				$("#hidden_pageNum").val(pageNum);
+				document.getElementById("searchForm").submit();
+			}
+			
+			//页面条跳转
+			function go(){
+				var pageNum = parseInt($("#pageGo").val());
+
+				if(isNaN(pageNum)){
+					return false;
+				}
+				if(pageNum<1){
+					return false;
+				}
+				if(pageNum>[[${totalPages}]]){
+					return false;
+				}
+				
+				$("#hidden_pageNum").val(pageNum);
+				document.getElementById("searchForm").submit();
+			}
+		/*]]>*/	
+	</script>
+	<style>
+		.a-page{
+			cursor: pointer;
+		}
+	</style>
+</th:block>

@@ -1,0 +1,100 @@
+<!-- header -->
+<div class="header_bg" th:fragment="header-nav">
+		<div class="container" >
+			<br/>
+			<div class="row">
+				<div class="col-sm-4 col-xs-12">
+					<a th:href="@{/}" href="#"><img class="img-responsive" th:src="@{/static/templates/web/logo.svg}"  /> </a>
+				</div>
+				<div class="col-sm-4 col-xs-12 margin-top-1"  >
+					<div class="search">
+							<form method="get" th:action="@{/product/q}">
+								<input type="text" name="q" th:value="${q}" placeholder="search..." /> 
+								<input type="submit" value="" />
+							</form>
+						</div>
+				</div>
+				<div class="col-sm-2 col-xs-6  margin-top-1 text-right" >
+					<ul class="icon1 sub-icon1 profile_img">
+						<li>
+							<a th:href="@{/cart}" href="#"><i class="fa fa-shopping-cart fa-2x cart-icon" aria-hidden="true"></i></a> 
+							<span class="badge label-success totalNum"></span> 
+							<ul class="sub-icon1 list text-left">
+								<li>
+									<h3>总数量:&nbsp;&nbsp;<i class="fa fa-cart-plus" aria-hidden="true"></i>&nbsp;<span class="totalNum" id="totalNum"></span></h3>
+								</li>
+								<li>
+									<h3>总价格:&nbsp;&nbsp;<i class="fa fa-usd" aria-hidden="true"></i>&nbsp;<span id="totalAmount"></span></h3>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+				<div class=" col-sm-2 col-xs-6  margin-top-1 text-right" >
+					
+					<div class="create_btn">
+						<a class="arrow" th:href="@{/customer}" href="#" th:if="${customer}==null">登录
+							
+						</a>
+						<a class="arrow" th:href="@{/customer/logout}" href="#" th:if="${customer}!=null">退出 
+						</a>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<!-- start header menu -->
+				<ul class="megamenu skyblue">
+					<li style="display: inline-block;"><a class="color1"  href="#" th:href="@{/}">首页</a></li>
+					<li class="grid" style="display: inline-block;" th:each="menuView1,iterStat : ${topMenuViewList}">
+						<a class="color1" th:href="|@{/}${menuView1.menu.menuType}/category/${menuView1.menu.id}|" href="#" th:text="${menuView1.menu.name}">new arrivals</a>
+						<div class="megapanel" th:if="${#lists.size(menuView1.subMenuViewList) &gt; 0}">
+							<div class="row" >
+								<div class="col1"  th:each="menuView2 : ${menuView1.subMenuViewList}">
+									<div class="h_nav">
+										<h4 ><a href="#" th:href="|@{/}${menuView1.menu.menuType}/category/${menuView2.menu.id}|" th:text="${menuView2.menu.name}">Shop</a></h4>
+										<ul>
+											<li  th:each="menuView3 : ${menuView2.subMenuViewList}" >
+												<a href="#" th:href="|@{/}${menuView1.menu.menuType}/category/${menuView3.menu.id}|" th:text="${menuView3.menu.name}">menuName</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								
+							</div>
+							
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<script th:src="@{/static/templates/web/shoppingcart/shoppingcart.js}" src="#"></script>
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } 
+			 
+			$(document).ready(function() {
+				$(".megamenu").megamenu();
+			});
+			
+			
+			var productlist = cart.getproductlist();//取出购物车商品  
+			$(".totalNum").html(getTotalNumber());
+			$("#totalAmount").html(getTotalAmount());
+			
+		/*]]>*/	
+		</script>
+	
+	<style>
+		.margin-top-1{
+			margin: 1% 0;
+		}
+		.cart-icon{
+			color: #b7a072;
+		}
+		.cart-icon:HOVER{
+			color: #357363;
+		}
+	</style>
+</div>

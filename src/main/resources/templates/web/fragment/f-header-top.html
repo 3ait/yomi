@@ -1,0 +1,31 @@
+	<!-- header_top -->
+	<div class="top_bg" th:fragment="header-top">
+		<div class="container">
+
+			<div class="header_top">
+				<div class="top_left ">
+					<h2>
+						<!-- <a href="#">50%off</a>  -->更多优惠？ 请关注我们。
+					</h2>
+				</div>
+				<div class="top_right">
+					<ul>
+						<li><a href="#">64-09-4444007</a></li>
+						|<li><a href="mailto:info@ulife.co.nz" style="text-transform: lowercase;">info@ulife.co.nz</a></li>
+						<!-- 
+						-->
+						<li class="login">
+							<div id="loginContainer">
+								<!-- <a href="#" id="loginButton" th:if="${customer==null}" th:href="@{/customer}" > 
+									<span>登陆</span>
+								</a> -->
+								<a href="#" th:href="@{/customer/info}" th:if="${customer!=null}" title="My Account"><i  class="fa fa-user-o" aria-hidden="true"></i><span style="display: inline;"  th:text="|Hello, ${customer.name}|"></span></a>
+							</div>
+						</li> 
+					</ul>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	

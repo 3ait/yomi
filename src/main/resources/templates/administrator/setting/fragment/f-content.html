@@ -1,0 +1,215 @@
+<div class="container-fluid "  th:fragment="content">
+    <script type="text/javascript" src="../../../static/plugin/ckeditor/ckeditor.js" th:src="@{/static/plugin/ckeditor/ckeditor.js}"></script>
+    
+    	<form th:action="@{/management/setting/save}" onsubmit="return submitConfir();" method="post">
+    		<input type="hidden" name="id" th:value="${userCompany.id}" />
+	        <div class="row">
+				<div class="col-sm-2 text-right">
+					<label>Company Name:</label>
+				</div>
+				<div class="col-sm-8">
+					<div class="form-group" >
+							<input type="text" maxlength="200" class="form-control" name="name" th:value="${userCompany.name}" />
+					</div>
+				</div>
+			</div>
+	        <div class="row">
+				<div class="col-sm-2 text-right">
+					<label>GST Number:</label>
+				</div>
+				<div class="col-sm-8">
+					<div class="form-group " >
+							<input type="text" maxlength="200" class="form-control" name="gstNo" th:value="${userCompany.gstNo}"/>
+					</div>
+				</div>
+			</div>
+	        <div class="row">
+				<div class="col-sm-2 text-right">
+					<label>Website:</label>
+				</div>
+				<div class="col-sm-8">
+					<div class="form-group " >
+							<input type="text" maxlength="200" class="form-control" name="website" th:value="${userCompany.website}"/>
+					</div>
+				</div>
+			</div>
+	        <div class="row">
+				<div class="col-sm-2 text-right">
+					<label>Contact Email:</label>
+				</div>
+				<div class="col-sm-8">
+					<div class="form-group " >
+							<input type="text" maxlength="200" class="form-control" name="email" th:value="${userCompany.email}"/>
+					</div>
+				</div>
+			</div>
+	        <div class="row">
+				<div class="col-sm-2 text-right">
+					<label>Tel:</label>
+				</div>
+				<div class="col-sm-8">
+					<div class="form-group " >
+							<input type="text" maxlength="200" class="form-control" name="tel" th:value="${userCompany.tel}"/>
+					</div>
+				</div>
+			</div>
+	        <div class="row">
+				<div class="col-sm-2 text-right">
+					<label>Fax:</label>
+				</div>
+				<div class="col-sm-8">
+					<div class="form-group " >
+							<input type="text" maxlength="200" class="form-control" name="fax" th:value="${userCompany.fax}"/>
+					</div>
+				</div>
+			</div>
+	        <div class="row">
+				<div class="col-sm-2 text-right">
+					<label>Address:</label>
+				</div>
+				<div class="col-sm-8">
+					<div class="form-group " >
+							<input type="text" maxlength="200" class="form-control" name="address" th:value="${userCompany.address}"/>
+					</div>
+				</div>
+			</div>
+	        <div class="row">
+				<div class="col-sm-2 text-right ">
+					<label>Bank Account:</label>
+				</div>
+				<div class="col-sm-8 ">
+					<div class="form-group " >
+							<input type="text" maxlength="200" class="form-control" name="bankAccount" placeholder="ASB: XX-XXXX-XXXXXX-XX" th:value="${userCompany.bankAccount}"/>
+					</div>
+				</div>
+			</div>
+			
+	         <div class="row">
+				<div class="col-sm-2 text-right ">
+					<label>SendingMail</label>
+				</div>
+				<div class="col-sm-8 ">
+					<div class="form-group " >
+							<input type="text" maxlength="200" class="form-control" name="sendingMail" placeholder="from@company.com" th:value="${userCompany.sendingMail}"/>
+					</div>
+				</div>
+			</div>
+	         <div class="row">
+				<div class="col-sm-2 text-right ">
+					<label>SendingMailSMTP</label>
+				</div>
+				<div class="col-sm-8 ">
+					<div class="form-group " >
+							<input type="text" maxlength="200" class="form-control" name="sendingMailSmtp" placeholder="smtp.gmail.com" th:value="${userCompany.sendingMailSmtp}"/>
+					</div>
+				</div>
+			</div>
+	         <div class="row">
+				<div class="col-sm-2 text-right ">
+					<label>SendingMail Password</label>
+				</div>
+				<div class="col-sm-8 ">
+					<div class="form-group " >
+							<input type="password" maxlength="200" class="form-control" name="sendingMailPassword" placeholder="********" th:value="${userCompany.sendingMailPassword}"/>
+					</div>
+				</div>
+			</div>
+	        <div class="row">
+				<div class="col-sm-2 text-right ">
+					<label>SendingMail subject</label>
+				</div>
+				<div class="col-sm-8 ">
+					<div class="form-group " >
+							<input type="text" maxlength="200" class="form-control" name="sendingMailSubject" placeholder="email subject" th:value="${userCompany.sendingMailSubject}"/>
+					</div>
+				</div>
+			</div>
+	        <div class="row">
+				<div class="col-sm-2 text-right ">
+					<label>SendingMail CC</label>
+				</div>
+				<div class="col-sm-8 ">
+					<div class="form-group " >
+							<input type="text" maxlength="200" class="form-control" name="sendingMailCc" placeholder="test1@test.com;test2@test.com" th:value="${userCompany.sendingMailCc}"/>
+					</div>
+				</div>
+			</div>
+	        <div class="row">
+				<div class="col-sm-2 text-right ">
+					<label>SendingMailTemplate</label>
+				</div>
+				<div class="col-sm-8 ">
+					<div class="form-group " >
+							<!-- 编辑框 -->
+						<textarea id="sendingMailTemplate"  maxlength="20000"  name="sendingMailTemplate" th:utext="${userCompany.sendingMailTemplate}"></textarea>
+		                  <script th:inline="javascript">
+		                      CKEDITOR.replace( 'sendingMailTemplate', {
+		                      	filebrowserBrowseUrl: /*[[@{/management/attachment/ckediter/select}]]*/,
+		                      	allowedContent: true,
+		                      } );
+		                  </script>
+					<!-- 编辑框结束 -->
+					</div>
+				</div>
+			</div>
+	        
+	        
+	        <div class="row">
+				<div class="col-sm-2 text-right">
+					<label>Terms  conditions:</label>
+				</div>
+				<div class="col-sm-8">
+					<div class="form-group">
+					<!-- 编辑框 -->
+						<textarea id="txtDefaultHtmlArea"  maxlength="20000"  name="invoiceTermsConditions" th:utext="${userCompany.invoiceTermsConditions}"></textarea>
+		                  <script th:inline="javascript">
+		                      CKEDITOR.replace( 'txtDefaultHtmlArea', {
+		                      	filebrowserBrowseUrl: /*[[@{/management/attachment/ckediter/select}]]*/,
+		                      	allowedContent: true,
+		                      } );
+		                  </script>
+					<!-- 编辑框结束 -->
+					</div>
+			                        
+				
+			</div>
+	    </div>
+	    
+	    <div class="row">
+			<div class="col-sm-2 col-sm-offset-2">
+				<div class="form-group input-group">
+					<button class="btn btn-primary">Submit</button>
+				</div>
+			</div>
+		</div>
+    </form>
+    <style>
+    	
+    </style>
+     <script src="static/plugin/editable/js/bootstrap-editable.min.js"   stype="text/javascript" th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           //
+			$('.edit-name').editable();
+
+			$('.status').editable({
+		        value: '',    
+		        source: [
+		              {value: 'inactive', text: 'In-active'},
+		              {value: 'active', text: 'Active'},
+		              {value: 'cancelled', text: 'cancelled'},
+		           ]
+		    });
+			
+			/**
+			**/
+			function submitConfir(){
+				return confirm("Confirm?");
+			}
+		
+		/*]]>*/	
+	</script>
+</div>

@@ -1,0 +1,130 @@
+<div class="container-fluid "  th:fragment="content">
+
+    <th:block th:replace="/administrator/content/fragment/search :: search('management/attachment')"></th:block>
+    <div class="row">
+        <div class="col-lg-12">
+        	<table class="table table-hover  table-striped">
+				 	<thead>
+				 		<tr>
+				 			<th></th>
+				 			<th>ID</th>
+				 			<th>Img</th>
+				 			<th>Category</th>
+				 			<th>FileName</th>
+				 			<th>Title<br/>Description</th>
+				 			<th>Position</th>
+				 			<th>Href</th>
+				 			<th>CreateTime</th>
+				 			<th>
+				 				<a href="javascript:void(0)" onclick="newAttachment()" target="_blank">
+				 				 <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-plus fa-stack-1x"></i>
+									</span>
+				 				
+				 				</a>
+				 			</th>
+				 		</tr>
+				 		
+				 	</thead>
+				 		<tr th:each="attachment : ${attachmentList}" th:id="|tr_${attachment.id}|" >
+				 			<td >
+				 				<input type="checkbox" name="checkbox_del"  th:value="${attachment.id}" />
+				 			</td>
+				 			
+				 			<td th:text="${attachment.id}">ID</td>
+				 			<td >
+				 				<div style="width:100px;height: 100px;overflow: hidden;">
+				 					<img alt=""  class="img-responsive img-thumbnail" src="#" th:src="|/${attachment.filePath}|" />
+				 				</div>
+				 			</td>
+				 			<td th:text="${attachment.menu==null}?'':${attachment.menu.name}">CategoryName</td>
+				 			<td >
+				 				<a th:href="|@{/}${attachment.filePath}|" th:text="${attachment.fileName}" target="_blank"></a>
+				 			</td>
+				 			<td >
+				 				<a data-type="select"  th:attr="data-pk=${attachment.id}, data-url=|@{/management/attachment/update/colomn/}|" href="#" data-name="title" class="title"  th:text="${attachment.title}" >title</a>
+				 				<br/>
+				 				<a  th:attr="data-pk=${attachment.id}, data-url=|@{/management/attachment/update/colomn/}|" data-name="description"  href="#"  class="edit-name"  th:text="${attachment.description}" >description</a>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${attachment.id}, data-url=|@{/management/attachment/update/colomn/}|" data-name="position"  href="#"  class="edit-name"  th:text="${attachment.position}" >position</a>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${attachment.id}, data-url=|@{/management/attachment/update/colomn/}|" data-name="href"  href="#"  class="edit-name"  th:text="${attachment.href}" >position</a>
+				 			</td>
+				 			<td th:text="${attachment.createTime}">createTime</td>
+				 			<td>
+				 				<a href="javascript:void(0)" th:onclick="|delOne(${attachment.id})|">
+				 					 <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-remove fa-stack-1x"></i>
+									</span>
+				 				</a>
+				 			</td>
+				 		</tr>
+				 		
+				 		<tr >
+				 			<td colspan="3">
+				 				<!-- <a href="#" aria-label="Delete" th:onclick="|del()|" >
+									  <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-remove fa-stack-1x"></i>
+									</span>
+								</a> -->
+								
+				 			</td>
+				 			<td colspan="12" align="right">
+				 				<div th:replace="/administrator/fragment/f-page :: page"></div>
+				 			</td>
+				 		</tr>
+				</table>
+        </div>
+    </div>
+    
+    <script src="static/plugin/editable/js/bootstrap-editable.min.js"
+		type="text/javascript"
+		th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           //
+			$('.edit-name').editable();
+		
+			$('.title').editable({
+		        value: "",    
+		        source: [
+		              {value: "", text: '--Select--'},
+		              {value: "indexSlider", text: 'IndexSlider'},
+		              {value: "indexAd", text: 'IndexAd'},
+		              {value: "", text: 'others'},
+		           ]
+		    });
+			
+			function delOne(attachemntId){
+				if(confirm("Confirm delete?")){
+					$.get([[@{/management/attachment/del/}]]+attachemntId);
+					$("#tr_" + attachemntId).fadeOut('slow');
+				}
+			}
+			
+			function del(){
+				if(confirm("Confirm delete?")){
+					$("input[name='checkbox_del']").each(function(index,value){
+						if($(value).prop("checked")){
+							$.get([[@{/management/content/del/}]]+$(value).val());
+							$("#tr_" + $(value).val()).fadeOut('slow');
+						}
+					});
+					
+				}
+			}
+			function newAttachment(){
+				window.open([[@{/management/attachment/new}]],'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			}
+		
+		/*]]>*/	
+	</script>
+</div>

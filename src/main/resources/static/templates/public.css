@@ -1,0 +1,16 @@
+@CHARSET "UTF-8";
+
+.dark{
+	color:#29255f;
+}
+.orange{
+	color:#c05a22;
+}
+
+.red{
+	background: red;
+}
+
+.green{
+	background: green;
+}

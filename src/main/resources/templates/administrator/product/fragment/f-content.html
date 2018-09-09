@@ -1,0 +1,261 @@
+<div class="container-fluid "  th:fragment="content">
+	 <script src="#" type="text/javascript" th:src="@{/static/plugin/vue/vue.js}" charset="utf-8"></script>
+	<script src="#" type="text/javascript" th:src="@{/static/plugin/vue/axios.min.js}" charset="utf-8"></script>
+	<script src="#" type="text/javascript" th:src="@{/static/plugin/vue/vue-form.js}" charset="utf-8"></script>
+    <th:block th:replace="/administrator/product/fragment/search :: search('management/product')"></th:block>
+    <div class="row">
+        <div class="col-lg-12">
+        	<table class="table table-hover  table-striped">
+				 	<thead>
+				 		<tr>
+				 			<th></th>
+				 			<th>Img</th>
+				 			<th>ID</th>
+				 			<th >Category</th>
+				 			<th>MPN</th>
+				 			<th >Name</th>
+				 			<th onclick="colomnSort('status')" class="sort-colomn">Status</th>
+				 			<th>Price</th>
+				 			<th onclick="colomnSort('stock')" class="sort-colomn">Stock</th>
+				 			<th onclick="colomnSort('clickNum')" class="sort-colomn">ClickNum</th>
+				 			<th onclick="colomnSort('position')" class="sort-colomn">Position</th>
+				 			<th onclick="colomnSort('location')" class="sort-colomn">Location</th>
+				 			<th>
+				 				<span onclick="colomnSort('hot')" class="sort-colomn">Hot</span> |
+				 				<span onclick="colomnSort('promote')" class="sort-colomn">Specials</span><br/>
+				 				<span onclick="colomnSort('frontPage')" class="sort-colomn">NewArrivals</span> |
+				 				<span onclick="colomnSort('recommend')" class="sort-colomn">recommend</span>
+				 			</th>
+				 			<th>CreateTime</th>
+				 			<th>
+				 				<a href="#" th:href="@{/management/product/new}" target="_blank">
+				 				 <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-plus fa-stack-1x"></i>
+									</span>
+				 				
+				 				</a>
+				 			</th>
+				 		</tr>
+				 		
+				 	</thead>
+				 		<tr th:each="product : ${productList}" th:id="|tr_${product.id}|" >
+				 			<td >
+				 				<input type="checkbox" name="checkbox_single"  th:value="${product.id}" />
+				 			</td>
+				 			
+				 			<td >
+				 				<img style="width: 50px;" alt="" class="img-responsive img-thumbnail" src="#" th:src="|/${product.defaultSrc}|" />
+				 			</td>
+				 			<td th:text="${product.id}">ID</td>
+				 			<td th:text="${product.menu==null}?'':${product.menu.name}">CategoryName</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="mpn"  href="#"  class="edit-name"  th:text="${product.mpn}" >mpn</a>
+				 			</td>
+				 			<td >
+			 					<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="productName"  href="#"  class="edit-name"  th:text="${product.productName}" >productName</a>
+				 			</td>
+				 			<td >
+					 			<a class="productStatus" data-type="select" th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="status"  href="#"    th:text="${product.status==0?'Off line': (product.status==1?'On line':'Out stock')}" >status</a>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="price1"  href="#"  class="edit-name"  th:text="${product.price1}" >price1</a>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="stock"  href="#"  class="edit-name"  th:text="${product.stock}" >stock</a>
+				 				<br/>
+				 				<div th:each="pb : ${product.branchProducts}">
+				 					<span th:text="${pb.branch.branchName}"></span>&nbsp;:&nbsp;
+	    							<a  class="edit-name" th:attr="data-pk=${pb.id} ,data-url=|@{/management/branchproduct/update/colomn/}|"  data-name="stock"  href="#"  th:text="${pb.stock}">{{pb.stock}}</a>
+				 				</div>
+				 				<span class="label label-danger" th:if="${product.stock}<50">Stock Less 50 </span>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="clickNum"  href="#"  class="edit-name"  th:text="${product.clickNum}" >clickNum</a>
+				 			</td>
+				 			<td>
+				 				<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="position"  href="#"  class="edit-name"  th:text="${product.position}" >position</a>
+				 			</td>
+				 			<td>
+				 				<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="location"  href="#"  class="edit-name"  th:text="${product.location}" >location</a>
+				 			</td>
+				 			<td>
+				 				<div class="form-group input-group">
+									<label class="checkbox-inline"> 
+										<input type="checkbox" name="product.hot" value="1" th:checked="${product.hot==1}?1:0" th:onchange="|updateColoum('${product.id}','hot',this)|" /> Hot
+									</label> <br/>
+									<label class="checkbox-inline"> 
+										<input type="checkbox" name="product.promote" value="1"  th:checked="${product.promote==1}?1:0" th:onchange="|updateColoum('${product.id}','promote',this)|" /> Specials
+									</label> <br/>
+									<label class="checkbox-inline"> 
+										<input type="checkbox" name="product.frontPage" value="1" th:checked="${product.frontPage==1}?1:0" th:onchange="|updateColoum('${product.id}','frontPage',this)|" /> New Arrivals
+									</label> <br/>
+									<label class="checkbox-inline"> 
+										<input type="checkbox" name="product.recommend" value="1" th:checked="${product.recommend==1}?1:0" th:onchange="|updateColoum('${product.id}','recommend',this)|" /> Recommend
+									</label>
+								</div>
+				 			</td>
+				 			<td >
+				 				<span th:text="${#dates.format(product.createTime, 'HH:mm dd/MM/yyyy')}">createTime</span>
+				 			</td>
+				 			<td>
+				 				<a href="javascript:void(0)" th:onclick="|editProduct(${product.id})|" target="_blank" title="Edit">
+				 					 <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-edit fa-stack-1x"></i>
+									</span></a>
+				 				
+				 				 <a href="javascript:void(0)" th:onclick="|singleReport(${product.id})|" title="Report">
+				 				 	 <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"> </i>
+									  <i class="fa fa-bar-chart fa-stack-1x"></i>
+									</span></a>
+									<a href="javascript:void(0)" th:onclick="|copyProduct(${product.id})|" title="Dupilcate" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-copy fa-stack-1x"></i>
+									</span></a>
+				 				
+				 			</td>
+				 		</tr>
+				 		
+				 		<tr >
+				 			<td colspan="3">
+				 				<input type="checkbox" onclick="checkAll(this)" />&nbsp;
+								<a href="javascript:void(0)" th:onclick="|multpulReport()|" title="Report">
+				 				 	 <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"> </i>
+									  <i class="fa fa-bar-chart fa-stack-1x"></i>
+									</span></a>
+				 				<a href="#" aria-label="Delete" th:onclick="|delProduct()|" >
+									  <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-remove fa-stack-1x"></i>
+									</span></a>
+								
+				 			</td>
+				 			<td colspan="13" align="right">
+				 				<div th:replace="/administrator/fragment/f-page :: page"></div>
+				 			</td>
+				 		</tr>
+				</table>
+        </div>
+    </div>
+    
+    <style>
+    	.sort-colomn{
+    		cursor: pointer;
+    		color: #c05a22;
+    		
+    	}
+    	
+    </style>
+    <script src="static/plugin/editable/js/bootstrap-editable.min.js"
+		type="text/javascript"
+		th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           //
+			$('.edit-name').editable();
+		
+			$('.productStatus').editable({
+		        value: -1,    
+		        source: [
+		              {value: -1, text: '--Select--'},
+		              {value: 0, text: 'Off line'},
+		              {value: 1, text: 'On line'},
+		              {value: 2, text: 'Out stock'}
+		           ]
+		    });
+			/**
+			删除产品
+			**/
+			function delProduct(){
+				if(confirm("Confirm delete?")){
+					$("input[name='checkbox_single']").each(function(index,value){
+						if($(value).prop("checked")){
+							$.get([[@{/management/product/del/}]]+$(value).val());
+							$("#tr_" + $(value).val()).fadeOut('slow');
+						}
+					});
+					
+				}
+			}
+
+			
+			/**
+			更新字段
+			**/
+			function updateColoum(productId,name,_self){
+				
+				var checked = _self.checked==true?1:0;
+				$.get([[@{/management/product/update/colomn/}]] + "?pk=" + productId +"&name=" + name + "&value=" + checked );
+			}
+			
+			
+			/**
+				Edit
+			**/
+			function editProduct(productId){
+				window.open([[@{/management/product/edit/}]] + productId,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			}
+			/**
+				single Report
+			**/
+			function singleReport(productId){
+				window.open([[@{/management/report/product/}]] + productId,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			}
+			
+			/**
+			多个产品report 
+			**/
+			function multpulReport(){
+				
+				var productIds = new Array();
+				var i = 0;
+				$("input[name='checkbox_single']").each(function(index,value){
+					if($(value).prop("checked")){
+						productIds[i] = $(value).val();
+						i++;
+					}
+				});
+				if(productIds.length>0){
+					window.open([[@{/management/report/product/multiple?productIds=}]] + productIds,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+				}
+			}
+		
+			/**
+			全选
+			**/
+			function checkAll(obj){
+				if($(obj).prop("checked")){
+					$("input[name='checkbox_single']").prop("checked",true);
+				}else{
+					$("input[name='checkbox_single']").prop("checked",false) ;
+				}
+			}
+			
+			/**
+			Duplicate product
+			**/
+			function copyProduct(productId){
+				if(!confirm("Confirm ?")){
+					return;
+				}
+				$.ajax({
+					url:[[@{/management/product/duplicate/}]] + productId ,
+					method: "GET",
+					data:{
+					}
+				}).done(function(ret){
+					window.location.reload();
+				});
+			}
+			
+			
+		/*]]>*/	
+	</script>
+</div>

@@ -1,0 +1,83 @@
+
+<!-- content -->
+
+<div th:fragment="content" class="container">
+
+	<div class="row" style="margin:30px 0;">
+		<div class="col-md-2 ">
+			<th:block th:replace="/web/customer/fragment/customer-menu :: left-menu('history')"></th:block>
+		</div>
+
+
+		<div class="col-md-10 w_content">
+			<div th:replace="/web/customer/fragment/f-search :: search(|customer/history|)"></div>
+			<table class="table table-hover">
+				<thead>
+					<tr>
+					<th  > 订单号</th>
+					<th  > 快递单号</th>
+					<th  >支付状态</th>
+					<th  >订单状态</th>
+					<th  >客人留言</th>
+					<th  >系统信息</th>
+					<th  >金额(<span style="color:#c05a22;" th:text="${#numbers.formatDecimal(totalPrice,0,2)}"></span>)</th>
+					<th  th:if="${customer.customerType=='sales'}" >Commission(<span  style="color:#c05a22;" th:text="${#numbers.formatDecimal(totalCommission,0,2)}"></span>)</th>
+					<th  >时间</th>
+					<th ></th>
+					</tr>
+				</thead>
+				<tr  th:each="order : ${orderList}" >
+					<td >
+						<a href="javascript:void(0)" th:onclick="|viewOrder(${order.id})|" target="_blank" th:if="${order!=null}"><span   th:text="${order.id}" ></span></a>
+					</td>
+					<td >
+						<span  th:text="${order.trackingNum}" ></span>
+					</td>
+							
+					<td th:text="${order.isPaid==2?'已经支付': '未支付'}"></td>
+<!-- 					<td th:text="${order.status==1?'New Order': (order.status==2?'Hold':(order.status==3?'Dispatched':(order.status==4?'Complete':(order.status==5?'Back Order':'Deleted'))))}"></td> -->
+					<td>
+						<td:block th:replace="/web/customer/fragment/order-status :: content(${order})"></th:block>
+					</td>
+					
+					<td  th:text="${order.customerMsg}" ></td>
+					<td  th:text="${order.adminMsg}" ></td>
+					<td>$<span th:text="${#numbers.formatDecimal(order.totalProductPrice,0,2)}"></span></td>
+					<td th:if="${customer.customerType=='sales'}">* &nbsp;<span th:text="${order.salesCommissionPercentage}"></span></td>
+					
+					<td  th:text="${#dates.format(order.createTime, 'dd/MM/yyyy')}"></td>
+					<td  ><a th:if="${order.isPaid!=2}" target="_blank" th:href="|@{/customer/cart/order/place/}${order.id}|">支付</a></td>
+				</tr>
+				
+				<tr>
+					<td colspan="10" class="text-right">
+						<div th:replace="/web/customer/fragment/list-page :: page"></div>
+					</td>
+				</tr>
+				
+			</table>
+			
+
+		</div>
+	</div>
+
+
+
+
+
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		var flag = true;
+		function detailsShowToggle(id){
+			$("#"+id).toggle('slow');
+		}
+		
+		 function viewOrder(orderId){
+				window.open([[@{/customer/commission/}]]+orderId,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			}
+		/*]]>*/
+	</script>
+
+
+</div>
+

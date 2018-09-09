@@ -1,0 +1,38 @@
+<th:block th:fragment="content">
+	
+	<span id="loginUser">
+	&nbsp;&nbsp;
+	<label>Hello, <a>{{user.email}}, &nbsp;&nbsp;{{user.status}}</a></label> &nbsp;&nbsp;
+	<label><a th:href="@{/logout}">Logout</a></label> 
+	</span>
+	
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		        
+			new Vue({
+				el : '#loginUser',
+				data : {
+					user:{}
+				},
+				created: function() {
+					var _this = this;
+					axios.get([[@{/api/management/user}]], {
+						params: {
+					    }
+					  })
+					  .then(function (response){
+						  _this.user = response.data;
+						  console.log(_this.user);
+					  })
+					  .catch(function (error) {
+					    console.log(error);
+					  }); 
+					
+				}
+				
+			})
+			
+			
+		/*]]>*/	
+	</script>
+</th:block> 

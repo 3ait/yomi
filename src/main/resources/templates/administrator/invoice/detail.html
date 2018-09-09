@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title><span th:replace="/administrator/fragment/f-company-name :: companyname"></span> | Invoice</title>
+        <th:block th:replace="/administrator/fragment/f-js-css :: public-css-js"></th:block>
+    </head>
+    
+    <body>
+    
+       
+       <div id="wrapper">
+	        
+	    	<!-- content -->
+          	<th:block th:replace="/administrator/invoice/fragment/detail-content :: content"></th:block>
+          	
+       </div>
+    </body>
+</html>

@@ -1,0 +1,26 @@
+<th:bolck  th:fragment="content(order)">
+	<a class="orderStatus" data-type="select" th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="status"  href="#"   
+		th:text="${order.status==1?'New Order': (order.status==2?'Hold':(order.status==3?'Dispatched':(order.status==4?'Complete':(order.status==5?'Back Order':'Deleted'))))}" >status</a>    
+    
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           //
+			$('.orderStatus').editable({
+		        value: -2,    
+		        source: [
+		              {value: -2, text: '--Select--'},
+		              {value: 1, text: 'New Order'},
+		              {value: 2, text: 'Hold'},
+		              {value: 3, text: 'Dispatched'},
+		              {value: 4, text: 'Complete'},
+		              {value: 5, text: 'Back Order'},
+		              {value: 0, text: 'Deleted'},
+		           ],
+		           success: function(response, newValue) {
+		        	   window.location.reload();
+		           }
+		    });
+		
+		/*]]>*/	
+	</script>
+</th:bolck>

@@ -1,0 +1,510 @@
+<div class="container-fluid "  th:fragment="content">
+    
+    <div class="row text-center">
+        <div class="col-sm-3  col-sm-offset-1 " >
+        		<div class="div-box" >
+	        		<h4 th:text="${orderNumber}"></h4>
+	        	</div>
+        	<br/>
+        	<label><a th:href="@{/management/order/}">New Order</a></label>
+        	
+        </div>
+        <div class="col-sm-3 ">
+        		<div class="div-box">
+	        		<h4  th:text="${customerNumber}"></h4>
+	        	</div>
+        	<br/>
+        	<label><a th:href="@{/management/customer}" >New Customer</a></label>
+        </div>
+        <div class="col-sm-3" >
+        		<div class="div-box">
+	        		<h4  th:text="${pageViewNumber}"></h4>
+	        	</div>
+        	<br/>
+        	<label>PageView(Week)</label>
+        </div>
+    </div>
+    
+    
+    <hr />
+    <div class="row">
+    	<div class="col-sm-1 col-sm-offset-2" >
+    		<a href="#" th:href="@{/management/order/}">
+    		<i class="fa fa-folder-o fa-2x"  aria-hidden="true"></i><br/>
+        	<h5>Order</h5>
+    		</a>
+        </div>
+         <div class="col-sm-1" >
+         	<a href="#" th:href="@{/management/invoice/}">
+    		<i class="fa fa-folder-o fa-2x"  aria-hidden="true"></i><br/>
+        	<h5>Invoice</h5>
+        	</a>
+        </div>
+    	<div class="col-sm-1" >
+    		<a href="#" th:href="@{/management/customer}">
+    		<i class="fa fa-folder-o fa-2x"  aria-hidden="true"></i><br/>
+        	<h5>Customer</h5>
+        	</a>
+        </div>
+    	<div class="col-sm-1 " >
+    		<a href="#" th:href="@{/management/product/}">
+    		<i class="fa fa-folder-o fa-2x"  aria-hidden="true"></i><br/>
+        	<h5>Product</h5>
+        	</a>
+        </div>
+    	<div class="col-sm-1" >
+    		<a href="#" th:href="@{/management/user}">
+    		<i class="fa fa-folder-o fa-2x"  aria-hidden="true"></i><br/>
+        	<h5>Admin User</h5>
+        	</a>
+        </div>
+    	<div class="col-sm-1 " >
+    		<a href="#" th:href="@{/management/payment/}">
+    		<i class="fa fa-folder-o fa-2x"  aria-hidden="true"></i><br/>
+        	<h5>Payment</h5>
+        	</a>
+        </div>
+    	<div class="col-sm-1 " >
+    		<a href="#" th:href="@{/management/category/}">
+    		<i class="fa fa-folder-o fa-2x"  aria-hidden="true"></i><br/>
+        	<h5>Category</h5>
+        	</a>
+        </div>
+    	<div class="col-sm-1 " >
+    		<a href="#" th:href="@{/management/setting/}">
+    		<i class="fa fa-folder-o fa-2x"  aria-hidden="true"></i><br/>
+        	<h5>System Config</h5>
+        	</a>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <div class="row">
+    	<div class="col-sm-10 col-sm-offset-1" >
+    	<th:block th:replace="/administrator/fragment/f-search :: search('management/dashboard')"></th:block>
+    	</div>
+    	<div class="col-sm-10 col-sm-offset-1">
+    		 <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
+			<!-- order report -->
+			<div id="pageViewReport" style="height:400px"></div>
+	    	<br/>
+	    	<br/>
+			<div id="orderReport" style="height:400px"></div>
+	    	<br/>
+	    	<br/>
+			<div id="salesReport" style="height:400px"></div>
+	    	<br/>
+	    	<br/>
+			<div id="topProduct" style="height:400px"></div>
+	    	
+	    	
+    	</div>
+    </div>
+    
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		  // 路径配置
+        require.config({
+            paths: {
+                echarts: 'http://echarts.baidu.com/build/dist'
+            }
+        });
+		
+		//order report
+        var xAxisData =  [[${orderDateNumberPrice[0]}]].split(",");
+        xAxisData.pop();
+		var seriesData0 =  [[${orderDateNumberPrice[1]}]].split(",");
+		seriesData0.pop();
+		for(var i=0;i<seriesData0.length;i++){
+			seriesData0[i] = parseFloat(seriesData0[i]);
+		}
+		var seriesData1 =  [[${orderDateNumberPrice[2]}]].split(",");
+		seriesData1.pop();
+		for(var i=0;i<seriesData1.length;i++){
+			seriesData1[i] = parseFloat(seriesData1[i]);
+		}
+		
+        // 使用
+        require(
+            [
+                'echarts',
+                'echarts/chart/line' // 使用柱状图就加载bar模块，按需加载
+            ],
+            function (ec) {
+                // 基于准备好的dom，初始化echarts图表
+                var myChart = ec.init(document.getElementById('orderReport')); 
+                
+                option = {
+                	    title : {
+                	        text: 'Order Diagram',
+                	        subtext: 'order report'
+                	    },
+                	    tooltip : {
+                	        trigger: 'axis'
+                	    },
+                	    legend: {
+                	        data:['CustomerOrder']
+                	    },
+                	    toolbox: {
+                	        show : true,
+                	        feature : {
+                	            mark : {show: true},
+                	            dataView : {show: true, readOnly: false},
+                	            magicType : {show: true, type: ['line', 'bar']},
+                	            restore : {show: true},
+                	            saveAsImage : {show: true}
+                	        }
+                	    },
+                	    calculable : true,
+                	    xAxis : [
+                	        {
+                	            type : 'category',
+                	            boundaryGap : false,
+                	            data : xAxisData,
+                	        }
+                	    ],
+                	    yAxis : [
+                	        {
+                	            type : 'value',
+                	            axisLabel : {
+                	                formatter: '{value}'
+                	            }
+                	        }
+                	    ],
+                	    series : [
+                	        {
+                	            name:'Total Order Number',
+                	            type:'line',
+                	            data:seriesData0,
+                	            markPoint : {
+                	                data : [
+                	                    {type : 'max', name: 'Max Order Number'},
+                	                    {type : 'min', name: 'Min Order Number'}
+                	                ]
+                	            },
+                	            markLine : {
+                	                data : [
+                	                    {type : 'average', name: 'average'}
+                	                ]
+                	            }
+                	        },
+                	        {
+                	            name:'Total Order Price',
+                	            type:'line',
+                	            data:seriesData1,
+                	            markPoint : {
+                	                data : [
+                	                    {type : 'max', name: 'Max Order Price'},
+                	                    {type : 'min', name: 'Min Order Price'}
+                	                ]
+                	            },
+                	            markLine : {
+                	                data : [
+                	                    {type : 'average', name: 'average'}
+                	                ]
+                	            }
+                	        },
+                	        
+                	    ]
+                	};
+                	                    
+        
+                // 为echarts对象加载数据 
+                myChart.setOption(option); 
+            }
+        );
+        
+        
+        
+        
+        //sales report
+        var salesX =  [[${salesChartData.x}]].split(",");
+        salesX.pop();
+        
+        //动态构造销售数据
+        var salesYSeries = new Array();
+		var saleYList =  [[${salesChartData.y}]];
+		var lineName = [[${salesChartData.lineName}]].split(",");
+		
+		/**
+			array[0] = xDate.toString();
+			array[1] = totalNumber.toString();
+			array[2] = totalPrice.toString();
+			array[3] = saleId.toString();
+			array[4] = saleName.toString();
+			**/
+			
+		for(var i=0;i<saleYList.length;i++){
+			
+			var orderNums = saleYList[i][2].split(",");
+			orderNums.pop();
+			
+			salesYSeries[i] = {
+		            name:lineName[i],
+		            type:'line',
+		            data:orderNums,
+		            markPoint : {
+		                data : [
+		                    {type : 'max', name: 'Max '},
+		                    {type : 'min', name: 'Min'}
+		                ]
+		            },
+		            markLine : {
+		                data : [
+		                    {type : 'average', name: 'average'}
+		                ]
+		            }
+		        }
+			
+		}
+		
+		
+        
+        // 使用
+        require(
+            [
+                'echarts',
+                'echarts/chart/line' // 使用柱状图就加载bar模块，按需加载
+            ],
+            function (ec) {
+                // 基于准备好的dom，初始化echarts图表
+                var myChart = ec.init(document.getElementById('salesReport')); 
+                
+                option = {
+                	    title : {
+                	        text: 'Sales Diagram',
+                	        subtext: 'Sales volume per person'
+                	    },
+                	    tooltip : {
+                	        trigger: 'axis'
+                	    },
+                	    legend: {
+                	        data:['Sales report']
+                	    },
+                	    toolbox: {
+                	        show : true,
+                	        feature : {
+                	            mark : {show: true},
+                	            dataView : {show: true, readOnly: false},
+                	            magicType : {show: true, type: ['line', 'bar']},
+                	            restore : {show: true},
+                	            saveAsImage : {show: true}
+                	        }
+                	    },
+                	    calculable : true,
+                	    xAxis : [
+                	        {
+                	            type : 'category',
+                	            boundaryGap : false,
+                	            data : xAxisData,
+                	        }
+                	    ],
+                	    yAxis : [
+                	        {
+                	            type : 'value',
+                	            axisLabel : {
+                	                formatter: '{value}'
+                	            }
+                	        }
+                	    ],
+                	    series : salesYSeries,
+                	};
+                	                    
+        
+                // 为echarts对象加载数据 
+                myChart.setOption(option); 
+            }
+        );
+        
+        
+        
+        //pageview 曲线图
+        
+        //array[0] = xDate.toString();
+		//array[1] = numbers.toString();
+		//order report
+        var pageViewXData =  [[${pageViewData.x}]].split(",");
+		pageViewXData.pop();
+		var pageViewYData =  [[${pageViewData.y[1]}]].split(",");
+		pageViewYData.pop();
+		for(var i=0;i<pageViewYData.length;i++){
+			pageViewYData[i] = parseFloat(pageViewYData[i]);
+		}
+        // 使用
+        require(
+            [
+                'echarts',
+                'echarts/chart/line' // 使用柱状图就加载bar模块，按需加载
+            ],
+            function (ec) {
+                // 基于准备好的dom，初始化echarts图表
+                var myChart = ec.init(document.getElementById('pageViewReport')); 
+                
+                option = {
+                	    title : {
+                	        text: 'Page View Diagram',
+                	        subtext: 'page view per day'
+                	    },
+                	    tooltip : {
+                	        trigger: 'axis'
+                	    },
+                	    legend: {
+                	        data:['Page view report']
+                	    },
+                	    toolbox: {
+                	        show : true,
+                	        feature : {
+                	            mark : {show: true},
+                	            dataView : {show: true, readOnly: false},
+                	            magicType : {show: true, type: ['line', 'bar']},
+                	            restore : {show: true},
+                	            saveAsImage : {show: true}
+                	        }
+                	    },
+                	    calculable : true,
+                	    xAxis : [
+                	        {
+                	            type : 'category',
+                	            boundaryGap : false,
+                	            data : pageViewXData,
+                	        }
+                	    ],
+                	    yAxis : [
+                	        {
+                	            type : 'value',
+                	            axisLabel : {
+                	                formatter: '{value}'
+                	            }
+                	        }
+                	    ],
+                	    series : [
+                	        {
+                	            name:'Page View Number',
+                	            type:'line',
+                	            data:pageViewYData,
+                	            markPoint : {
+                	                data : [
+                	                    {type : 'max', name: 'Max Order Number'},
+                	                    {type : 'min', name: 'Min Order Number'}
+                	                ]
+                	            },
+                	            markLine : {
+                	                data : [
+                	                    {type : 'average', name: 'average'}
+                	                ]
+                	            }
+                	        },
+                	       
+                	        
+                	    ]
+                	};
+                	                    
+        
+                // 为echarts对象加载数据 
+                myChart.setOption(option); 
+            }
+        );
+        
+		//销量最好的产品
+		var topProductX =  [[${topProduct.x}]].split(",");
+		topProductX.pop();
+		var topProductY =  [[${topProduct.y[0]}]].split(",");
+		topProductY.pop();
+		for(var i=0;i<topProductY.length;i++){
+			topProductY[i] = parseFloat(topProductY[i]);
+		}
+		
+		 // 使用
+        require(
+            [
+                'echarts',
+                'echarts/chart/bar' // 使用柱状图就加载bar模块，按需加载
+            ],
+            function (ec) {
+                // 基于准备好的dom，初始化echarts图表
+                var myChart = ec.init(document.getElementById('topProduct')); 
+                
+                option = {
+                	    title : {
+                	        text: 'Top 100 Products',
+                	        subtext: 'Most popular products'
+                	    },
+                	    tooltip : {
+                	        trigger: 'axis'
+                	    },
+                	    legend: {
+                	        data:['Top sale']
+                	    },
+                	    toolbox: {
+                	        show : true,
+                	        feature : {
+                	            dataView : {show: true, readOnly: false},
+                	            magicType : {show: true, type: ['line', 'bar']},
+                	            restore : {show: true},
+                	            saveAsImage : {show: true}
+                	        }
+                	    },
+                	    calculable : true,
+                	    xAxis : [
+                	        {
+                	            type : 'category',
+                	            data : topProductX
+                	        }
+                	    ],
+                	    yAxis : [
+                	        {
+                	            type : 'value'
+                	        }
+                	    ],
+                	    series : [
+                	        {
+                	            name:'Product Sold Number',
+                	            type:'bar',
+                	            data:topProductY,
+                	            markPoint : {
+                	                data : [
+                	                    {type : 'max', name: 'Max'},
+                	                    {type : 'min', name: 'Min'}
+                	                ]
+                	            },
+                	            markLine : {
+                	                data : [
+                	                    {type : 'average', name: 'Average'}
+                	                ]
+                	            }
+                	        },
+                	        
+                	    ]
+                	};
+                	                    
+        
+                // 为echarts对象加载数据 
+                myChart.setOption(option); 
+            }
+        );
+    	/*]]>*/	
+		</script>
+    
+    
+    <style>
+    	.div-box{
+   		    display: flex;
+		    justify-content: space-around;
+		    align-items: center;
+		    border: 1px solid #e7e7e7;
+		    width: 120px;
+		    height: 120px;
+		    border-radius:60px;
+		    margin: 0 auto; 
+    	}
+    	
+    	
+    </style>
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           
+		
+		/*]]>*/	
+	</script>
+</div>

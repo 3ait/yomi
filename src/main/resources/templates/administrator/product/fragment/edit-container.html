@@ -1,0 +1,481 @@
+<div class="container-fluid" th:fragment="content">
+	<script type="text/javascript" src="../../../static/plugin/ckeditor/ckeditor.js" th:src="@{/static/plugin/ckeditor/ckeditor.js}"></script>
+	
+	<hr />
+	<form th:action="@{/management/product/edit/save}" id="productForm" enctype="multipart/form-data" method="post" onsubmit="return confirm('confirm ?');">
+	
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Product ID:</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<input type="number" maxlength="200" class="form-control" name="product.id" th:value="${productEditView.product.id}" readonly="readonly" />
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Category:</label>
+			</div>
+			<div class="col-sm-6">
+				<!-- content -->
+				<th:block th:replace="/administrator/product/fragment/category-select :: category-select"></th:block>
+			</div>
+		</div>
+		
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Product Name:</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<input type="text" maxlength="200" class="form-control" name="product.productName" th:value="${productEditView.product.productName}" />
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Product Alias:</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group">
+				<input type="text" maxlength="200" class="form-control" name="product.productNameAlias" th:value="${productEditView.product.productNameAlias}"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>MPN:</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group">
+				<input type="text" maxlength="50" class="form-control" name="product.mpn" th:value="${productEditView.product.mpn}"/>
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Loaction:</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group">
+				<input type="text" maxlength="50" class="form-control" name="product.location" th:value="${productEditView.product.location}"/>
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Label:</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group">
+				<input type="text" maxlength="50" class="form-control" name="product.label" th:value="${productEditView.product.label}"/>
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Default Img:</label>
+			</div>
+			<div class="col-sm-6">
+				<img class="img-responsive img-thumbnail col-sm-2" alt="" src="#" th:src="|/${productEditView.product.defaultSrc}|" />
+				<div class="form-group input-group">
+					<input type="file" class="form-control" name="defaultImg" onchange="updateDefaultImg(this)" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Slider Img:</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="col-sm-2"  th:each="attachment : ${productEditView.attachmentList}"> 
+					<img class="img-responsive img-thumbnail " alt="" src="#" th:src="|/${attachment.filePath}|" />
+					<a  aria-label="Delete" th:onclick="|delSilderById(${attachment.id},this)|">
+						  <span class="fa-stack">
+							  <i class="fa fa-square-o fa-stack-2x"></i>
+							  <i class="fa fa-remove fa-stack-1x"></i>
+						</span>
+					</a>
+				</div>
+				
+				<div class="form-group input-group">
+					<input type="file" class="form-control" name="sliderImg" multiple="multiple" onchange="updateSliderImg(this)" />
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Status:</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group">
+					<label class="radio-inline" > 
+						<input type="radio" name="product.status" value="1" th:checked="${productEditView.product.status==1}?1:0"  /> 
+						<span  th:class="${productEditView.product.status==1}?'label label-success':'label label-default'">On Line</span>
+					</label> 
+					<label class="radio-inline"> 
+						<input type="radio" name="product.status" value="0" th:checked="${productEditView.product.status==0}?1:0" /> 
+						<span   th:class="${productEditView.product.status==0}?'label label-danger':'label label-default'">Off Line</span>
+					</label>
+					 <label class="radio-inline"> 
+					 	<input type="radio" name="product.status" value="2" th:checked="${productEditView.product.status==2}?1:0"  /> 
+					 	<span  th:class="${productEditView.product.status==2}?'label label-warning':'label label-default'">Out stock</span>
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label></label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group">
+					<label class="checkbox-inline"> 
+						<input type="checkbox" name="product.hot" value="1" th:checked="${productEditView.product.hot==1}?1:0" /> Hot
+					</label> 
+					<label class="checkbox-inline"> 
+						<input type="checkbox" name="product.promote" value="1"  th:checked="${productEditView.product.promote==1}?1:0" /> Specials
+					</label> 
+					<label class="checkbox-inline"> 
+						<input type="checkbox" name="product.frontPage" value="1" th:checked="${productEditView.product.frontPage==1}?1:0" /> New Arrivals
+					</label>
+					<label class="checkbox-inline"> 
+						<input type="checkbox" name="product.recommend" value="1" th:checked="${productEditView.product.recommend==1}?1:0" /> Recommend
+					</label>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row" th:each="attrKeyValue : ${attrKeyValueList}">
+			<div class="col-sm-2 text-right">
+				<label th:text="${attrKeyValue.productAttrKey.attrKey}">Attribute:</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group">
+					<label class="checkbox-inline" th:each="productAttrValue : ${attrKeyValue.productAttrValueList}"> 
+						<input type="checkbox" name="attrKeyValue"  th:value="|${attrKeyValue.productAttrKey.id}-${productAttrValue.id}|" th:checked="${#sets.contains( productEditView.keyvalueSet, attrKeyValue.productAttrKey.id +',' + productAttrValue.id)}" /> 
+						<span  th:text="${productAttrValue.attrValue}">Attr value</span>
+					</label> 
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Cost:</label>
+			</div>
+			<div class="col-sm-2">
+				<div class="form-group input-group">
+				<input type="number" min="0" max="100000" step="0.01" class="form-control" name="product.cost" th:value="${productEditView.product.cost}"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Price:</label>
+			</div>
+			<div class="col-sm-2">
+				<div class="form-group input-group">
+				<input type="number" min="0" max="100000" step="0.01" class="form-control" name="product.price1"  th:value="${productEditView.product.price1}"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Promote Price:</label>
+			</div>
+			<div class="col-sm-2">
+				<div class="form-group input-group">
+				<input type="number" min="0" max="100000" step="0.01" class="form-control" name="product.price2" th:value="${productEditView.product.price2}"/>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Stock:</label>
+			</div>
+			<div class="col-sm-2">
+				<div class="form-group input-group">
+					<input type="number" min="0" max="100000" class="form-control" name="product.stock" value="100" th:value="${productEditView.product.stock}"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Weight(KG):</label>
+			</div>
+			<div class="col-sm-2">
+				<div class="form-group input-group">
+					<input type="number" min="0" max="100000" step="0.1" class="form-control" name="product.weight" th:value="${productEditView.product.weight}"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Sold Num:</label>
+			</div>
+			<div class="col-sm-2">
+				<div class="form-group input-group">
+					<input type="number" min="0" max="100000" class="form-control" value="0" name="product.soldNum" th:value="${productEditView.product.soldNum}"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Click Num:</label>
+			</div>
+			<div class="col-sm-2">
+				<div class="form-group input-group">
+					<input type="number" min="0" max="100000" class="form-control" value="0" name="product.clickNum" th:value="${productEditView.product.clickNum}"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>SEO Keywords:</label>
+			</div>
+			<div class="col-sm-10">
+				<div class="form-group input-group">
+					<input type="text" maxlength="500" class="form-control"  name="product.seoKeywords"  th:value="${productEditView.product.seoKeywords}" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>SEO Description:</label>
+			</div>
+			<div class="col-sm-10">
+				<div class="form-group input-group">
+					<input type="text" maxlength="1000" class="form-control" name="product.seoDesc" th:value="${productEditView.product.seoDesc}" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Norms:</label>
+			</div>
+			<div class="col-sm-10">
+				<div class="form-group input-group">
+				<!-- 编辑框 -->
+					<textarea id="txtnorms"  maxlength="20000"  name="product.norms" th:utext="${productEditView.product.norms}" ></textarea>
+	                  <script th:inline="javascript">
+	                      CKEDITOR.replace( 'txtnorms', {
+	                      	filebrowserBrowseUrl: /*[[@{/management/attachment/ckediter/select}]]*/,
+	                      	allowedContent: true,
+	                      } );
+	                  </script>
+				<!-- 编辑框结束 -->
+				</div>
+		                        
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Description:</label>
+			</div>
+			<div class="col-sm-10">
+				<div class="form-group input-group">
+				<!-- 编辑框 -->
+					<textarea id="txtDefaultHtmlArea"  maxlength="20000"  name="product.description" th:utext="${productEditView.product.description}" ></textarea>
+	                  <script th:inline="javascript">
+	                      CKEDITOR.replace( 'txtDefaultHtmlArea', {
+	                      	filebrowserBrowseUrl: /*[[@{/management/attachment/ckediter/select}]]*/,
+	                      	allowedContent: true,
+	                      } );
+	                  </script>
+				<!-- 编辑框结束 -->
+				</div>
+		                        
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Mobile Description:</label>
+			</div>
+			<div class="col-sm-10">
+				<div class="form-group input-group">
+				<!-- 编辑框 -->
+					<textarea id="mobileDefaultDesc"  maxlength="20000"  name="product.mobileDefaultDesc" th:utext="${productEditView.product.mobileDefaultDesc}" ></textarea>
+	                  <script th:inline="javascript">
+	                      CKEDITOR.replace( 'mobileDefaultDesc', {
+	                      	filebrowserBrowseUrl: /*[[@{/management/attachment/ckediter/select}]]*/,
+	                      	allowedContent: true,
+	                      } );
+	                  </script>
+				<!-- 编辑框结束 -->
+				</div>
+		                        
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 col-sm-offset-2">
+				<div class="form-group input-group">
+					<button class="btn btn-primary">Submit</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           
+		
+		/**
+		复制一个文章
+		**/
+		function duplicate(){
+			if(confirm("confirm ?")){
+				window.location.href = [[@{/administrator/article/edit/duplicate/}]] + document.getElementById("article.id").value;
+			}
+		}
+		
+		/**
+		更新默认图片
+		**/
+		function updateDefaultImg(_self){
+			for(var i=0;i<_self.files.length;i++){
+				var reader  = new FileReader();
+				reader.readAsDataURL(_self.files[i]);
+				reader.onload = function(e){
+					$(_self).parent().prev().replaceWith("<img class='col-xs-2 img-thumbnail img-responsive' src='" + this.result  +  "'></img>");
+				}
+			}
+		}
+		
+		/**
+		更新slider图片
+		**/
+		function updateSliderImg(_self){
+			for(var i=0;i<_self.files.length;i++){
+				var reader  = new FileReader();
+				reader.readAsDataURL(_self.files[i]);
+				reader.onload = function(e){
+					$(_self).parent().before("<img class='col-xs-2 img-thumbnail img-responsive' src='" + this.result  +  "'></img>");
+				}
+			}
+		}
+		
+		/**
+		删除slider图片
+		**/
+		function delSilderById(attachId,_self){
+			if(confirm("Delete ?")){
+				$.ajax({
+					url: [[@{/management/attachment/del/}]] + attachId
+				}).done(function(ret){
+					if(ret==true){
+						$(_self).prev().fadeOut('slow');
+						$(_self).fadeOut('slow');
+					}
+				});
+				
+			}
+		}
+			
+		
+		/*]]>*/	
+	</script>
+	
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			
+			//登录表单
+			$( "#productForm" ).validate( {
+				rules: {
+					'product.productName': {
+						required: true,
+						minlength: 1,
+						maxlength: 50,
+					},
+					'product.location': {
+						required: true,
+						minlength: 1
+					},
+					'product.cost': {
+						required: true,
+						number: true,
+						min:0,
+						max:10000,
+					},
+					'product.price1': {
+						required: true,
+						number: true,
+						min:0.01,
+						max:10000,
+					},
+					'product.stock': {
+						digits: true,
+						min:-1000,
+						max:10000,
+					},
+					'product.soldNum': {
+						digits: true,
+						min:0,
+						max:10000,
+					},
+					'product.clickNum': {
+						digits: true,
+						min:0,
+						max:10000,
+					},
+					loginAgree: "required"
+				},
+				messages: {
+					
+					/* loginPassword:{
+						required: "Please provide a password",
+						minlength: "Your password must be at least 2 characters long"
+					} */
+					
+				},
+				
+				errorElement: "em",
+				errorPlacement: function ( error, element ) {
+					// Add the `help-block` class to the error element
+					error.addClass( "help-block col-sm-offset-2" );
+
+					// Add `has-feedback` class to the parent div.form-group
+					// in order to add icons to inputs
+					element.parents( ".input-group" ).addClass( "has-feedback" );
+
+					if ( element.prop( "type" ) === "checkbox" ) {
+						error.insertAfter( element.parent( "label" ) );
+					} else {
+						error.insertAfter( element.parents( ".input-group" ) );
+					}
+
+					// Add the span element, if doesn't exists, and apply the icon classes to it.
+					if ( !element.next( "span" )[ 0 ] ) {
+						$( "<span class='glyphicon glyphicon-remove form-control-feedback'></span>" ).insertAfter( element );
+					}
+				},
+				success: function ( label, element ) {
+					// Add the span element, if doesn't exists, and apply the icon classes to it.
+					if ( !$( element ).next( "span" )[ 0 ] ) {
+						$( "<span class='glyphicon glyphicon-ok form-control-feedback'></span>" ).insertAfter( $( element ) );
+					}
+				},
+				highlight: function ( element, errorClass, validClass ) {
+					$( element ).parents( ".input-group" ).addClass( "has-error" ).removeClass( "has-success" );
+					$( element ).next( "span" ).addClass( "glyphicon-remove" ).removeClass( "glyphicon-ok" );
+				},
+				unhighlight: function ( element, errorClass, validClass ) {
+					$( element ).parents( ".input-group" ).addClass( "has-success" ).removeClass( "has-error" );
+					$( element ).next( "span" ).addClass( "glyphicon-ok" ).removeClass( "glyphicon-remove" );
+				}
+			} );
+			
+		/*]]>*/	
+	</script>
+	<style>
+		.input-group{
+			width: 100%;
+		}
+	</style>
+</div>

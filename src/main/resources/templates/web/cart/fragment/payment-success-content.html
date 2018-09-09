@@ -1,0 +1,44 @@
+
+<!-- content -->
+<div th:fragment="content" class="container">
+
+	
+	
+	<div class="container" style="min-height:400px;" id="payment">
+		<div class="row" style="margin-top: 40px;border-bottom:1px solid #e7e7e7;">
+				<h3> 订单号:<th:block th:text="${orderId}"></th:block> &nbsp;&nbsp;&nbsp;  
+					<th:block th:text="${info}"></th:block>
+				</h3>
+
+		</div>
+		<br/>
+		
+		
+	</div>
+	
+	
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           
+		           
+				new Vue({
+					el:"#payment",
+					data:{
+						
+					},
+					created: function(){
+						
+					},
+					methods:{
+						
+					},
+					
+					
+					
+				});
+		
+
+		/*]]>*/
+	</script>
+</div>
+

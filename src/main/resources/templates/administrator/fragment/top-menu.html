@@ -1,0 +1,24 @@
+	<th:block th:fragment="content(active)">
+		
+		 <div class="nav" style="margin-left: 100px;padding-top: 20px;">
+         	<label><a th:class="${active=='product'?'menu-active':''}" th:href="@{/management/product/}">Product</a></label> 
+         	<label>&nbsp; | &nbsp;</label> 
+         	<label><a  th:class="${active=='order'?'menu-active':''}" th:href="@{/management/order}">Order List</a></label> 
+         	<label>&nbsp; | &nbsp;</label> 
+         	<label><a  th:class="${active=='invoice'?'menu-active':''}" th:href="@{/management/invoice/}">Invoice</a></label> 
+         	<label>&nbsp; | &nbsp;</label> 
+         	<label><a  th:class="${active=='payment'?'menu-active':''}" th:href="@{/management/payment/}">Payment</a></label> 
+         	<label>&nbsp; | &nbsp;</label> 
+         	<label><a  th:class="${active=='customer'?'menu-active':''}" th:href="@{/management/customer/}">Customer</a></label> 
+         	<label>&nbsp; | &nbsp;</label> 
+         	<label><a  th:class="${active=='sales'?'menu-active':''}" th:href="@{/management/customer/sales}">Sales</a></label> 
+         	<label>&nbsp; | &nbsp;</label> 
+         	<th:block th:replace="/administrator/components/Login-user :: content"></th:block>
+          </div>
+		<style>
+			.menu-active{
+				text-decoration: underline;
+				color: blue;
+			}
+		</style>
+</th:block>

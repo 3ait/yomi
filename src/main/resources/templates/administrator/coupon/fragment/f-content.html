@@ -1,0 +1,113 @@
+<div class="container-fluid "  th:fragment="content">
+
+    <th:block th:replace="/administrator/fragment/f-search :: search('management/coupon')"></th:block>
+    <div class="row">
+        <div class="col-lg-12">
+        	<table class="table table-hover  table-striped">
+				 	<thead>
+				 		<tr>
+				 			<th>ID</th>
+				 			<th >Name</th>
+				 			<th >Code</th>
+				 			<th onclick="colomnSort('reg')" class="sort-colomn">Reg(Min price)</th>
+				 			<th onclick="colomnSort('type')" class="sort-colomn">Type</th>
+				 			<th onclick="colomnSort('value')" class="sort-colomn">Value</th>
+				 			<th onclick="colomnSort('status')" class="sort-colomn">Status</th>
+				 			<th onclick="colomnSort('customerId')" class="sort-colomn">Sales</th>
+				 			<th>Create Time<br/>Expired Time</th>
+				 			<th>
+				 				<a href="javascript:void(0)" onclick="newCoupon()" target="_blank">
+				 				 <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-plus fa-stack-1x"></i>
+									</span>
+				 				
+				 				</a>
+				 			</th>
+				 		</tr>
+				 		
+				 	</thead>
+				 		<tr th:each="coupon : ${couponList}"  >
+				 			<td><span th:text="${coupon.id}"></span></td>
+				 			<td><span th:text="${coupon.name}"></span></td>
+				 			<td><span th:text="${coupon.code}"></span></td>
+				 			<td><span th:text="${coupon.reg}"></span></td>
+				 			<td><span th:text="${coupon.Type}"></span></td>
+				 			<td><span th:text="${coupon.Value}"></span></td>
+				 			<td>
+				 				<a class="status" data-type="select" th:attr="data-pk=${coupon.id}, data-url=|@{/management/coupon/update/colomn/}|" data-name="status"  href="#"    th:text="${coupon.status==0?'In-active': 'Active'}" >status</a>
+				 			</td>
+				 			<td>
+				 				<a data-type="select"  th:attr="data-pk=${coupon.id}, data-url=|@{/management/coupon/update/colomn/}|" data-name="customer"  href="#"  class="customerId"  th:text="${coupon.customer.name}" th:if="${coupon.customer}!=null">customerBySalesId</a>
+				 				<a data-type="select"  th:attr="data-pk=${coupon.id}, data-url=|@{/management/coupon/update/colomn/}|" data-name="customer"  href="#"  class="customerId"  th:text="${coupon.customer}" th:if="${coupon.customer}==null">customerBySalesId</a>
+				 				
+				 			</td>
+				 		
+				 			<td>
+				 			<span th:text="${coupon.createTime}"></span><br/>
+				 			<span th:text="${coupon.expiredTime}"></span><br/>
+				 			<span class="label label-danger" th:if="${coupon.expiredTime < #dates.createNow()}">Expired</span>
+				 			</td>
+				 			<td><a href="javascript:void(0)" th:onclick="|viewUser(${coupon.id})|" target="_blank">User</a> &nbsp; <a href="javascript:void(0)"  th:onclick="|viewOrder(${coupon.id})|" target="_blank">Order</a></td>
+				 		</tr>
+				 		
+				 		<tr >
+				 			<td colspan="3">
+				 			</td>
+				 			<td colspan="12" align="right">
+				 				<div th:replace="/administrator/fragment/f-page :: page"></div>
+				 			</td>
+				 		</tr>
+				</table>
+        </div>
+    </div>
+    
+    <script src="static/plugin/editable/js/bootstrap-editable.min.js"
+		type="text/javascript"
+		th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           //
+			$('.edit-name').editable();
+		
+			$('.status').editable({
+		        value: 0,    
+		        source: [
+		              {value: '', text: '--Select--'},
+		              {value: 0, text: 'In-active'},
+		              {value: 1, text: 'Active'},
+		           ]
+		    });
+			
+			
+			$('.customerId').editable({
+		        value: -1,    
+		        source: [[${salesArray}]],
+		    });
+			
+			function newCoupon(){
+				window.open([[@{/management/coupon/new}]],'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			}
+			
+			function viewUser(couponId){
+				window.open([[@{/management/coupon/view/user/}]] +  couponId,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			}
+			
+			function viewOrder(couponId){
+				window.open([[@{/management/coupon/view/order/ }]] + couponId ,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			}
+		
+		/*]]>*/	
+	</script>
+	 <style>
+    	.sort-colomn{
+    		cursor: pointer;
+    		color: #c05a22;
+    		
+    	}
+    	
+    </style>
+</div>

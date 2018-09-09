@@ -1,0 +1,292 @@
+<div class="container-fluid" th:fragment="content">
+	<script type="text/javascript" src="../../../static/plugin/ckeditor/ckeditor.js" th:src="@{/static/plugin/ckeditor/ckeditor.js}"></script>
+	
+	<form th:action="@{/management/customer/new/save}" id="customerForm" enctype="multipart/form-data" method="post" >
+		<hr />
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Company Name</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<input class="form-control"  placeholder="Company Name:" type="text" name="companyName"  />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Company Email</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<input class="form-control"  placeholder="Company Email:" type="email" name="companyEmail" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Phone</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<input class="form-control"  placeholder="Company Mobile:" type="text" name="phone" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>First/Last Name</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<input class="form-control"  placeholder="First/Last Name:" type="text" name="name"  />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Login Email</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<input class="form-control" placeholder="Login Email:" type="email" name="email"   />
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Password</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<input class="form-control"  placeholder="Password"  name="password" type="password"   />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Status</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<select class="form-control" name="status" >
+						<option value="1">Active</option>
+						<option value="0">In-Active</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Type</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<select class="form-control"  name="customerType">
+						<option value="customer">Customer</option>
+						<option value="sales">Sales</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Discount</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<input class="form-control"  placeholder="Discount"  name="discount" type="number" value="1" min="0.5" max="1" step="0.01" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>GST-No.</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<input class="form-control"  placeholder="GST-No."  name="gstNo" type="number"  />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Web site</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<input class="form-control" placeholder="website"  name="website" type="text"  />
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Balance</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<input class="form-control"  placeholder="Discount"  name="balance" type="number" value="0"  step="0.01" />
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Tel:</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<input class="form-control"  placeholder="Tel:" type="text" name="tel" />
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Mobile:</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<input class="form-control"  placeholder="Mobile:" type="text" name="phone" />
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Company Address:</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<input class="form-control"  placeholder="Company Address:" type="text" name="address" />
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Shipping Address:</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<input class="form-control"  placeholder="Shipping Address:" type="text" name="shippingAddress" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Memo:</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<textarea class="form-control"  rows="5" cols="" name="memo"></textarea>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="row">
+			<div class="col-sm-2 col-sm-offset-2">
+				<div class="form-group input-group">
+					<button class="btn btn-primary">Submit</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	
+	<script src="../static/plugin/jquery/jquery.validate.min.js" type="text/javascript" th:src="@{/static/plugin/jquery/jquery.validate.min.js}" charset="utf-8"></script>
+	<script src="../static/plugin/jquery/additional-methods.min.js" type="text/javascript" th:src="@{/static/plugin/jquery/additional-methods.min.js}" charset="utf-8"></script>
+	
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			
+			//登录表单
+			$( "#customerForm" ).validate( {
+				rules: {
+					'companyName': {
+						required: true,
+						minlength: 2,
+						maxlength: 100,
+					},
+					'companyEmail': {
+						required: true,
+						minlength: 1,
+						remote:{
+							async : false,
+							url: [[@{/management/customer/email/check}]],
+						}
+					},
+					'phone': {
+						required: true,
+						minlength: 2,
+						maxlength: 50,
+					},
+					'name': {
+						required: true,
+						minlength: 2,
+						maxlength: 50,
+					},
+					'email': {
+						minlength: 0,
+						maxlength: 50,
+					},
+					'password': {
+						minlength: 0,
+						maxlength: 50,
+					},
+					
+				},
+				messages: {
+					 'companyEmail':{
+						 remote: "email existed.",
+					} 
+					
+				},
+				
+				errorElement: "em",
+				errorPlacement: function ( error, element ) {
+					// Add the `help-block` class to the error element
+					error.addClass( "help-block col-sm-offset-2" );
+
+					// Add `has-feedback` class to the parent div.form-group
+					// in order to add icons to inputs
+					element.parents( ".input-group" ).addClass( "has-feedback" );
+
+					if ( element.prop( "type" ) === "checkbox" ) {
+						error.insertAfter( element.parent( "label" ) );
+					} else {
+						error.insertAfter( element.parents( ".input-group" ) );
+					}
+
+					// Add the span element, if doesn't exists, and apply the icon classes to it.
+					if ( !element.next( "span" )[ 0 ] ) {
+						$( "<span class='glyphicon glyphicon-remove form-control-feedback'></span>" ).insertAfter( element );
+					}
+				},
+				success: function ( label, element ) {
+					// Add the span element, if doesn't exists, and apply the icon classes to it.
+					if ( !$( element ).next( "span" )[ 0 ] ) {
+						$( "<span class='glyphicon glyphicon-ok form-control-feedback'></span>" ).insertAfter( $( element ) );
+					}
+				},
+				highlight: function ( element, errorClass, validClass ) {
+					$( element ).parents( ".input-group" ).addClass( "has-error" ).removeClass( "has-success" );
+					$( element ).next( "span" ).addClass( "glyphicon-remove" ).removeClass( "glyphicon-ok" );
+				},
+				unhighlight: function ( element, errorClass, validClass ) {
+					$( element ).parents( ".input-group" ).addClass( "has-success" ).removeClass( "has-error" );
+					$( element ).next( "span" ).addClass( "glyphicon-ok" ).removeClass( "glyphicon-remove" );
+				}
+			} );
+			
+		/*]]>*/	
+	</script>
+	<style>
+		.input-group{
+			width: 100%;
+		}
+	</style>
+</div>

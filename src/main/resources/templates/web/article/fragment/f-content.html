@@ -1,0 +1,69 @@
+
+<!-- content -->
+
+<div th:fragment="content" class="container">
+	<div class="row" >
+		<div class="col-sm-12" th:each="article : ${articleList}" >
+		<br/>
+			<!-- <h4>
+				<a href="javascript:void(0);">
+					<i  class="toggle-icon fa fa-angle-double-up" aria-hidden="true"></i> &nbsp;
+					<span th:text="${article.title}" class="article-title"></span>
+				</a>
+			</h4> -->
+			
+			<div id="row" class="article-content" th:utext="${article.content}" >content</div>
+			<br/>
+		</div>
+	</div>
+
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		var flag = true;
+		$(".article-title").click(function() {
+			if(flag){
+				$(".toggle-icon").removeClass("fa-angle-double-up");
+				$(".toggle-icon").addClass("fa-angle-double-down");
+				flag = false;				
+			}else{
+				$(".toggle-icon").removeClass("fa-angle-double-down");
+				$(".toggle-icon").addClass("fa-angle-double-up");
+				flag = true;	
+			}
+			$(".article-content").toggle('slow');
+		});
+		
+		
+		area=document.getElementsByTagName('area'),
+		initarea=null;//初始数据保存
+		function init(){//初始化
+			initarea=new Array(area.length-1);
+			for(var i=0;i<area.length;i++){
+				initarea[i]=area[i].getAttribute("coords");
+			}
+		}
+	
+		function setCoords(){//根据分辨率自适应热区坐标
+		 //   var width=document.body.offsetWidth,
+		    var naturalWidth=document.getElementById("testimg").naturalWidth;
+		  //初始图片宽度
+		   var  initwidth=1140;
+		    	percent=(naturalWidth/initwidth).toFixed(2);
+		    for(var i=0;i<area.length;i++){
+		    	var coords=initarea[i],
+		    		arr=coords.split(",");
+		        for(var j=0;j<arr.length;j++){
+		            arr[j] = (arr[j]/percent).toFixed(2);    
+		        }
+		        area[i].setAttribute("coords",arr.join(","));
+		    }
+		} 
+		//使用
+		init();
+	    setCoords();
+		window.onresize = function () {  
+		}  
+		/*]]>*/
+	</script>
+</div>
+

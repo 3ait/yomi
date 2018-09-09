@@ -1,0 +1,59 @@
+<th:block th:fragment="category-select">
+		
+		<div class="form-group">
+		      <select class="form-control" th:onchange="|getCategory2(this)|" name="menu1Id">
+		      	<option value="-1">--Category Level 1--</option>
+		      	<option th:each="menu:${menuList}" th:value="${menu.id}" th:text="${menu.name}" th:selected="${menu.id==searchForm.menu1Id}?1:0">--Category Level 1--</option>
+		      </select>
+	  	</div>
+		<div class="form-group" id="menu2Div" th:fragment="menuDiv2" >
+		      <select class="form-control" name="menu2Id" th:if="${leve2FatherId!=0}"  th:onchange="|getCategory3(this)|"  >
+		      	<option  value="-1">--Category Level 2--</option>
+		      	<option th:each="menu:${menuList}" th:value="${menu.id}" th:text="${menu.name}" th:selected="${menu.id==searchForm.menu2Id}?1:0">--Category Level 2--</option>
+		      </select>
+	  	</div>
+		<div class="form-group" id="menu3Div" th:fragment="menuDiv3" >
+		      <select class="form-control" name="menu3Id" th:if="${leve3FatherId!=0}"   >
+		      	<option  value="-1">--Category Level 3--</option>
+		      	<option th:each="menu:${menuList}" th:value="${menu.id}" th:text="${menu.name}" th:selected="${menu.id==searchForm.menu3Id}?1:0" >--Category Level 3--</option>
+		      </select>
+	  	</div>
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		    
+		    var menu1Id = [[${searchForm.menu1Id}]];
+		    var menu2Id = [[${searchForm.menu2Id}]];
+		    
+		    if(menu1Id!=-1){
+	      		$("#menu2Div").load([[@{/management/product/category/load/2/}]]+ menu1Id,function(){
+	      			if(menu2Id!=-1){
+			      		$("select").find("option[value=" + menu2Id + "]").attr("selected","selected");
+	      			}
+	      		});
+		    }
+		    
+		    var menu3Id = [[${searchForm.menu3Id}]];
+		    if(menu2Id!=-1){
+		    	$("#menu3Div").load([[@{/management/product/category/load/3/}]]+ menu2Id,function(){
+		    		if(menu3Id!=-1){
+			      		$("select").find("option[value=" + menu3Id + "]").attr("selected","selected");
+		    		}
+	      		});
+		    }
+		
+           /**
+		           加载二级分类
+		   **/
+	      	function getCategory2(_self){
+	      		$("#menu2Div").load([[@{/management/product/category/load/2/}]]+ $(_self).val());
+			}
+           /**
+		           加载三级分类
+		   **/
+	      	function getCategory3(_self){
+	      		$("#menu3Div").load([[@{/management/product/category/load/3/}]]+ $(_self).val());
+			}
+		/*]]>*/	
+	</script>
+</th:block>

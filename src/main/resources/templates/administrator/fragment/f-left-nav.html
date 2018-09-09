@@ -1,0 +1,110 @@
+<th:block th:fragment="nav(hightLight)">
+
+<!-- Sidebar -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+            <ul class="nav sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#" th:href="@{/}" target="_blank">
+                       Administrator
+                    </a>
+                </li>
+                <li>
+                    <a href="#"  th:href="@{/management/dashboard/}" ><i class="fa fa-fw fa-home"></i>&nbsp;DashBoard</a>
+                </li>
+                
+                 <li  class="dropdown">
+                	 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-chevron-down"></i> Order Info <span class="caret"></span></a>
+                	  <ul class="dropdown-menu" role="menu">
+                	  	<li style="display: none;"></li>
+                	  	 <li >
+		                    <a href="#" th:href="@{/management/order/}" >&nbsp;&nbsp;&nbsp;&nbsp;Order</a>
+		                </li>
+		                <li>
+		                    <a href="#" th:href="@{/management/invoice/}">&nbsp;&nbsp;&nbsp;&nbsp;Invoice</a>
+		                </li>
+		                <li>
+		                    <a href="#" th:href="@{/management/payment/}" >&nbsp;&nbsp;&nbsp;&nbsp;Payment</a>
+		                </li>
+                	  </ul>
+                </li>
+                
+                <li class="dropdown">
+                	 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-chevron-down"></i>Customer&nbsp;&nbsp;|&nbsp;&nbsp;Sales <span class="caret"></span></a>
+                	  <ul class="dropdown-menu" role="menu">
+                	  	<li style="display: none;"></li>
+                	  	<li><a href="#" th:href="@{/management/customer}">&nbsp;&nbsp;&nbsp;&nbsp;Customer</a></li>
+                	  	<li><a href="#" th:href="@{/management/customer/sales}">&nbsp;&nbsp;&nbsp;&nbsp;Sales</a></li>
+                	  </ul>
+                </li>
+                <li>
+                    <a href="#" th:href="@{/management/product/}" ><i class="fa fa-fw fa-folder-o"></i>&nbsp;Product</a>
+                </li>
+                
+                <li>
+                    <a href="#" th:href="@{/management/content/}" ><i class="fa fa-fw fa-folder-o"></i>&nbsp;Content</a>
+                </li>
+                
+                <li  class="dropdown">
+                	  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-chevron-down"></i> Category <span class="caret"></span></a>
+                	  <ul class="dropdown-menu" role="menu">
+                	  	<li style="display: none;"></li>
+                	  	<li><a href="#" th:href="@{/management/category/}" >&nbsp;&nbsp;&nbsp;&nbsp;Category</a></li>
+                	  	<li><a href="#" th:href="@{/management/attribute/}" >&nbsp;&nbsp;&nbsp;&nbsp;Attribute</a></li>
+                	  </ul>
+                </li>
+                
+                <li  class="dropdown">
+                	 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-chevron-down"></i>System Config<span class="caret"></span></a>
+                	  <ul class="dropdown-menu" role="menu">
+                	  	<li style="display: none;"></li>
+		                <li>
+		                    <a href="#" th:href="@{/management/user/}">&nbsp;&nbsp;&nbsp;&nbsp;Admin User</a>
+		                </li>
+		                <li>
+		                    <a href="#" th:href="@{/management/setting/}">&nbsp;&nbsp;&nbsp;&nbsp;Setting</a>
+		                </li>
+		                <li>
+		                    <a href="#" th:href="@{/management/attachment/}">&nbsp;&nbsp;&nbsp;&nbsp;Attachment</a>
+		                </li>
+		                <li>
+		                    <a href="#" th:href="@{/management/branch/}">&nbsp;&nbsp;&nbsp;&nbsp;Branch</a>
+		                </li>
+		                 <li>
+		                    <a href="#" th:href="@{/management/coupon/}">&nbsp;&nbsp;&nbsp;&nbsp;Coupon</a>
+		                </li>
+                	  </ul>
+                </li>
+            </ul>
+        </nav>
+        <script type="text/javascript">
+		$(document).ready(function () {
+		  var trigger = $('.hamburger'),
+		      overlay = $('.overlay'),
+		     isClosed = false;
+
+		    trigger.click(function () {
+		      hamburger_cross();      
+		    });
+
+		    function hamburger_cross() {
+
+		      if (isClosed == true) {  
+		    	 //右侧遮盖
+		        //overlay.hide();
+		        trigger.removeClass('is-open');
+		        trigger.addClass('is-closed');
+		        isClosed = false;
+		      } else {   
+		        //overlay.show();
+		        trigger.removeClass('is-closed');
+		        trigger.addClass('is-open');
+		        isClosed = true;
+		      }
+		  }
+		  
+		  $('[data-toggle="offcanvas"]').click(function () {
+		        $('#wrapper').toggleClass('toggled');
+		  });  
+		});
+	</script>
+</th:block>

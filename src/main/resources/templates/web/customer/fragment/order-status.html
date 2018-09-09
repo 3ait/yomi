@@ -1,0 +1,13 @@
+<th:bolck  th:fragment="content(order)">
+	<span class="orderStatus"  th:if="${order.status==1}" >新订单</span>   
+	<span class="orderStatus"  th:if="${order.status==2}" >已处理</span>   
+	<span class="orderStatus"  th:if="${order.status==3}" >已发送</span>   
+	<span class="orderStatus"  th:if="${order.status==4}" >已完成</span>   
+	<span class="orderStatus"  th:if="${order.status==5}" >已删除</span>   
+				
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           //
+		/*]]>*/	
+	</script>
+</th:bolck>

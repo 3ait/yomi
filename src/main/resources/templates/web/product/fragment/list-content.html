@@ -1,0 +1,107 @@
+<div th:fragment="content">
+	<!-- content -->
+	<div class="container">
+		<div class="row" >
+		
+			<br/>
+			<!-- left sidebar -->
+			<div class="col-xs-4 col-sm-1 "  style="color: #666;font-size: 14px;">
+					<span class="c-title">分类：</span>
+			</div>
+			<div class="col-xs-8 col-sm-11 " >
+				<div th:replace="/web/component/Subcategory :: content(${categoryId})"></div>
+			</div>
+		</div>
+		<hr />
+		<div class="row" style="color: grey;font-size: 14px;">
+			<div class="col-xs-4 col-sm-1" >
+				品牌：
+			</div>
+			<div class="col-xs-8 col-sm-11 " >
+				<div th:replace="/web/component/Attributes :: content"></div>
+			</div>
+		</div>
+		
+		<hr />
+		
+		<div class="row" >
+			<div class="col-xs-3 col-sm-2 hidden-xs"  >
+				<div class="detail">
+						<span style="padding-left: 10px;">浏览记录</span>
+					</div>
+				<div th:replace="/web/component/ViewHistory :: content"></div>
+			</div>
+			<div class="col-xs-12 col-sm-10"  style="border-left: 1px solid #357363;" >
+				 <div th:replace="/web/component/Products :: content(${categoryId})"></div>
+			</div>
+		</div>
+		
+	</div>
+	<style>
+		.c-title{
+			color: #666;
+			font-size: 14px;
+			font-weight: 500;
+		}
+		
+		.detail{
+			    
+			    color: #333;
+			    font-size: 16px;
+			    border: 1px solid #F3F3F3;
+		    	padding-top: 10px;
+		    	padding-bottom: 10px;
+		    }
+		    .detail-title{
+		    	border-top: 2px solid #e4393c;
+		    	border-right: 1px solid #F3F3F3;
+		    	padding: 10px;
+		    }
+	</style>
+	
+
+	
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			
+		   
+           /**
+			属性选择
+			**/
+			function listProduct(sortBy,sort){
+				
+				var i = 0;
+				var attrValueIds = new Array(); 
+				$("input[name='attr_value_checkbox']").each(function(index,value){
+					if($(value).prop("checked")){
+						attrValueIds[i] = $(value).val();
+						i++;
+					}
+				});
+								
+				$("#product_list").load([[@{/product/attr}]],{
+					'attrValueIds':attrValueIds,
+					'categoryId': $("#hidden_categoryId").val(),
+					'q': $("#hidden_q").val(),
+					'page': $("#hidden_pageNum").val(),
+					'sortBy':sortBy,
+					'sort':sort,
+				}); 
+			}
+			
+
+		    //sort
+		    var flag = 0;
+			function sort(sortBy){
+				var sort = 'asc';
+				if(flag%2==0){
+					order = 'desc'
+				}else{
+					order = 'asc'
+				}
+				flag++;
+				listProduct(sortBy,sort);
+			}
+		/*]]>*/	
+		</script>	
+</div>

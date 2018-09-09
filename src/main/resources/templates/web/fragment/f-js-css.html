@@ -1,0 +1,31 @@
+<th:block th:fragment="public-css-js">
+
+	<meta charset="UTF-8" />
+	<link rel="icon" type="image/x-icon" th:href="@{/static/templates/web/favicon.ico}" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<!-- menu CSS 
+	--> 
+	<link th:href="@{/static/plugin/bootstrap-3.3.7/css/bootstrap.css}"  href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+	<link th:href="@{/static/templates/web/index/css/style.css}" href="css/style.css" rel='stylesheet' type='text/css' />
+	
+	<!-- public CSS
+	-->
+	<link rel="stylesheet" type="text/css" href="../../static/plugin/font-awesome-4.7.0/css/font-awesome.min.css" th:href="@{/static/plugin/font-awesome-4.7.0/css/font-awesome.min.css}" />
+	<link rel="stylesheet" type="text/css" href="../../static/templates/public.css" th:href="@{/static/templates/public.css}" />
+	
+	<!-- public JS --> 
+	<script src="static/plugin/jquery/jquery-2.2.1.min.js" type="text/javascript" th:src="@{/static/plugin/jquery/jquery-2.2.1.min.js}" charset="utf-8"></script>
+	<script src="../static/plugin/jquery/jquery.validate.min.js" type="text/javascript" th:src="@{/static/plugin/jquery/jquery.validate.min.js}" charset="utf-8"></script>
+	<script src="../static/plugin/jquery/additional-methods.min.js" type="text/javascript" th:src="@{/static/plugin/jquery/additional-methods.min.js}" charset="utf-8"></script>
+	<script th:src="@{/static/templates/web/index/js/jquery-ui.min.js}" src="js/jquery-ui.min.js"></script>
+	
+	<!-- menu 
+	 --> 
+	<link th:href="@{/static/templates/web/index/css/megamenu.css}" href="css/megamenu.css" rel="stylesheet" type="text/css" media="all" />
+	<script th:src="@{/static/templates/web/index/js/megamenu.js}" src="js/megamenu.js"></script>
+	<script th:src="@{/static/templates/web/index/js/menu_jquery.js}" src="js/menu_jquery.js"></script>
+	
+	
+</th:block>

@@ -1,0 +1,263 @@
+	<th:block th:fragment="content(categoryId)" >
+	
+		<div id="products"  >
+			<div class="row">
+				<div class="col-xs-12 col-sm-12" >
+					<div class=" pull-right"  style="border-bottom: solid 1px #357363;">
+						 排序: <a href="javascript:return void(0);" @click="productSort('id')">时间</a> | 
+						 		<a href="javascript:return void(0);" @click="productSort('price1')">价格</a> | 
+						 		<a href="javascript:return void(0);" @click="productSort('clickNum')">热销</a> 
+					</div>
+				</div>
+			</div>
+			<div class="row"  style="padding-left: 10px;">
+				<div class="col-xs-6 col-sm-3 product-list" v-for="(item, index) in retData.content">
+					<a :href="'/product/'+ item.id" target="_blank" @click="addHistory(item.id,item.productName,item.productNameAlias,item.defaultSrc,item.price1)" >
+						<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive">
+					</a>
+				      <div class="caption" >
+				        <p>
+							<span v-if="item.price2>0" class="price-color" >NZD {{item.price2}}&nbsp;</span> 
+				        	<span :class="item.price2>0 ? 'price-del':'price-color'" >NZD {{item.price1}}</span> 
+				        </p>
+			        	<span style="color: grey;font-size: 12px;">{{item.productName}}</span>
+			        	
+				        <p style="margin-top: 10px;">
+							<span class="label label-danger">{{item.label}}</span>
+<!-- 						    <i class="fa fa-shopping-cart fa-2x cart-icon pull-right" aria-hidden="true" style="cursor: pointer;"></i> -->
+				        </p>
+				      </div>
+			    </div>
+		    </div>
+		    <br/>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 " >
+					<div class=" pull-right" >
+						 	<span>{{retData.number+1}}</span>/<span >{{retData.totalPages}}</span>
+							&nbsp;
+							<span class="page-btn" @click="prePage()">
+								&nbsp;<i class="fa fa-chevron-left "></i>&nbsp;
+							</span>
+							<span class="page-btn" @click="nextPage()">
+								 &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i>&nbsp;
+							</span>&nbsp;
+							
+							<input id="pageGo" style="width:50px;" type="number" min="1" step="1" v-model="retData.number+1"/>&nbsp; 
+							
+							<span class="page-btn" id="fontPage" @click="go()" >
+								Go
+							</span>
+						 
+					</div>
+					</div>
+			</div>
+		</div>
+	<style>
+	
+		@media (min-width: 768px){
+			.product-list {
+				height: 310px;
+			}
+		}
+		@media (max-width: 768px){
+			.product-list {
+				height: 240px;
+			}
+		}
+		.product-list {
+			margin-top: 20px;
+			padding: 5px 15px;
+			transition: all .5s;
+			border: 1px solid #eee;
+		}
+		
+		.product-list:HOVER {
+			box-shadow: -3px 0 5px #9FA8AB, 0 -3px 5px #9FA8AB, 0 3px 5px #9FA8AB,3px 0 5px #9FA8AB;
+		}
+		
+		/** **/
+		.buy-div{
+			display: block;
+			position: absolute;
+			background: red;
+		}
+		.product-list:HOVER .buy-div{
+			display: block;
+		}
+		
+		
+		.page-btn{
+			border: 1px solid #e7e7e7;
+			padding: 4px 5px ;
+			cursor: pointer;
+			transition: all .5s;
+		}
+		.page-btn:HOVER {
+			background: #357363;
+			color: white;
+		}
+		.price-del{
+			font-size:12px;
+			text-decoration: line-through;
+		}
+		.price-color{
+			font-size:14px;
+			color: #e4393c;
+		}
+		
+	</style>
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			new Vue({
+			el : '#products',
+			data : {
+				retData:{},
+			},
+			created: function() {
+				
+				var _this = this;
+				axios.get([[@{/api/product/list}]], {
+					params: {
+					 q:[[${searchForm.q}]],
+				     categoryId:[[${categoryId}]],
+				     page:0,
+				     size:40,
+				     sortBy:'position',
+				     sort:'asc',
+				    }
+				  })
+				  .then(function (response){
+					  _this.retData = response.data;
+					  for(var i=0;i< _this.retData.content.length;i++){
+						  if (!isNaN(_this.retData.content[i].price1)) {
+							  _this.retData.content[i].price1 = _this.retData.content[i].price1.toFixed(2);
+					        }
+						  if (!isNaN(_this.retData.content[i].price2)) {
+							  _this.retData.content[i].price2 = _this.retData.content[i].price2.toFixed(2);
+					        }
+						  
+					  }
+				  })
+				  .catch(function (error) {
+				    console.log(error);
+				  }); 
+				
+			},
+			methods:{
+				addCart: function(id,productName,productNameAlias,mpn,defaultSrc,price,num){
+					productAdd(id, productName, productNameAlias, mpn, defaultSrc, price, num);
+				},
+				addHistory: function(id,productName,productNameAlias,defaultSrc,price){
+					addToHistory(id,productName,productNameAlias,defaultSrc,price);
+				},
+				
+				//上一页面
+				prePage :function(){
+					var _this = this;
+					if(!_this.retData.first){
+						var _this = this;
+						axios.get([[@{/api/product/list}]], {
+							params: {
+						     categoryId:[[${categoryId}]],
+						     page:_this.retData.number-1,
+						     size:_this.retData.size,
+						     sortBy:_this.retData.sort[0].property,
+						     sort:_this.retData.sort[0].ascending?"asc":"desc",
+						    }
+						  })
+						  .then(function (response){
+							  _this.retData = response.data;
+						  })
+						  .catch(function (error) {
+						    console.log(error);
+						  }); 
+					}
+				},
+				//nexpage
+				nextPage :function(){
+					var _this = this;
+					if(!_this.retData.last){
+						var _this = this;
+						axios.get([[@{/api/product/list}]], {
+							params: {
+						     categoryId:[[${categoryId}]],
+						     page:_this.retData.number+1,
+						     size:_this.retData.size,
+						     sortBy:_this.retData.sort[0].property,
+						     sort:_this.retData.sort[0].ascending?"asc":"desc",
+						    }
+						  })
+						  .then(function (response){
+							  _this.retData = response.data;
+						  })
+						  .catch(function (error) {
+						    console.log(error);
+						  }); 
+					}
+				},
+				
+				//nexpage
+				go :function(){
+					var _this = this;
+					var pageNum = parseInt($("#pageGo").val())-1;
+					
+					if(pageNum>=0 && pageNum<=_this.retData.totalPages){
+						var _this = this;
+						axios.get([[@{/api/product/list}]], {
+							params: {
+						     categoryId:[[${categoryId}]],
+						     page:pageNum,
+						     size:_this.retData.size,
+						     sortBy:_this.retData.sort[0].property,
+						     sort:_this.retData.sort[0].ascending?"asc":"desc",
+						    }
+						  })
+						  .then(function (response){
+							  _this.retData = response.data;
+						  })
+						  .catch(function (error) {
+						    console.log(error);
+						  }); 
+					}
+				},
+				
+				//重新排序
+				
+				productSort : function(sortBy){
+					var _this = this;
+					var pageNum = parseInt($("#pageGo").val())-1;
+					
+					if(pageNum>=0 && pageNum<=_this.retData.totalPages){
+						var _this = this;
+						var sort = _this.retData.sort[0].ascending?"asc":"desc";
+						if(sort=="asc"){
+							sort = "desc";
+						}else if(sort=="desc"){
+							sort = "asc";
+						}
+						axios.get([[@{/api/product/list}]], {
+							params: {
+						     categoryId:[[${categoryId}]],
+						     page:pageNum,
+						     size:_this.retData.size,
+						     sortBy:sortBy,
+						     sort:sort,
+						    }
+						  })
+						  .then(function (response){
+							  _this.retData = response.data;
+						  })
+						  .catch(function (error) {
+						     console.log(error);
+						  }); 
+					}
+				}
+				
+			}
+		});
+		
+		
+		
+	/*]]>*/
+</script>
+</th:block>

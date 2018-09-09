@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title><span th:replace="/administrator/fragment/f-company-name :: companyname"></span> | Statement</title>
+<th:block th:replace="/administrator/fragment/f-js-css :: public-css-js"></th:block>
+</head>
+
+
+<body>
+	<th:block th:fragment="single-statement">
+	<style>
+	
+	
+			.td-bottom {
+				border-bottom: 1px solid #ddd;
+			}
+	</style>
+	<table style="width:100%;">
+		<thead >
+			<tr style="text-align: center;">
+				<td><h3> Statement</h3></td>
+			</tr>
+			<tr style="text-align: center;">
+				<td> From:<span th:text="${searchForm.dateFrom}"></span> &nbsp;&nbsp;To:<span th:text="${searchForm.dateTo}"></span></td>
+			</tr>
+			<tr style="text-align: center;">
+				<td> <span th:text="${userCompany.name}"></span></td>
+			</tr>
+			<tr style="text-align: center;">
+				<td> <span th:text="${userCompany.tel}"></span></td>
+			</tr>
+			<tr style="text-align: center;">
+				<td> <span th:text="${userCompany.mobile}"></span></td>
+			</tr>
+			<tr style="text-align: center;">
+				<td> <span th:text="${userCompany.email}"></span></td>
+			</tr>
+			<tr style="text-align: center;">
+				<td> <span th:text="${userCompany.website}"></span></td>
+			</tr>
+			<tr style="text-align: center;">
+				<td>Gst-No:<span th:text="${userCompany.gstNo}"></span></td>
+			</tr>
+			<tr style="text-align: center;">
+				<td><span th:text="${userCompany.bankAccount}"></span></td>
+			</tr>
+			<tr style="text-align: center;">
+				<td><span th:text="${userCompany.address}"></span></td>
+			</tr>
+		</thead>
+	</table>
+	
+	<table style="width:100%;">
+		
+		<tr>
+			<td >
+				 <span th:text="${customer.companyName}"></span>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				 <span th:text="${customer.tel}"></span>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<span th:text="${customer.phone}"></span>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				<span th:text="${customer.gstNo}"></span>
+			</td>
+		</tr>
+		<tr>
+			<td >
+				 <span th:text="${customer.website}"></span>
+			</td>
+		</tr>
+
+		<tr>
+			<td >
+				<span th:text="${customer.address}"></span>
+			</td>
+		</tr>
+	</table>
+	
+	<table style="width: 100%">
+		<thead>
+			<tr>
+				<th class="td-bottom"  style="width: 15%;">Date</th>
+				<th class="td-bottom"  style="width: 25%;">Details</th>
+				<th class="td-bottom"  style="width: 15%;">Invoice Amount</th>
+				<th class="td-bottom"  style="width: 10%;">Payment</th>
+				<th class="td-bottom"  style="width: 10%;">Balance</th>
+			</tr>
+		</thead>
+		<tr th:each="transfer :${transferList}" style="border-bottom: 1px solid;">
+			<td class="td-bottom" th:text="${#dates.format(transfer.date,'dd/MM/yyyy')}" ></td>
+			<td class="td-bottom" >
+				<span th:if="${transfer.invoiceView==null}" th:text="${transfer.details}"></span>
+				<span th:if="${transfer.invoiceView!=null}"	th:text="${transfer.details}"></span>
+			</td>
+			<td class="td-bottom" ><span th:if="${transfer.invoiceCost!=null}" th:text="|$${#numbers.formatDecimal(transfer.invoiceCost,1,2)}|"></span></td>
+			<td class="td-bottom" ><span th:if="${transfer.deposits!=null}" th:text="|$${#numbers.formatDecimal(transfer.deposits,1,2)}|"></span></td>
+			<td class="td-bottom" ><span th:text="|$${#numbers.formatDecimal(transfer.balance,1,2)}|"></span></td>
+		</tr>
+	</table>
+	
+	<div style="height: 30px;"></div>
+
+	<th:block th:if="${transfer.invoiceView}!=null" th:each="transfer :${transferList}" >
+		<div style="height: 30px;background: blue;"></div>
+		<th:block th:replace="/administrator/invoice/pdf/template :: invoice(${transfer.invoiceView})"></th:block>
+	</th:block>
+		
+	</th:block>
+</body>
+</html>

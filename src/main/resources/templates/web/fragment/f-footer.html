@@ -1,0 +1,47 @@
+<footer th:fragment="footer" class="footer_top" >
+	<!-- footer_top -->
+	
+	
+	
+		<div class="container" >
+			<div class="row">
+				<div class="col-sm-3 span1_of_4" th:each="menuView1,iterStat : ${bottomMenuViewList}">
+					<h4> <span th:text="${menuView1.menu.name}"></span> </h4>
+					<div class="col1"  th:each="menuView2 : ${menuView1.subMenuViewList}">
+						<ul class="f_nav">
+							<li>
+								<a href="#" th:href="|@{/}${menuView1.menu.menuType}/category/${menuView2.menu.id}|" th:if="${menuView2.menu}!=null" th:text="${menuView2.menu.name}">Shop</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-sm-3 span1_of_4" >
+					<h4> <span> 商家服务</span> </h4>
+					<div class="col1"  >
+						<ul class="f_nav">
+							<li>
+								<a th:href="@{/coupons}" >优惠券</a>
+							</li>
+							<li>
+								<a th:href="@{/forgot/password}" >忘记密码</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	<!-- footer -->
+	<br/>
+	<div class="footer">
+		<div class="container">
+			<div class="copy">
+				<p class="link">
+					Copyright &copy; 2018. Ultimate Life All rights reserved.
+				</p>
+			</div>
+		</div>
+	</div>
+
+
+</footer>

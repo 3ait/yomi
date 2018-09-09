@@ -1,0 +1,56 @@
+	<th:block th:fragment="autoComplete(url)">
+		<script src="../static/plugin/jquery/jquery-ui-1.9.2.custom.min.js" type="text/javascript" th:src="@{/static/plugin/jquery/jquery-ui-1.9.2.custom.min.js}" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../static/plugin/jquery/jquery-ui-1.9.2.custom.min.css" th:href="@{/static/plugin/jquery/jquery-ui-1.9.2.custom.min.css}"/>
+		
+		<input id="autoInput"  oninput="getQList(this)" type="text" class="form-control" onchange="initHiddenId()"  />
+		
+	<input type="hidden" id="hiddenId" name="hiddenId" />
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		
+		var retJson ;
+		function initHiddenId(){
+			$("#hiddenId").val("");
+			for(var key in retJson){  
+		       if(key == $("#autoInput").val()){
+					$("#hiddenId").val(retJson[key]);
+		       }
+			  }
+			
+			if($("#hiddenId").val()==""){
+				$("#hiddenId").focus();
+				return ;
+			}
+		}
+		
+		
+		           
+      	/*
+			获取关联词信息
+		*/
+		function getQList(obj){
+			
+			$.ajax({
+				url: [[|@{/}${url}|]],
+				method: "get",
+				data: { 
+					"size" : 8,
+					"q" : obj.value,
+					},
+			}).done(function(ret){
+				retJson = JSON.parse(ret);
+				var availableTags = retJson.source;
+				
+				for(var item in retJson){  
+			       if(item == $("#autoInput").val()){
+						$("#hiddenId").val(retJson.$("#autoInput").val());
+			       }
+			    }  
+				$( "#autoInput" ).autocomplete({
+					source: availableTags
+				});
+			});
+		}
+		/*]]>*/	
+	</script>
+</th:block>

@@ -1,0 +1,250 @@
+<div class="container-fluid "  th:fragment="content">
+    <div th:replace="/administrator/order/fragment/f-search :: search('management/order')"></div>
+    <div class="row">
+        <div class="col-lg-12">
+        	<table class="table   ">
+				 	<thead>
+				 		<tr>
+				 			<th >
+				 				<input type="checkbox" onclick="checkAll(this)" />&nbsp;
+				 				<a href="javascript:void(0)" th:onclick="|printOrder()|" title="Print" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-print fa-stack-1x"></i>
+									</span></a>
+				 			
+				 			</th>
+				 			<th>ID</th>
+				 			<th>Company Name</th>
+				 			<th>Tracking No.</th>
+				 			<th>Total Price(<span th:text="${#numbers.formatDecimal(totalPrice,0,2)}" th:if="${user.status=='Superadmin'}"></span>)
+				 				<br/> Total Freight(<span th:text="${#numbers.formatDecimal(totalFreight,0,2)}"></span>)
+				 				
+				 			</th>
+				 			<th onclick="colomnSort('status')" class="sort-colomn">Status</th>
+				 			<th onclick="colomnSort('isPaid')" class="sort-colomn">Paid</th>
+				 			<th onclick="colomnSort('invoiced')" class="sort-colomn">Invoiced</th>
+				 			<th>Customer Msg</th>
+				 			<th>Admin Msg</th>
+				 			<th>Create Time<br/>Modify Time</th>
+				 			<th><span onclick="colomnSort('customerBySalesId.id')" class="sort-colomn">Sales</span><br/>Commission</th>
+				 			<th>
+				 				<a target="_blank"  th:href="@{/management/order/add}">
+				 				 <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-plus fa-stack-1x"></i>
+									</span>
+				 				
+				 				</a><br/>
+				 				
+				 			 </th>
+				 		</tr>
+				 		
+				 	</thead>
+				 		<tr th:each="order :${orderList}" th:class="${order.status}==1?'alert-danger':(${order.status}==2?'alert-warning':(${order.status}==3?'bg-grey')) ">
+				 			<td><input name="checkbox_select" type="checkbox" th:value="${order.id}" /></td>
+				 			<td  th:text="${order.id}">
+				 				
+				 			</td>
+				 			<td ><a href="javascript:void(0)" style="text-transform: capitalize;"  th:text="${order.toCustomerCompanyName}" ToCustomerCompanyName th:onclick="|showCustomer(${order.customerByCustomerId.id})|"> CustomerName </a></td>
+				 			<td>
+				 				<a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="trackingNum"  href="#"  class="edit-name"  th:text="${order.trackingNum}" >Tracking Num</a>
+				 			</td>
+				 			<td>
+				 				<span th:text="${#numbers.formatDecimal(order.totalProductPrice,0,2)}" th:if="${user.status=='Superadmin'}"></span>
+				 				<br/>
+				 				<a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="totalFreight"  href="#"  class="edit-name"  th:text="${#numbers.formatDecimal(order.totalFreight,1,2)}" >Total Freight</a> 
+				 			</td>
+				 			<td >
+				 				<th:block th:replace="/administrator/order/fragment/order-status :: content(${order})"></th:block>
+				 			</td>
+				 			<td >
+				 				<a class="isPaid" data-type="select" th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="isPaid"  href="#"    th:text="${order.isPaid==0?'Unpaid': 'Paid'}" >status</a>
+				 			</td>
+				 			<td th:text="${order.invoiced ==1?'Invoiced' :'None' }" id="invoiceTd">Invoice</td>
+				 			<td th:text="${order.customerMsg}">Customer Msg</td>
+				 			<td >
+				 				<a data-type="textarea" data-placement="bottom" th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="adminMsg"  href="#"  class="edit-name"  th:text="${order.adminMsg}" >Admin Msg</a>
+				 			</td>
+				 			<td>
+				 				<span th:text="${#dates.format(order.createTime, 'HH:mm dd/MM/yyyy')}"></span><br/>
+				 				<span th:text="${#dates.format(order.modifyTime, 'HH:mm dd/MM/yyyy')}"></span>
+				 			</td>
+				 			<td>
+				 				<a data-type="select"  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="customerBySalesId"  href="#"  class="customerBySalesId"  th:text="${order.customerBySalesId.name}" th:if="${order.customerBySalesId}!=null">customerBySalesId</a>
+				 				<a data-type="select"  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="customerBySalesId"  href="#"  class="customerBySalesId"  th:text="${order.customerBySalesId}" th:if="${order.customerBySalesId}==null">customerBySalesId</a>
+				 				<br/>
+				 				<a data-type="select"  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="salesCommissionPercentage"  href="#"  class="salesCommissionPercentage"  th:text="${#numbers.formatPercent(order.salesCommissionPercentage,0,0)}" >salesCommissionPercentage</a>
+				 			</td>
+				 			<td>
+				 				<span th:if="${order.user!=null}" th:text="${order.user.name}"></span>
+				 				<br/>
+				 				<a title="Edit" href="javascript:void(0)" th:onclick="|orderEdit(${order.id})|" >
+				 					<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-edit fa-stack-1x"></i>
+									</span></a>
+				 				<a href="javascript:void(0)" th:onclick="|transferInvoice(${order.id})|" title="Transfer into Invoice" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-paste fa-stack-1x"></i>
+									</span></a>
+				 				
+				 				<a href="javascript:void(0)" th:onclick="|copyOrder(${order.id})|" title="Dupilcate" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-copy fa-stack-1x"></i>
+									</span>
+				 				</a>
+				 			</td>
+				 		</tr>
+				 		
+				 		<tr >
+				 			<td>
+				 				
+				 			</td>
+				 			<td colspan="13" align="right">
+				 				<div th:replace="/administrator/fragment/f-page :: page"></div>
+				 			</td>
+				 		</tr>
+				</table>
+        </div>
+    </div>
+    
+    <style>
+    	.sort-colomn{
+    		cursor: pointer;
+    		color: #c05a22;
+    		
+    	}
+    	
+    </style>
+     <script src="static/plugin/editable/js/bootstrap-editable.min.js"  
+     	type="text/javascript" th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           
+			$('.edit-name').editable();
+
+			$('.isPaid').editable({
+		        value: -2,    
+		        source: [
+		              {value: -1, text: '--Select--'},
+		              {value: 0, text: 'Unpaid'},
+		              {value: 2, text: 'Paid'},
+		           ]
+		    });
+			$('.salesCommissionPercentage').editable({
+		        value: -1,    
+		        source: [
+		              {value: -1, text: '--Select--'},
+		              {value: 0.00, text: '0%'},
+		              {value: 0.05, text: '5%'},
+		              {value: 0.10, text: '10%'},
+		              {value: 0.15, text: '15%'},
+		              {value: 0.20, text: '20%'},
+		           ]
+		    });
+			
+			
+			$('.customerBySalesId').editable({
+		        value: -1,    
+		        source: [[${salesArray}]],
+		    });
+			
+			/**
+			订单转换为Invoice
+			**/
+			function transferInvoice(orderId){
+				if(!confirm("Confirm ?")){
+					return;
+				}
+				$.ajax({
+					url:[[@{/management/order/transfer/}]] + orderId ,
+					method: "GET",
+					data:{
+					}
+				}).done(function(ret){
+					if(ret==true){
+						$("#invoiceTd").html("Invoiced");
+					}else{
+						alert("Error.Please try again.");
+					}
+				});
+			}
+			/**
+			Duplicate Order
+			**/
+			function copyOrder(orderId){
+				if(!confirm("Confirm ?")){
+					return;
+				}
+				$.ajax({
+					url:[[@{/management/order/duplicate/}]] + orderId ,
+					method: "GET",
+					data:{
+					}
+				}).done(function(ret){
+					window.location.reload();
+				});
+			}
+		
+			
+			
+			/**
+			全选
+			**/
+			function checkAll(obj){
+				if($(obj).prop("checked")){
+					$("input[name='checkbox_select']").prop("checked",true);
+				}else{
+					$("input[name='checkbox_select']").prop("checked",false) ;
+				}
+			}
+			
+			/**
+			批量打印
+			**/
+			function printOrder(){
+				if(confirm("Confirm?")){
+					var orderIds = new Array();
+					var i = 0;
+					$("input[name='checkbox_select']").each(function(index,value){
+						
+						if($(value).prop("checked")){
+							orderIds[i] = parseInt($(value).val());
+							i++;
+							
+						}
+					});
+					console.log(orderIds);
+					if(orderIds.length>0){
+							//生成PDF
+// 						window.open([[@{/management/order/print.pdf}]] +"?orderIds=" +orderIds,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+						window.open([[@{/management/order/batch/print}]] +"?orderIds=" +orderIds,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+					}
+
+				}
+			}
+			
+			/**
+			编辑跳转
+			**/
+			function orderEdit(orderId){
+				window.open([[@{/management/order/}]]+orderId,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			}
+			/**
+			
+			**/
+			function showCustomer(customerId){
+				window.open([[@{/management/customer/}]] +customerId,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+
+			}
+			
+			
+		/*]]>*/	
+	</script>
+</div>

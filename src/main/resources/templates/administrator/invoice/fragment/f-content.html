@@ -1,0 +1,294 @@
+<div class="container-fluid "  th:fragment="content">
+    
+    <div th:replace="/administrator/invoice/fragment/f-search :: search('management/invoice')"></div>
+    
+    <div class="row">
+        <div class="col-lg-12">
+        	<table class="table  ">
+				 	<thead>
+				 		<tr>
+				 			<th>
+				 				<input type="checkbox" onclick="checkAll(this)" />&nbsp;
+				 				<a href="javascript:void(0)" th:onclick="|emailBatch()|" title="EmailBatch" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-envelope-o fa-stack-1x"></i>
+									</span></a>
+									&nbsp;
+									<a href="javascript:void(0)" th:onclick="|printPreview()|" title="Batch print" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-print fa-stack-1x"></i>
+									</span></a>
+									
+				 			ID</th>
+				 			<th  onclick="colomnSort('aliasId')" class="sort-colomn">InvoiceID</th>
+				 			<th onclick="colomnSort('aliasId')" class="sort-colomn">CustomerName <br />CustomerPhone</th>
+				 			<th  onclick="colomnSort('paid')" class="sort-colomn">Paid</th>
+				 			<th  onclick="colomnSort('status')" class="sort-colomn">Status</th>
+				 			<th  onclick="colomnSort('total')" class="sort-colomn">Total<br/>(<span th:text="${#numbers.formatDecimal(totalPrice,0,2)}"></span>)</th>
+				 			<th  onclick="colomnSort('balance')" class="sort-colomn">Balance<br/>(<span th:text="${#numbers.formatDecimal(totalBalance,0,2)}"></span>)</th>
+				 			<th>Create Time<br/>Modify Time</th>
+				 			<th>Operator</th>
+				 			<th>Admin-Info</th>
+				 			<th>Email-Info</th>
+				 			<th></th>
+				 		</tr>
+				 	</thead>
+				 		<tr th:each="invoice : ${invoiceList}" th:class="${invoice.paid==0?'alert-danger':''} ">
+				 			<td >
+				 			<input name="checkbox_email" type="checkbox" th:value="${invoice.id}" />
+				 			<span th:text="${invoice.id}"></span>
+				 			</td>
+				 			<td th:text="${invoice.aliasId}"></td>
+				 			<td >
+				 				<a href="javascript:void(0)"  th:onclick="|showCustomer(${invoice.customerId})|">  
+				 					<span th:text="${invoice.customerCompanyName}">customerCompanyName</span><br/>
+				 					<span th:text="${invoice.customerCompanyPhone}">customerCompanyPhone</span></td>
+				 					</a>
+				 			<td >
+								<a class="isPaid" data-type="select" th:attr="data-pk=${invoice.id}, data-url=|@{/management/invoice/update/colomn/}|" data-name="paid"  href="#"    
+									th:text="${invoice.paid==0?'Unpaid':(invoice.paid==1?'PaidInPart':'Paid')}">isPaid</a>
+				 			</td>
+				 			<td >
+								<a class="status" data-type="select" th:attr="data-pk=${invoice.id}, data-url=|@{/management/invoice/update/colomn/}|" data-name="status"  href="#"    
+									th:text="${invoice.status==1?'New Invoice': (invoice.status==2?'Emailed':(invoice.status==3?'Completed':'Cancelled'))}" >status</a>
+							</td>
+				 			<td th:text="${invoice.total}">total</td>
+				 			<td >
+								<span th:text="${invoice.balance}">balance</span>
+				 			</td>
+				 			<td >
+								<span th:text="${#dates.format(invoice.createTime, 'HH:mm dd/MM/yyyy')}" >createTime</span>
+							<br/>
+				 				<span th:text="${#dates.format(invoice.modifyTime, 'HH:mm dd/MM/yyyy')}" >modifyTime</span>
+				 			</td>
+				 			<td></td>
+				 			<td >
+				 				<a data-type="textarea" data-placement="bottom" th:attr="data-pk=${invoice.id}, data-url=|@{/management/invoice/update/colomn/}|" data-name="adminInfo"  href="#"  class="edit-name"  th:text="${invoice.adminInfo}" >adminInfo</a> 
+				 			</td>
+				 			<td >
+				 				<a data-type="textarea" data-placement="bottom" th:attr="data-pk=${invoice.id}, data-url=|@{/management/invoice/update/colomn/}|" data-name="emailInfo"  href="#"  class="edit-name"  th:text="${invoice.emailInfo}" >info</a> 
+				 			</td>
+				 			<td>
+				 				<a href="javascript:void(0)" th:onclick="|email(${invoice.id})|" title="Email" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-envelope-o fa-stack-1x"></i>
+									</span></a>
+				 				<a target="_blank" th:href="|@{/management/invoice/pdf/view/}${invoice.id}.pdf|" title="View" >
+				 					<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-file-pdf-o fa-stack-1x"></i>
+									</span></a>
+				 				<a target="_blank" href="javascript:void(0)" th:onclick="|showInvoice(${invoice.id})|"  title="Edit" >
+				 					<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-edit fa-stack-1x"></i>
+									</span></a>
+				 				<a href="javascript:void(0)" th:href="|@{/management/invoice/pdf/view/}${invoice.id}.pdf|" th:attr="download=|${invoice.aliasId}.pdf|"  title="Download" >
+				 					<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-download fa-stack-1x"></i>
+									</span></a>
+									
+								<a href="javascript:void(0)" th:onclick="|showModel('${invoice.id}','${invoice.aliasId}','${invoice.customerId}','${invoice.customerCompanyName}')|" title="Payment"  target="_blank">
+								<span class="fa-stack"> <i
+									class="fa fa-square-o fa-stack-2x"></i> <i
+									class="fa fa-plus fa-stack-1x"></i>
+									</span>
+		
+								</a>
+				 			</td>
+				 		</tr>
+				 		
+				 		<tr >
+				 			<td>
+				 				<input type="checkbox" onclick="checkAll(this)" />&nbsp;
+				 				<a href="javascript:void(0)" th:onclick="|emailBatch()|" title="EmailBatch" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-envelope-o fa-stack-1x"></i>
+									</span></a>
+									&nbsp;
+									<a href="javascript:void(0)" th:onclick="|printPreview()|" title="Batch print" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-print fa-stack-1x"></i>
+									</span></a>
+									
+				 			</td>
+				 			<td colspan="20" align="right">
+				 				<div th:replace="/administrator/fragment/f-page :: page"></div>
+				 			</td>
+				 		</tr>
+				</table>
+        </div>
+    </div>
+    <th:block th:replace="/administrator/invoice/fragment/new-payment :: content"></th:block>
+  
+    
+    <style>
+    	.bg-grey{
+    		background: #cecaca;
+    	}
+    	.sort-colomn{
+    		cursor: pointer;
+    		color: #c05a22;
+    		
+    	}
+    	
+    </style>
+     <script src="static/plugin/editable/js/bootstrap-editable.min.js"  
+     	type="text/javascript" th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           
+			$('.edit-name').editable();
+
+			$('.isPaid').editable({
+		        value: -1,    
+		        source: [
+		              {value: -1, text: '--Select--'},
+		              {value: 1, text: 'PaidInPart'},
+		              {value: 2, text: 'Paid'},
+		              {value: 0, text: 'Unpaid'},
+		           ],
+				 	success: function(response, newValue) {
+			        	   window.location.reload();
+			           }
+		    });
+			
+			$('.status').editable({
+		        value: -1,    
+		        source: [
+		              {value: -1, text: '--Select--'},
+		              {value: 1, text: 'New Invoice'},
+		              {value: 2, text: 'Emailed'},
+		              {value: 3, text: 'Completed'},
+		              {value: 0, text: 'Canceled'},
+		           ],
+				 	success: function(response, newValue) {
+			        	   window.location.reload();
+			           }
+		    });
+			
+			/**
+			**/
+			function email(aliasId){
+				if(!confirm("Confirm ?")){
+					return;
+				}
+				$.ajax({
+					url:[[@{/management/invoice/email/}]] + aliasId ,
+					method: "GET",
+					data:{
+					}
+				}).done(function(ret){
+					if(ret=='true'){
+						window.location.reload();
+					}else{
+						alert(ret);
+					}
+				});
+			}
+			/**
+			    批量发送邮件
+			**/
+			function emailBatch(){
+				if(confirm("Confirm?")){
+					$("input[name='checkbox_email']").each(function(index,value){
+						if($(value).prop("checked")){
+							$.ajax({
+								url:[[@{/management/invoice/email/}]] + $(value).val(),
+								method: "GET",
+								data:{
+								}
+							}).done(function(ret){
+								if(ret=='true'){
+									window.location.reload();
+								}else{
+									alert(ret);
+								}
+							});
+						}
+					});
+					window.location.reload();
+				}
+			}
+			
+			/**
+			     批量打印预览
+			**/
+			function printPreview(invoiceId){
+				var checkedInvoice = new Array();
+				$("input[name='checkbox_email']").each(function(index,value){
+					if($(value).prop("checked")){
+						checkedInvoice.push(value.value);
+					}
+				});
+				window.open([[@{/management/invoice/batch/print/preview?invoiceIds=}]] +checkedInvoice,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			}
+			
+			/**
+			全选
+			**/
+			function checkAll(obj){
+				if($(obj).prop("checked")){
+					$("input[name='checkbox_email']").prop("checked",true);
+				}else{
+					$("input[name='checkbox_email']").prop("checked",false) ;
+				}
+			}
+			
+			
+			
+			/**
+			    根据aliasId 获取公司信息
+			**/
+			function getCompanyInfo(obj){
+				$.ajax({
+					url: [[@{/management/payment/invoice/}]] + obj.value,
+					method: "get",
+					data: {},
+				}).done(function(ret){
+					if(ret!="{}"){
+						retJson = JSON.parse(ret);
+						var customerId = retJson.customerId;
+						var customerCompanyName = retJson.customerCompanyName;
+						var invoiceId = retJson.invoiceId;
+						
+						$("#companyName").val(customerCompanyName);
+						$("#hiddenId").val(customerId);
+						$("#hiddenInvoiceId").val(invoiceId);
+						
+					}else{
+						$("#aliasId").val("");
+						alert("Invoice id does not exist.");
+					}
+					
+					
+				});
+			}
+			
+			
+			/**
+			**/
+			function showCustomer(customerId){
+				window.open([[@{/management/customer/}]] +customerId,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+
+			}
+			
+			function showInvoice(invoiceId){
+				window.open([[@{/management/invoice/edit/}]] +invoiceId,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+
+			}
+			
+		
+		
+		/*]]>*/	
+	</script>
+</div>

@@ -1,0 +1,58 @@
+	<th:block th:fragment="content" >
+		
+	<div id="viewHistory"  >
+	
+		<div class="history-list" v-for="item in historyList" >
+		
+			<a :href="'/product/'+ item.id" target="_blank">
+				<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive">
+			</a>
+			       <div class="caption" >
+			        	<span style="color: grey;font-size: 12px;">{{item.productName}}</span>
+				        <p>
+				        	<span v-if="item.price1" :class="item.price2>0 ? 'price-del':'price-color'" >NZD {{item.price1}}</span> 
+							<span v-if="item.price2>0" class="price-color" >NZD {{item.price2}}</span> 
+							<span class="label label-danger">{{item.label}}</span>
+				        </p>
+				      </div>
+			    </div>
+		</div>
+	<style>
+		.history-list {
+			margin-top: 20px;
+			padding: 5px 15px;
+			transition: all .5s;
+			border: 1px solid #eee;
+		}
+		
+		.history-list:HOVER {
+			box-shadow: -3px 0 5px #9FA8AB, 0 -3px 5px #9FA8AB, 0 3px 5px #9FA8AB,
+				3px 0 5px #9FA8AB;
+		}
+		.price-del{
+			text-decoration: line-through;
+		}
+		.price-color{
+			color: #e4393c;
+		}
+	</style>
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			new Vue({
+			el : '#viewHistory',
+			data : {
+				historyList:[
+				]
+			},
+			created: function() {
+				var _this = this;
+			  _this.historyList = getHistory();
+				
+			},
+			
+		});
+		
+		
+	/*]]>*/
+</script>
+</th:block>

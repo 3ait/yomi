@@ -1,0 +1,185 @@
+<div class="container-fluid" th:fragment="content">
+	<script type="text/javascript" src="../../../static/plugin/ckeditor/ckeditor.js" th:src="@{/static/plugin/ckeditor/ckeditor.js}"></script>
+	
+	<hr />
+	
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Customer ID:</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<input type="text" maxlength="200" class="form-control"  th:value="${customer.id}" readonly="readonly" />
+			</div>
+			</div>
+		</div>
+		
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Customer Name</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<a  style="text-transform: capitalize;"  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="name"  href="#"  class="edit-name"  th:text="${customer.name}" >name</a>
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Company Name</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<a  style="text-transform: capitalize;"  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="companyName"  href="#"  class="edit-name"  th:text="${customer.companyName}" >companyName</a>
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Balance</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<input type="text" maxlength="200" class="form-control"  th:value="${customer.balance}" readonly="readonly" />
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>CustomerType</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<input type="text" maxlength="200" class="form-control"  th:value="${customer.customerType}" readonly="readonly" />
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Login Email</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<a  style="text-transform: capitalize;"  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="email"  href="#"  class="edit-name"  th:text="${customer.email}" >Email</a>
+			</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Company Email</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<a  style="text-transform: capitalize;"  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="companyName"  href="#"  class="edit-name"  th:text="${customer.companyEmail}" >companyEmail</a>
+			</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Phone</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<a  style="text-transform: capitalize;"  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="phone"  href="#"  class="edit-name"  th:text="${customer.phone}" >phone</a>
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Mobile</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<a  style="text-transform: capitalize;"  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="mobile"  href="#"  class="edit-name"  th:text="${customer.mobile}" >mobile</a>
+			</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Status</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<a class="status" data-type="select" th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="status"  href="#"    th:text="${customer.status==0?'In-active': 'Active'}" >status</a>
+			</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Company Address</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<a  style="text-transform: capitalize;"  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="address"  href="#"  class="edit-name"  th:text="${customer.address}" >address</a>
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Shipping Address</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<a  style="text-transform: capitalize;"  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="shippingAddress"  href="#"  class="edit-name"  th:text="${customer.shippingAddress}" >companyEmail</a>
+			</div>
+			</div>
+		</div>
+		
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Create Time  </label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<input type="text" maxlength="200" class="form-control"  th:value="${#dates.format(customer.createTime, 'HH:mm dd/MM/yyyy')}" readonly="readonly" />
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Modify Time</label>
+			</div>
+			<div class="col-sm-6">
+			<div class="form-group input-group" >
+					<input type="text" maxlength="200" class="form-control"  th:value="${#dates.format(customer.modifyTime, 'HH:mm dd/MM/yyyy')}" readonly="readonly" />
+			</div>
+			</div>
+		</div>
+		
+		
+	 <script src="static/plugin/editable/js/bootstrap-editable.min.js"  
+     	type="text/javascript" th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			$('.edit-name').editable();
+
+			$('.status').editable({
+		        value: -1,    
+		        source: [
+		              {value: 0, text: 'In-active'},
+		              {value: 1, text: 'Active'},
+		           ]
+		    });
+			$('.customerType').editable({
+		        value: "",    
+		        source: [
+		              {value: "", text: '--select--'},
+		              {value: 'customer', text: 'customer'},
+		              {value: 'sales', text: 'sales'},
+		           ]
+		    });
+		/*]]>*/	
+	</script>
+	<style>
+		.input-group{
+			width: 100%;
+		}
+	</style>
+</div>
