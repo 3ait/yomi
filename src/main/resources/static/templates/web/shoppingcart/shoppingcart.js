@@ -37,7 +37,7 @@ function addToHistory(id,productName,productNameAlias,defaultSrc,price){
 	}
 	
 	if(viewHistoryList.length>6){
-		historyList.pop();
+		viewHistoryList.pop();
 	}
 	
 	localStorage.setItem("historyList", JSON.stringify(viewHistoryList));

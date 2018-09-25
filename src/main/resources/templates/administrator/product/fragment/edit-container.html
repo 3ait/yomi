@@ -171,7 +171,9 @@
 			</div>
 			<div class="col-sm-2">
 				<div class="form-group input-group">
-				<input type="number" min="0" max="100000" step="0.01" class="form-control" name="product.cost" th:value="${productEditView.product.cost}"/>
+					<input th:if="${user.status=='Superadmin'}"  type="number" min="0" max="100000" step="0.01" class="form-control" name="product.cost" th:value="${productEditView.product.cost}"/>
+					<input th:if="${user.status=='Staff'}"  class="form-control" readonly="readonly" value="0">
+					<input th:if="${user.status=='Staff'}"  type="hidden" min="0" max="100000" step="0.01" class="form-control" name="product.cost" th:value="${productEditView.product.cost}"/>
 				</div>
 			</div>
 		</div>
@@ -202,7 +204,9 @@
 			</div>
 			<div class="col-sm-2">
 				<div class="form-group input-group">
-					<input type="number" min="0" max="100000" class="form-control" name="product.stock" value="100" th:value="${productEditView.product.stock}"/>
+					<input th:if="${user.status=='Superadmin'}" type="number" min="0" max="100000" class="form-control" name="product.stock" value="100" th:value="${productEditView.product.stock}"/>
+					<input th:if="${user.status=='Staff'}" readonly="readonly"type="number" min="0" max="100000" class="form-control" name="product.stock" value="100" th:value="${productEditView.product.stock}"/>
+					
 				</div>
 			</div>
 		</div>

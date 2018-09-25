@@ -45,7 +45,9 @@
 											<span th:text="${orderItem.productNameCn}"></span>
 											</a>	
 										</td>
-										<td  >$<span th:text="${orderItem.productPrice}"></span></td>
+										<td  >
+											$<a  th:attr="data-pk=${orderItem.id}, data-url=|@{/management/order/orderitem/update/colomn/}|" data-placement="bottom" data-name="productPrice"  href="#"  class="edit-name"  th:text="${orderItem.productPrice}" >orderItem.productPrice</a>
+										</td>
 											
 										<td  >
 										<a  th:attr="data-pk=${orderItem.id}, data-url=|@{/management/order/orderitem/update/colomn/}|" data-placement="bottom" data-name="num"  href="#"  class="edit-name"  th:text="${orderItem.num}" >orderItem.num</a>

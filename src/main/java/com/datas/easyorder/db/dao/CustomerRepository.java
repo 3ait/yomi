@@ -31,4 +31,8 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
 
 	Customer findOneByEmailAndPasswordAndStatus(String username, String md5String,byte statusActive);
 
+	Customer findOneByPhone(String username);
+
+	Customer findOneByPhoneAndPasswordAndStatus(String username, String md5String, byte statusActive);
+
 }

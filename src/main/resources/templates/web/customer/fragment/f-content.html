@@ -138,7 +138,7 @@
 									maxlength: 50,
 									remote:{
 										async : false,
-										url: [[@{/customer/email/check}]],
+										url: [[@{/email/check}]],
 									}
 								},
 								
@@ -152,6 +152,10 @@
 									required: true,
 									minlength: 1,
 									maxlength: 50,
+									remote:{
+										async : false,
+										url: [[@{/phone/check}]],
+									}
 								},
 								
 								'customer.password': {
@@ -182,6 +186,9 @@
 								} */
 								'customer.email':{
 									remote: "email existed, Please login.",
+								},
+								'customer.phone':{
+									remote: "phone is existed, ",
 								}
 								
 							},

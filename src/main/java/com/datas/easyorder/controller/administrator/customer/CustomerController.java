@@ -324,8 +324,7 @@ public class CustomerController extends BaseController<Customer>{
 	public ResponseEntity<List<Customer>> getCustomerList(@ModelAttribute SearchForm searchForm){
 		
 		Pageable pageable = new PageRequest(searchForm.getPage()-1<1?0:searchForm.getPage()-1, searchForm.getSize(), Direction.fromString(searchForm.getSort()), searchForm.getSortBy());
-		Page<Customer> list = customerLogic.findByCompanyName(searchForm.getQ(),CustomerRepository.customerType_customer, pageable);
-		
+		Page<Customer> list = customerLogic.findAll(searchForm,CustomerRepository.customerType_customer, pageable);
 		return new ResponseEntity<List<Customer>>(list.getContent(),HttpStatus.OK);
 		
 	}

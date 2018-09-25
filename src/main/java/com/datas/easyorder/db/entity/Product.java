@@ -187,7 +187,7 @@ public class Product implements java.io.Serializable {
 		this.defaultSrc = defaultSrc;
 	}
 
-	@Column(name = "cost", precision = 22, scale = 0)
+	@Column(name = "cost", precision = 22, scale = 2)
 	public Double getCost() {
 		return this.cost;
 	}
@@ -196,7 +196,7 @@ public class Product implements java.io.Serializable {
 		this.cost = cost;
 	}
 
-	@Column(name = "price1", nullable = false, precision = 22, scale = 0)
+	@Column(name = "price1", nullable = false, precision = 22, scale = 2)
 	public double getPrice1() {
 		return this.price1;
 	}
@@ -205,7 +205,7 @@ public class Product implements java.io.Serializable {
 		this.price1 = price1;
 	}
 
-	@Column(name = "price2", precision = 22, scale = 0)
+	@Column(name = "price2", precision = 22, scale = 2)
 	public Double getPrice2() {
 		return this.price2;
 	}
@@ -214,7 +214,7 @@ public class Product implements java.io.Serializable {
 		this.price2 = price2;
 	}
 
-	@Column(name = "price3", precision = 22, scale = 0)
+	@Column(name = "price3", precision = 22, scale = 2)
 	public Double getPrice3() {
 		return this.price3;
 	}
@@ -223,7 +223,7 @@ public class Product implements java.io.Serializable {
 		this.price3 = price3;
 	}
 
-	@Column(name = "price4", precision = 22, scale = 0)
+	@Column(name = "price4", precision = 22, scale = 2)
 	public Double getPrice4() {
 		return this.price4;
 	}
@@ -295,7 +295,7 @@ public class Product implements java.io.Serializable {
 		this.stock = stock;
 	}
 
-	@Column(name = "weight", precision = 22, scale = 0)
+	@Column(name = "weight", precision = 22, scale = 2)
 	public Double getWeight() {
 		return this.weight;
 	}

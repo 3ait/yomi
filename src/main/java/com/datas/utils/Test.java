@@ -22,30 +22,31 @@ public class Test {
 		PrintWriter pw = new PrintWriter( new OutputStreamWriter(new FileOutputStream(new File("d:/new-sq.txt"))));
 		
 		
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("D:/items.sql")), "utf-8"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("D:/a.csv")), "utf-8"));
 		String line = null;
 		
 		//INSERT INTO `items` VALUES ('1230', 'Viscose', 'BLS-SZJ-11', 'item-1230', '57', '4.50', '0.00', 8'1377751476_BLS-SZJ-11.JPG', 'Mateiral: Viscose', '0', '0', '1', '25', '0');
-		Pattern p = Pattern.compile("INSERT INTO `items` VALUES \\('(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)'\\);");
 		while((line=br.readLine())!=null){
 			System.out.println(line);
 			
-			Matcher m = p.matcher(line);
-			if(m.matches()){
+			String[] s = line.split(",");
+			if(s.length==3){
 				
 				StringBuffer newsb = new StringBuffer();
-				newsb.append("insert into product (product_name,default_src,price1,price2,stock,sold_num,description,status,create_time,modify_time)");
+				newsb.append("insert into product (product_name,product_name_alias,mpn,default_src,price1,price2,stock,sold_num,description,status,create_time,modify_time)");
 				newsb.append(" values ");
 				newsb.append(" ( ");
-				newsb.append("'").append(m.group(3)).append("'").append(",");
+				newsb.append("'").append(s[0]).append("'").append(",");
+				newsb.append("'").append(s[2]).append("'").append(",");
+				newsb.append("'").append(s[1]).append("'").append(",");
 				//src
-				newsb.append("'").append("attachment/item_images/" + m.group(8)).append("'").append(",");
-				newsb.append("'").append(m.group(6)).append("'").append(",");
-				newsb.append("'").append(m.group(7)).append("'").append(",");
-				newsb.append("'").append(m.group(5)).append("'").append(",");
-				newsb.append("'").append(m.group(13)).append("'").append(",");
-				newsb.append("'").append(m.group(9)).append("'").append(",");
-				newsb.append("'").append(m.group(12)).append("'").append(",");
+				newsb.append("'").append("'").append(",");
+				newsb.append("'").append(1).append("'").append(",");
+				newsb.append("'").append(1).append("'").append(",");
+				newsb.append("'").append(0).append("'").append(",");
+				newsb.append("'").append(0).append("'").append(",");
+				newsb.append("'").append("'").append(",");
+				newsb.append("'").append(1).append("'").append(",");
 				newsb.append("now()").append(",");
 				newsb.append("now()");
 				newsb.append(");");
@@ -137,7 +138,8 @@ public class Test {
 	
 	public static void main(String[] args) throws IOException, FileNotFoundException {
 		Test test = new Test();
-		test.newCustomer();
+//		test.newCustomer();
+		test.newProduct();
 		
 	}
 	

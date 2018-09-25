@@ -120,22 +120,6 @@ public class WebCustomerController extends BaseController{
 	}
 
 	
-	/**
-	 * email check 
-	 * @return String
-	 */
-	@RequestMapping(value={"/email/check"})
-	@ResponseBody
-	public String checkEmail(@RequestParam(value="customer.email",required=true) String registerEmail) {
-		Boolean ret = true;
-		Customer customer = customerLogic.findByEmail(registerEmail);
-		if(customer!=null){
-			ret = false;
-		}
-		
-		return ret.toString();
-	}
-	
 	
 	/**
 	 * register

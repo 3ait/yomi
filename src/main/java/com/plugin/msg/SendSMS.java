@@ -7,6 +7,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Random;
 
+import org.springframework.stereotype.Component;
+
 import com.plugin.utils.Md5;
 
  /**
@@ -21,7 +23,7 @@ import com.plugin.utils.Md5;
     示例
  * 
  */
-
+@Component
 public class SendSMS {
 	
 	

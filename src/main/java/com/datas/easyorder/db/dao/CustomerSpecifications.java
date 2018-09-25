@@ -31,6 +31,7 @@ public class CustomerSpecifications {
 
 				Path<Long> id = root.get("id");
 				Path<String> name = root.get("name");
+				Path<String> companyName = root.get("companyName");
 				Path<String> email = root.get("email");
 				Path<String> phone = root.get("phone");
 				Path<String> customerType = root.get("customerType");
@@ -46,6 +47,7 @@ public class CustomerSpecifications {
 							criteriaBuilder.like(name, "%" + searchForm.getQ() + "%"),
 							criteriaBuilder.like(tel, "%" + searchForm.getQ() + "%"),
 							criteriaBuilder.like(email, "%" + searchForm.getQ() + "%"),
+							criteriaBuilder.like(companyName, "%" + searchForm.getQ() + "%"),
 							criteriaBuilder.like(phone, "%" + searchForm.getQ() + "%"));
 					
 					Pattern pattern = Pattern.compile("[0-9]*");

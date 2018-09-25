@@ -28,7 +28,9 @@ import com.datas.easyorder.controller.web.index.MenuView;
 import com.datas.easyorder.db.dao.UserCompanyRepository;
 import com.datas.easyorder.db.entity.Customer;
 import com.datas.easyorder.db.entity.UserCompany;
+import com.datas.utils.Tools;
 import com.plugin.mail.logic.SendMail;
+import com.plugin.msg.SendSMS;
 import com.plugin.utils.Md5;
 
 /**
@@ -54,6 +56,9 @@ public class IndexController extends BaseController{
 	UserCompanyRepository userCompanyRepository;
 	@Autowired
 	CustomerLogic customerLogic;
+	@Autowired
+	SendSMS sendSMS;
+	
 	
 	@Value("${project.name}")
 	String projectName;
@@ -166,28 +171,72 @@ public class IndexController extends BaseController{
 	 * 找回密码
 	 * @return
 	 */
-	@RequestMapping(value={"forgot/password/retrieve/email"})
+	@RequestMapping(value={"forgot/password/retrieve"})
 	@ResponseBody
-	public Boolean retrieve(@RequestParam("email")String email) {
-		
+	public Boolean retrieve(@RequestParam("username")String username) {
 		boolean ret = false;
-		UserCompany userCompany = userCompanyRepository.findAll().get(0);
-		sendMail.init(userCompany, email);
 		
-		String newPassword = Md5.getMd5String(Calendar.getInstance().getTimeInMillis()+"").substring(0, 10);
-		String content = projectName + " your new password:" + newPassword;
-		try {
-			ret = sendMail.send(projectName + "update password", content);
-			if(ret){
-				Customer customer = customerLogic.findByEmail(email);
-				customerLogic.update(customer.getId(), "password", newPassword);
+		
+		if(Tools.emailCheck(username)){
+			UserCompany userCompany = userCompanyRepository.findAll().get(0);
+			sendMail.init(userCompany, username);
+			
+			String newPassword = Md5.getMd5String(Calendar.getInstance().getTimeInMillis()+"").substring(0, 10);
+			String content = projectName + " your new password:" + newPassword;
+			try {
+				ret = sendMail.send(projectName + "update password", content);
+				if(ret){
+					Customer customer = customerLogic.findByEmail(username);
+					customerLogic.update(customer.getId(), "password", newPassword);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		}else{
+			Customer customer = customerLogic.findByPhone(username);
+			if(customer!=null){
+				String newPassword = Md5.getMd5String(Calendar.getInstance().getTimeInMillis()+"").substring(0, 10);
+				boolean sendRet = sendSMS.send(username, newPassword);
+				if(sendRet){
+					customerLogic.update(customer.getId(), "password", newPassword);
+				}
+			}
 		}
+			
 		
 		return ret;
 	} 
+	/**
+	 * email check 
+	 * @return String
+	 */
+	@RequestMapping(value={"/email/check"})
+	@ResponseBody
+	public String checkEmail(@RequestParam(value="customer.email",required=true) String registerEmail) {
+		Boolean ret = true;
+		Customer customer = customerLogic.findByEmail(registerEmail);
+		if(customer!=null){
+			ret = false;
+		}
+		
+		return ret.toString();
+	}
+	
+	/**
+	 * phone check 
+	 * @return String
+	 */
+	@RequestMapping(value={"/phone/check"})
+	@ResponseBody
+	public String checkPhone(@RequestParam(value="customer.phone",required=true) String phone) {
+		Boolean ret = true;
+		Customer customer = customerLogic.findByPhone(phone);
+		if(customer!=null){
+			ret = false;
+		}
+		
+		return ret.toString();
+	}
 	
 	/**
 	 * 直播间

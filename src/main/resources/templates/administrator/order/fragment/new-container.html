@@ -41,7 +41,13 @@
 						</tr>
 						<tr v-if="products.length>0">
 							<td></td>
-							<td>Total: $ <span v-html="totalprice"></span></td>
+							<td>Total: $ <span v-html="getTotalprice"></span></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr v-if="gst>0">
+							<td></td>
+							<td> + GST: $ <span v-html="gst"></span></td>
 							<td></td>
 							<td></td>
 						</tr>
@@ -58,13 +64,13 @@
 					<div class="form-group input-group" >
 						<input class="form-control" autocomplete="off" id="companyName" placeholder="Company Name" v-model="companyName" @keypress="getCustomer()" type="text" name="companyName"  />
 						<input type="hidden" v-model="customerId" name="customerId"  />
-						<a href="javascipt:void(0);" onclick="newOpen()" >
+						<!-- <a href="javascipt:void(0);" onclick="newOpen()" >
 				 				 <span class="fa-stack">
 									  <i class="fa fa-square-o fa-stack-2x"></i>
 									  <i class="fa fa-plus fa-stack-1x"></i>
 									</span>
 				 				
-				 				</a>
+				 				</a> -->
 					</div>
 				</div>
 			</div>
@@ -75,7 +81,18 @@
 				</div>
 				<div class="col-sm-8">
 					<div class="form-group input-group" >
-						<input class="form-control" autocomplete="off"   id="productName" v-model="searchQ"  placeholder="Product" type="text" name="productName"  @keypress="getProduct()"/>
+						<input class="form-control"  id="productName" v-model="searchQ"  placeholder="Product" type="text" name="productName"  @keyup="getProduct()" />
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2 text-right">
+					<label>GST</label>
+				</div>
+				<div class="col-sm-8">
+					<div class="form-group input-group" >
+						<input  type="checkbox" checked="checked" id="gst-check"   @change="gstCaculate($event)" />&nbsp;&nbsp;
+						<label for="gst-check">GST include</label>
 					</div>
 				</div>
 			</div>
@@ -115,20 +132,21 @@
 				searchQ:'',
 				
 				totalPrice: 0,
+				gst: 0,
 				
 			},
 			created() {
 				var _this = this;
-				
 			},
 			computed : {
-				totalprice :function(){
+				getTotalprice :function(){
 					var total = 0;
 					var _this = this;
 					if(_this.products.length>0){
 						_this.products.map((item) => {total += item.qty*item.price1})
 					}
-		            return (total*_this.discount).toFixed(2);
+					_this.totalPrice = (total*_this.discount).toFixed(2);
+		            return _this.totalPrice;
 				}
 			},
 			methods:{
@@ -146,14 +164,15 @@
 							var availableTags = new Array();
 							for(var i=0;i<customerList.length;i++){ 
 								if(customerList[i].companyName !=null){
-									availableTags.push(customerList[i].companyName);
+									availableTags.push(customerList[i].companyName + ' # ' +customerList[i].phone);
 								}
 						    }
 							$("#companyName" ).autocomplete({
+								autoFocus: true,
 								source: availableTags,
 								select: function(event, ui){
 									for(var i=0;i<customerList.length;i++){  
-										if(customerList[i].companyName==ui.item.value){
+										if((customerList[i].companyName + ' # ' +customerList[i].phone)==ui.item.value){
 											_this.customerId = customerList[i].id;
 											
 											_this.companyName = customerList[i].companyName;
@@ -170,7 +189,7 @@
 					    	console.log(error);
 					  });
 				},
-
+				//获取产品
 				getProduct : function(){
 					var _this = this;
 					axios.get([[@{/api/management/product/q}]], {
@@ -184,22 +203,25 @@
 						  var availableTags = new Array();
 							for(var i=0;i<productList.length;i++){ 
 								if(productList[i].productName !=null){
-									availableTags.push(productList[i].mpn + ' # ' + productList[i].productName);
+									availableTags.push(productList[i].mpn + ' # ' + productList[i].productName + ' # ' + productList[i].productNameAlias) ;
 								}
 						    }
+							
 							$("#productName" ).autocomplete({
+								autoFocus: true,
 								source: availableTags,
 								select: function(event, ui){
-									for(var i=0;i<productList.length;i++){  
-										if((productList[i].mpn + ' # ' + productList[i].productName)==ui.item.value){
-											
+									for(var i=0;i<productList.length;i++){
+										if((productList[i].mpn + ' # ' + productList[i].productName + ' # ' + productList[i].productNameAlias)==ui.item.value){
 											productList[i].qty = 1;
 											_this.products.push(productList[i]);
 											ui.item.value = "";
+											_this.searchQ = "";
 											break;
 										}
 								    }
-								}
+								},
+								
 							});
 					  })
 					  .catch(function (error) {
@@ -224,6 +246,23 @@
 						}
 					}
 				},
+				
+				//计算GST
+				gstCaculate : function(event){
+					
+					var _this = this;
+					if(event.currentTarget.checked){
+						_this.gst = 0;
+					}else{
+						var total = 0;
+						if(_this.products.length>0){
+							_this.products.map((item) => {total += item.qty*item.price1})
+						}
+						_this.gst = (total*_this.discount*0.15).toFixed(2);
+					}
+					
+				},
+				
 				//保存订单
 				saveOrder : function(){
 					var _this = this;
@@ -241,6 +280,7 @@
 					
 					var params = new URLSearchParams();
 					params.append('customerId',_this.customerId);			
+					params.append('gst',_this.gst);			
 					params.append('products',paramProduct);
 					params.append('adminMsg',_this.adminMsg);
 					

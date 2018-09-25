@@ -673,7 +673,22 @@ public class ProductLogic extends BaseLogic<Product>{
 				
 			});
 			productAttrRepository.save(attrListNew);
+			
+			//增加多库存
+			Iterable<Branch> itr = branchRepository.findAll();
+			List<BranchProduct> list = new ArrayList<>();
+			itr.forEach(b -> {
+				BranchProduct bp = new BranchProduct();
+				bp.setProduct(newProduct);
+				bp.setBranch(b);
+				bp.setStock(0);
+				bp.setPrice1(product.getPrice1());
+				bp.setPrice2(product.getPrice2());
+				list.add(bp);
+			});
+			branchProductRepository.save(list);
 		}
+		
 		
 	}
 }

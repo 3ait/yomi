@@ -130,6 +130,21 @@ public class MobileMyController extends BaseController {
 	}
 
 	/**
+	 * phone check
+	 * 
+	 * @return String
+	 */
+	@RequestMapping(value = { "/phone" },method = RequestMethod.GET)
+	public ResponseEntity<Boolean> checkPhone(
+			@RequestParam(value = "customer.phone", required = true) String phone) {
+		Boolean ret = false;
+		Customer customer = customerLogic.findByPhone(phone);
+		if (customer == null) {
+			ret = true;
+		}
+		return new ResponseEntity<>(ret,HttpStatus.OK);
+	}
+	/**
 	 * 编辑保存
 	 * 
 	 * @return String

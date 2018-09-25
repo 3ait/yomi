@@ -78,6 +78,7 @@ public class ProductController extends BaseController<Product>{
 		modelAndView.addObject("menuList", categoryLogic.getMenuByLevel(1,MenuRepository.MENU_TYPE_PRODUCT));
 		modelAndView.addObject("leve2FatherId", 0);
 		modelAndView.addObject("leve3FatherId", 0);
+		modelAndView.addObject("user", getLognUser());
 		//库存
 		return modelAndView;
 	}
@@ -184,7 +185,7 @@ public class ProductController extends BaseController<Product>{
 		mv.addObject("menuList", categoryLogic.getMenuByLevel(1,MenuRepository.MENU_TYPE_PRODUCT));
 		mv.addObject("leve2FatherId", 0);
 		mv.addObject("leve3FatherId", 0);
-		
+		mv.addObject("user", getLognUser());
 		return mv;
 	}
 	

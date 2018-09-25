@@ -582,7 +582,7 @@ public class OrderLogic extends BaseLogic<Order> {
 	 * @param products
 	 */
 	@Transactional(rollbackOn = Exception.class)
-	public void saveOrder(Long customerId, String[] products,String adminMsg) {
+	public void saveOrder(Long customerId, String[] products,Double gst,String adminMsg) {
 		UserCompany userCompany = userCompanyRepository.findOne(1L);
 		
 		Order order = new Order();
@@ -640,7 +640,7 @@ public class OrderLogic extends BaseLogic<Order> {
 			order.setToShippingAddress(customer.getShippingAddress());
 			order.setAdminMsg(adminMsg);
 			order.setToEmail(customer.getCompanyEmail());
-			
+			order.setGst(gst);
 			//save order
 			orderRepository.save(order);
 			//Save item

@@ -110,11 +110,12 @@ public class PaymentLogic extends BaseLogic<CustomerPaymentHistory> {
 				 * {value: 0, text: 'New Invoice'}, {value: 1, text: 'Emailed'},
 				 * {value: 2, text: 'Completed'}, {value: 3, text: 'Cancelled'},
 				 */
-				invoice.setStatus((byte) 2);
+				invoice.setStatus(InvoiceRepository.status_emailed);
+				invoice.setPaid(InvoiceRepository.paid_paidInPart);
 				invoice.setBalance(invoice.getBalance() - customerPaymentHistory.getPayment());
 			} else {
-				invoice.setPaid((byte) 3);
-				invoice.setStatus((byte) 2);
+				invoice.setPaid(InvoiceRepository.paid_paid);
+				invoice.setStatus(InvoiceRepository.status_finished);
 				invoice.setBalance(0D);
 			}
 			invoice.setUser(user);
@@ -123,7 +124,6 @@ public class PaymentLogic extends BaseLogic<CustomerPaymentHistory> {
 
 		}
 		customer.setBalance(customer.getBalance() - customerPaymentHistory.getPayment());
-		customer.setModifyTime(Calendar.getInstance().getTime());
 		customerRepository.save(customer);
 	}
 

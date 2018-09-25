@@ -213,15 +213,15 @@ public class OrderController extends BaseController<Order>{
 	}
 	
 	/**
-	 * 后台新订单保存
+	 * 新订单保存
 	 * @return ModelAndView
 	 * @throws IOException 
 	 */
 	@RequestMapping(value="/add/save") 
 	@ResponseBody
-	public void newOrderSave(@RequestParam("customerId") Long customerId,@RequestParam("products") String[] products,@RequestParam("adminMsg") String adminMsg) throws IOException{
+	public void newOrderSave(@RequestParam("customerId") Long customerId,@RequestParam("products") String[] products,@RequestParam("adminMsg") String adminMsg,@RequestParam("gst") Double gst) throws IOException{
 		
-		orderLogic.saveOrder(customerId,products,adminMsg);
+		orderLogic.saveOrder(customerId,products,gst,adminMsg);
 	}
 	
 }

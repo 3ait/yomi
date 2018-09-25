@@ -63,6 +63,7 @@ public class Order implements java.io.Serializable {
 	private Double salesCommissionPercentage;
 	private Integer salesCommissionStatus;
 	private Double discount;
+	private Double gst;
 	@JsonIgnore
 	private Set<CustomerPaymentHistory> customerPaymentHistories = new HashSet<CustomerPaymentHistory>(0);
 	@JsonIgnore
@@ -86,7 +87,7 @@ public class Order implements java.io.Serializable {
 			String toCustomerName, String toCustomerCompanyName, String toTel, String toPhone, String toAddress,
 			String toShippingAddress, String toProvince, String toCity, String toDistrict, String toEmail,
 			String customerMsg, String adminMsg, Integer settled, Byte invoiced, Double salesCommissionPercentage,
-			Integer salesCommissionStatus, Double discount, Set<CustomerPaymentHistory> customerPaymentHistories,
+			Integer salesCommissionStatus, Double discount, Double gst, Set<CustomerPaymentHistory> customerPaymentHistories,
 			Set<OrderItem> orderItems, Set<CouponOrder> couponOrders, Set<Invoice> invoices) {
 		this.branch = branch;
 		this.customerBySalesId = customerBySalesId;
@@ -117,6 +118,7 @@ public class Order implements java.io.Serializable {
 		this.adminMsg = adminMsg;
 		this.settled = settled;
 		this.invoiced = invoiced;
+		this.gst = gst;
 		this.salesCommissionPercentage = salesCommissionPercentage;
 		this.salesCommissionStatus = salesCommissionStatus;
 		this.discount = discount;
@@ -205,7 +207,7 @@ public class Order implements java.io.Serializable {
 		this.isPaid = isPaid;
 	}
 
-	@Column(name = "total_product_price", nullable = false, precision = 10)
+	@Column(name = "total_product_price", nullable = false, precision = 10,scale = 2)
 	public double getTotalProductPrice() {
 		return this.totalProductPrice;
 	}
@@ -214,7 +216,7 @@ public class Order implements java.io.Serializable {
 		this.totalProductPrice = totalProductPrice;
 	}
 
-	@Column(name = "total_freight", precision = 10)
+	@Column(name = "total_freight", precision = 10,scale = 2)
 	public Double getTotalFreight() {
 		return this.totalFreight;
 	}
@@ -405,7 +407,8 @@ public class Order implements java.io.Serializable {
 		this.invoiced = invoiced;
 	}
 
-	@Column(name = "sales_commission_percentage", precision = 10)
+	
+	@Column(name = "sales_commission_percentage", precision = 10,scale = 2)
 	public Double getSalesCommissionPercentage() {
 		return this.salesCommissionPercentage;
 	}
@@ -423,13 +426,22 @@ public class Order implements java.io.Serializable {
 		this.salesCommissionStatus = salesCommissionStatus;
 	}
 
-	@Column(name = "discount", precision = 10)
+	@Column(name = "discount", precision = 10,scale = 2)
 	public Double getDiscount() {
 		return this.discount;
 	}
 
 	public void setDiscount(Double discount) {
 		this.discount = discount;
+	}
+
+	@Column(name = "gst", precision = 10,scale = 2)
+	public Double getGst() {
+		return gst;
+	}
+
+	public void setGst(Double gst) {
+		this.gst = gst;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "order")

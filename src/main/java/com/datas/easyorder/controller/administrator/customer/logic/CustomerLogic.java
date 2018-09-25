@@ -43,6 +43,7 @@ import com.datas.easyorder.db.entity.Invoice;
 import com.datas.easyorder.db.entity.User;
 import com.datas.easyorder.db.entity.UserCompany;
 import com.datas.utils.SearchForm;
+import com.datas.utils.Tools;
 import com.plugin.mail.logic.SendMail;
 import com.plugin.pdf.HtmlPDF;
 import com.plugin.utils.DateHelper;
@@ -111,7 +112,13 @@ public class CustomerLogic extends BaseLogic<Customer>{
 	 * customer login
 	 */
 	public Customer login(String username, String password){
-		return customerRepository.findOneByEmailAndPasswordAndStatus(username,Md5.getMd5String(password),CustomerRepository.status_active);
+
+		if (Tools.emailCheck(username)){
+			return customerRepository.findOneByEmailAndPasswordAndStatus(username,Md5.getMd5String(password),CustomerRepository.status_active);
+		}else{
+			return customerRepository.findOneByPhoneAndPasswordAndStatus(username,Md5.getMd5String(password),CustomerRepository.status_active);
+		}
+	
 	}
 
 
@@ -483,5 +490,10 @@ public class CustomerLogic extends BaseLogic<Customer>{
 		}
 		
 		return customer;
+	}
+
+
+	public Customer findByPhone(String username) {
+		return customerRepository.findOneByPhone(username);
 	}
 }
