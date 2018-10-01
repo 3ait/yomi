@@ -14,11 +14,10 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import com.datas.easyorder.controller.administrator.product.ProductAttrKeyValue;
+import com.datas.easyorder.controller.administrator.product.view.ProductAttrKeyValue;
 import com.datas.easyorder.db.dao.ProductAttrKeyRepository;
 import com.datas.easyorder.db.dao.ProductAttrRepository;
 import com.datas.easyorder.db.dao.ProductAttrValueRepository;
-import com.datas.easyorder.db.entity.Product;
 import com.datas.easyorder.db.entity.ProductAttrKey;
 import com.datas.easyorder.db.entity.ProductAttrValue;
 

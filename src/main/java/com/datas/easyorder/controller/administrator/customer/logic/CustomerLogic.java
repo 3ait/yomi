@@ -3,6 +3,7 @@ package com.datas.easyorder.controller.administrator.customer.logic;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,6 +30,7 @@ import org.thymeleaf.context.WebContext;
 
 import com.datas.easyorder.controller.BaseLogic;
 import com.datas.easyorder.controller.administrator.customer.Transfer;
+import com.datas.easyorder.controller.administrator.customer.view.CustomerRankView;
 import com.datas.easyorder.controller.administrator.invoice.InvoiceView;
 import com.datas.easyorder.controller.web.customer.CustomerView;
 import com.datas.easyorder.db.dao.CustomerPaymentHistoryRepository;
@@ -40,6 +42,7 @@ import com.datas.easyorder.db.dao.UserCompanyRepository;
 import com.datas.easyorder.db.entity.Customer;
 import com.datas.easyorder.db.entity.CustomerPaymentHistory;
 import com.datas.easyorder.db.entity.Invoice;
+import com.datas.easyorder.db.entity.RankCustomer;
 import com.datas.easyorder.db.entity.User;
 import com.datas.easyorder.db.entity.UserCompany;
 import com.datas.utils.SearchForm;
@@ -86,6 +89,31 @@ public class CustomerLogic extends BaseLogic<Customer>{
 		return customerRepository.findAll(CustomerSpecifications.getSearchSpecification(searchForm,customerType), pageable);
 	}
 
+	/**
+	 * admin 查询客户
+	 * @param searchForm
+	 * @param pageable
+	 * @return Page<Customer>
+	 */
+	@Transactional(rollbackOn=Exception.class)
+	public List<CustomerRankView> findAllWithCustomerRank(SearchForm searchForm,String customerType, Pageable pageable) {
+		Page<Customer>  page = customerRepository.findAll(CustomerSpecifications.getSearchSpecification(searchForm,customerType), pageable);
+		
+		List<CustomerRankView>  list = new ArrayList<>();
+		page.getContent().forEach(c -> {
+			CustomerRankView crv = new CustomerRankView();
+			crv.setCustomer(c);
+			RankCustomer rankCustomer = new RankCustomer();
+			if(c.getRankCustomer()!=null){
+				rankCustomer.setId(c.getRankCustomer().getId());
+				rankCustomer.setRankLevel(c.getRankCustomer().getRankLevel());
+				rankCustomer.setRankDesc(c.getRankCustomer().getRankDesc());
+			}
+			crv.setRankCustomer(rankCustomer);
+			list.add(crv);
+		});
+		return list;
+	}
 	
 	/**
 	 * 
@@ -495,5 +523,51 @@ public class CustomerLogic extends BaseLogic<Customer>{
 
 	public Customer findByPhone(String username) {
 		return customerRepository.findOneByPhone(username);
+	}
+	
+	/**
+	 * Update coloumns
+	 * @param pk id
+	 * @param atrributeName colomnName
+	 * @param attributeValue colomnValue
+	 * 
+	 */
+	@Transactional(rollbackOn=Exception.class)
+	public Customer update(Long id, String atrributeName, String attributeValue) {
+		Customer t = getRepository().findOne(id);
+		try {
+			Field field = t.getClass().getDeclaredField(atrributeName);
+			field.setAccessible(true);
+			if(atrributeName.equals("password")){
+				attributeValue = Md5.getMd5String(attributeValue);
+			}
+			if(field.getType()  ==  String.class){
+				field.set(t, attributeValue);
+			}else if(field.getType().equals(Double.class) || field.getType().equals(double.class)){
+				field.set(t, Double.valueOf(attributeValue));
+			}else if(field.getType().equals(Integer.class) || field.getType().equals(int.class)){
+				field.set(t, Integer.valueOf(attributeValue));
+			}else if(field.getType().equals(Byte.class) || field.getType().equals(byte.class)){
+				field.set(t, Byte.valueOf(attributeValue));
+			}else if(field.getType().equals(java.util.Date.class)){
+				field.set(t, DateHelper.parseYYYYMMDD(attributeValue));
+			}else if(field.getType().equals(RankCustomer.class)){
+				RankCustomer rc = new RankCustomer();
+				rc.setId(Long.valueOf(attributeValue));
+				field.set(t, rc);
+			}
+			for (Field f : t.getClass().getDeclaredFields()) {
+				if(f.getName().equals("modifyTime")){
+					f.setAccessible(true);
+					f.set(t, Calendar.getInstance().getTime());
+					break;
+				}
+			}
+			getRepository().save(t);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return t;
 	}
 }

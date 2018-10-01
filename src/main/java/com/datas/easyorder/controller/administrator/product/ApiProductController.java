@@ -40,4 +40,5 @@ public class ApiProductController extends BaseController{
 		Pageable pageable = new PageRequest(searchForm.getPage()< 1?0:searchForm.getPage()-1, searchForm.getSize(), Direction.fromString(searchForm.getSort()), searchForm.getSortBy());
 		return new ResponseEntity<Page<Product>>(productLogic.productSearch(searchForm, pageable),HttpStatus.OK);
 	}
+
 }

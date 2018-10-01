@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title><span th:replace="/administrator/fragment/f-company-name :: companyname"></span> | Branch</title>
+        <th:block th:replace="/administrator/fragment/f-js-css :: public-css-js"></th:block>
+    </head>
+    
+    <body>
+    
+       
+       <div id="wrapper">
+	    	<!-- left nav -->
+	       <div th:replace="/administrator/fragment/f-left-nav :: nav('category')"></div>
+	       
+	    	<!-- button -->
+	        <div id="page-content-wrapper ">
+		          <button type="button" class="hamburger is-closed animated fadeInLeft " data-toggle="offcanvas">
+		            <span class="hamb-top"></span>
+		            <span class="hamb-middle"></span>
+		            <span class="hamb-bottom"></span>
+		          </button>
+		          <div class="nav" style="margin-left: 100px;padding-top: 20px;">
+		         	<label><a th:href="@{/management/rankcustomer}">Rank Customer</a></label> 
+		          </div>
+        		<br/>
+	        </div>
+	        
+	    	<!-- content -->
+          	<th:block th:replace="/administrator/rankcustomer/fragment/f-content :: content"></th:block>
+          	
+       </div>
+    	<!-- footer -->
+       <footer th:replace="/administrator/fragment/f-footer :: footer"></footer>
+    </body>
+</html>

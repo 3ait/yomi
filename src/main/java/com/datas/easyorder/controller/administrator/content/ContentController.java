@@ -27,7 +27,7 @@ import com.datas.easyorder.controller.administrator.category.ArticleEditView;
 import com.datas.easyorder.controller.administrator.category.logic.AttrLogic;
 import com.datas.easyorder.controller.administrator.category.logic.CategoryLogic;
 import com.datas.easyorder.controller.administrator.content.logic.ContentLogic;
-import com.datas.easyorder.controller.administrator.product.ProductAttrKeyValue;
+import com.datas.easyorder.controller.administrator.product.view.ProductAttrKeyValue;
 import com.datas.easyorder.db.dao.MenuRepository;
 import com.datas.easyorder.db.entity.Article;
 import com.datas.easyorder.db.entity.Menu;

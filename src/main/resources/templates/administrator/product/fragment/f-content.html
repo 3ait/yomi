@@ -8,12 +8,10 @@
         	<table class="table table-hover  table-striped">
 				 	<thead>
 				 		<tr>
-				 			<th></th>
+				 			<th><br/> ID</th>
 				 			<th>Img</th>
-				 			<th>ID</th>
 				 			<th >Category</th>
-				 			<th>MPN</th>
-				 			<th >Name</th>
+				 			<th>MPN <br/> <span onclick="colomnSort('productName')" class="sort-colomn">Name</span></th>
 				 			<th onclick="colomnSort('status')" class="sort-colomn">Status</th>
 				 			<th>Price</th>
 				 			<th onclick="colomnSort('stock')" class="sort-colomn">Stock</th>
@@ -42,17 +40,17 @@
 				 		<tr th:each="product : ${productList}" th:id="|tr_${product.id}|" >
 				 			<td >
 				 				<input type="checkbox" name="checkbox_single"  th:value="${product.id}" />
+				 				<br/>
+				 				<span th:text="${product.id}"></span>
 				 			</td>
 				 			
 				 			<td >
 				 				<img style="width: 50px;" alt="" class="img-responsive img-thumbnail" src="#" th:src="|/${product.defaultSrc}|" />
 				 			</td>
-				 			<td th:text="${product.id}">ID</td>
 				 			<td th:text="${product.menu==null}?'':${product.menu.name}">CategoryName</td>
 				 			<td >
 				 				<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="mpn"  href="#"  class="edit-name"  th:text="${product.mpn}" >mpn</a>
-				 			</td>
-				 			<td >
+				 				<br/>
 			 					<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="productName"  href="#"  class="edit-name"  th:text="${product.productName}" >productName</a>
 				 			</td>
 				 			<td >
@@ -60,6 +58,11 @@
 				 			</td>
 				 			<td >
 				 				<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="price1"  href="#"  class="edit-name"  th:text="${product.price1}" >price1</a>
+				 				<br/>
+				 				<div th:each="rpp : ${#lists.toList(product.rankProductPrices)}">
+				 					<span th:text="${rpp.rankCustomer.rankLevel}"></span>&nbsp;:&nbsp;
+	    							<a  class="edit-name" th:attr="data-pk=${rpp.id} ,data-url=|@{/management/rankproductprice/update/colomn/}|"  data-name="price"  href="#"  th:text="${rpp.price}">price</a>
+				 				</div>
 				 			</td>
 				 			<td >
 				 				<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="stock"  href="#"  class="edit-name"  th:text="${product.stock}" >stock</a>

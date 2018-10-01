@@ -14,6 +14,7 @@
 				</div>
 				<div class="col-sm-8">
 						<div >Company Name: <span v-html="companyName"></span></div>
+						<div style="color: red;">Rank: <span v-html="rank"></span></div>
 						<div style="color: red;">Discount: <span v-html="discount"></span></div>
 						<div >Phone: <span v-html="companyPhone"></span></div>
 						<div >Address: <span v-html="companyAddress"></span></div>
@@ -29,6 +30,13 @@
 							<td>
 								<span v-html="p.mpn + ' # ' + p.productName"></span>
 							</td>
+							<td>
+								Default: ${{p.price}}<br/>
+								<span v-for="rankPrice in p.rankPriceList">
+									{{rankPrice.rankLevel}}: ${{rankPrice.price}} <br/>
+								</span>
+							</td>
+							
 							<td><span v-html="'$ '+ p.price1"></span></td>
 							<td><input  type="number"  style="width: 80px;" min="1" :value="p.qty" @change="updateQty(p.id,$event)" /></td>
 							<td><a href="javascipt:void(0);" @click="removeProduct(p.id)" >
@@ -41,11 +49,13 @@
 						</tr>
 						<tr v-if="products.length>0">
 							<td></td>
+							<td></td>
 							<td>Total: $ <span v-html="getTotalprice"></span></td>
 							<td></td>
 							<td></td>
 						</tr>
 						<tr v-if="gst>0">
+							<td></td>
 							<td></td>
 							<td> + GST: $ <span v-html="gst"></span></td>
 							<td></td>
@@ -64,13 +74,7 @@
 					<div class="form-group input-group" >
 						<input class="form-control" autocomplete="off" id="companyName" placeholder="Company Name" v-model="companyName" @keypress="getCustomer()" type="text" name="companyName"  />
 						<input type="hidden" v-model="customerId" name="customerId"  />
-						<!-- <a href="javascipt:void(0);" onclick="newOpen()" >
-				 				 <span class="fa-stack">
-									  <i class="fa fa-square-o fa-stack-2x"></i>
-									  <i class="fa fa-plus fa-stack-1x"></i>
-									</span>
-				 				
-				 				</a> -->
+						
 					</div>
 				</div>
 			</div>
@@ -123,10 +127,14 @@
 				companyPhone:'',
 				companyAddress:'',
 				discount:'',
+				rank:'',
+				rankCustomerId:'',
+
 				customerId:'',
 				adminMsg:'',
 				
 				products:[],
+				
 				productId:'',
 				
 				searchQ:'',
@@ -143,7 +151,7 @@
 					var total = 0;
 					var _this = this;
 					if(_this.products.length>0){
-						_this.products.map((item) => {total += item.qty*item.price1})
+						_this.products.map((item) => {total += item.qty*item.price1;})
 					}
 					_this.totalPrice = (total*_this.discount).toFixed(2);
 		            return _this.totalPrice;
@@ -160,11 +168,10 @@
 					  })
 					  .then(function (response){
 					   		var customerList = response.data;
-							
 							var availableTags = new Array();
 							for(var i=0;i<customerList.length;i++){ 
-								if(customerList[i].companyName !=null){
-									availableTags.push(customerList[i].companyName + ' # ' +customerList[i].phone);
+								if(customerList[i].customer.companyName !=null){
+									availableTags.push(customerList[i].customer.companyName + ' # ' +customerList[i].customer.phone);
 								}
 						    }
 							$("#companyName" ).autocomplete({
@@ -172,13 +179,16 @@
 								source: availableTags,
 								select: function(event, ui){
 									for(var i=0;i<customerList.length;i++){  
-										if((customerList[i].companyName + ' # ' +customerList[i].phone)==ui.item.value){
-											_this.customerId = customerList[i].id;
+										if((customerList[i].customer.companyName + ' # ' +customerList[i].customer.phone)==ui.item.value){
+											_this.customerId = customerList[i].customer.id;
 											
-											_this.companyName = customerList[i].companyName;
-											_this.companyPhone = customerList[i].phone;
-											_this.companyAddress = customerList[i].address;
-											_this.discount = customerList[i].discount;
+											_this.companyName = customerList[i].customer.companyName;
+											_this.companyPhone = customerList[i].customer.phone;
+											_this.companyAddress = customerList[i].customer.address;
+											_this.discount = customerList[i].customer.discount;
+											_this.rank = customerList[i].rankCustomer.rankLevel;
+											_this.rankCustomerId = customerList[i].rankCustomer.id;
+											
 											break;
 										}
 								    }
@@ -192,18 +202,18 @@
 				//获取产品
 				getProduct : function(){
 					var _this = this;
-					axios.get([[@{/api/management/product/q}]], {
+					axios.get([[@{/api/management/order/new/product/q}]], {
 						params: {
 							q:_this.searchQ,
 							size:10,
 					    }
 					  })
 					  .then(function (response){
-						  var productList = response.data.content;
+						  var productList = response.data;
 						  var availableTags = new Array();
 							for(var i=0;i<productList.length;i++){ 
-								if(productList[i].productName !=null){
-									availableTags.push(productList[i].mpn + ' # ' + productList[i].productName + ' # ' + productList[i].productNameAlias) ;
+								if(productList[i].product.productName !=null){
+									availableTags.push(productList[i].product.mpn + ' # ' + productList[i].product.productName + ' # ' + productList[i].product.productNameAlias) ;
 								}
 						    }
 							
@@ -211,10 +221,20 @@
 								autoFocus: true,
 								source: availableTags,
 								select: function(event, ui){
+									
 									for(var i=0;i<productList.length;i++){
-										if((productList[i].mpn + ' # ' + productList[i].productName + ' # ' + productList[i].productNameAlias)==ui.item.value){
-											productList[i].qty = 1;
-											_this.products.push(productList[i]);
+										if((productList[i].product.mpn + ' # ' + productList[i].product.productName + ' # ' + productList[i].product.productNameAlias)==ui.item.value){
+											productList[i].product.qty = 1;
+											productList[i].product.price = productList[i].product.price1;
+											
+											for(var j=0;j<productList[i].rankPriceList.length;j++){
+												if(productList[i].rankPriceList[j].rankCustomerId==_this.rankCustomerId){
+													productList[i].product.price1 = productList[i].rankPriceList[j].price;
+													break;
+												}
+											}
+											productList[i].product.rankPriceList = productList[i].rankPriceList;
+											_this.products.push(productList[i].product);
 											ui.item.value = "";
 											_this.searchQ = "";
 											break;
@@ -275,7 +295,7 @@
 					var paramProduct = [];
 					for(var i=0;i<_this.products.length;i++){  
 						
-						paramProduct.push(_this.products[i].id + ":" + _this.products[i].qty);
+						paramProduct.push(_this.products[i].id + ":" + _this.products[i].qty + ":" + _this.products[i].price1);
 					}
 					
 					var params = new URLSearchParams();

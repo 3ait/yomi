@@ -604,7 +604,7 @@ public class OrderLogic extends BaseLogic<Order> {
 			oi.setProductDefaultSrc(product.getDefaultSrc());
 			oi.setProductNameCn(product.getProductName());
 			oi.setProductNameEn(product.getProductNameAlias());
-			oi.setProductPrice(product.getPrice1());
+			oi.setProductPrice(Double.valueOf(pQty[2]));
 			oi.setNum(Integer.valueOf(pQty[1]));
 			orderItemList.add(oi);
 			

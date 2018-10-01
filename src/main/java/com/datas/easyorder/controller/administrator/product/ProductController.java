@@ -22,6 +22,9 @@ import com.datas.easyorder.controller.BaseController;
 import com.datas.easyorder.controller.administrator.category.logic.AttrLogic;
 import com.datas.easyorder.controller.administrator.category.logic.CategoryLogic;
 import com.datas.easyorder.controller.administrator.product.logic.ProductLogic;
+import com.datas.easyorder.controller.administrator.product.view.ProductAttrKeyValue;
+import com.datas.easyorder.controller.administrator.product.view.ProductEditView;
+import com.datas.easyorder.controller.administrator.product.view.ProductForm;
 import com.datas.easyorder.db.dao.MenuRepository;
 import com.datas.easyorder.db.entity.Menu;
 import com.datas.easyorder.db.entity.Product;
@@ -140,7 +143,7 @@ public class ProductController extends BaseController<Product>{
 		ModelAndView mv = new ModelAndView(new RedirectView("/management/product/new",true)); 
 		
 		productLogic.newSave(productForm);
-
+		
 		return mv;
 	}
 	

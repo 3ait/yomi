@@ -1,4 +1,4 @@
-package com.datas.easyorder.controller.administrator.product;
+package com.datas.easyorder.controller.administrator.product.view;
 
 import org.springframework.web.multipart.MultipartFile;
 

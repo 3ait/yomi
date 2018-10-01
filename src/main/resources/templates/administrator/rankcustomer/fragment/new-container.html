@@ -1,0 +1,107 @@
+<div class="container-fluid" th:fragment="content">
+	<script type="text/javascript" src="../../../static/plugin/ckeditor/ckeditor.js" th:src="@{/static/plugin/ckeditor/ckeditor.js}"></script>
+	
+	<form th:action="@{/management/rankcustomer/new/save}" id="newForm" enctype="multipart/form-data" method="post" >
+		<hr />
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Rank Level</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<input class="form-control"  placeholder="Rank Level" type="text" name="rankLevel"  />
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-2 text-right">
+				<label>Description:</label>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group input-group" >
+					<textarea class="form-control"  rows="5" cols="" name="rankDesc"></textarea>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="row">
+			<div class="col-sm-2 col-sm-offset-2">
+				<div class="form-group input-group">
+					<button class="btn btn-primary">Submit</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	
+	<script src="../static/plugin/jquery/jquery.validate.min.js" type="text/javascript" th:src="@{/static/plugin/jquery/jquery.validate.min.js}" charset="utf-8"></script>
+	<script src="../static/plugin/jquery/additional-methods.min.js" type="text/javascript" th:src="@{/static/plugin/jquery/additional-methods.min.js}" charset="utf-8"></script>
+	
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			
+			//登录表单
+			$( "#newForm" ).validate( {
+				rules: {
+					'rankLevel': {
+						required: true,
+						minlength: 2,
+						maxlength: 100,
+					},
+					'rankDesc': {
+						minlength: 0,
+						maxlength: 200,
+					},
+					
+					
+				},
+				messages: {
+					
+				},
+				
+				errorElement: "em",
+				errorPlacement: function ( error, element ) {
+					// Add the `help-block` class to the error element
+					error.addClass( "help-block col-sm-offset-2" );
+
+					// Add `has-feedback` class to the parent div.form-group
+					// in order to add icons to inputs
+					element.parents( ".input-group" ).addClass( "has-feedback" );
+
+					if ( element.prop( "type" ) === "checkbox" ) {
+						error.insertAfter( element.parent( "label" ) );
+					} else {
+						error.insertAfter( element.parents( ".input-group" ) );
+					}
+
+					// Add the span element, if doesn't exists, and apply the icon classes to it.
+					if ( !element.next( "span" )[ 0 ] ) {
+						$( "<span class='glyphicon glyphicon-remove form-control-feedback'></span>" ).insertAfter( element );
+					}
+				},
+				success: function ( label, element ) {
+					// Add the span element, if doesn't exists, and apply the icon classes to it.
+					if ( !$( element ).next( "span" )[ 0 ] ) {
+						$( "<span class='glyphicon glyphicon-ok form-control-feedback'></span>" ).insertAfter( $( element ) );
+					}
+				},
+				highlight: function ( element, errorClass, validClass ) {
+					$( element ).parents( ".input-group" ).addClass( "has-error" ).removeClass( "has-success" );
+					$( element ).next( "span" ).addClass( "glyphicon-remove" ).removeClass( "glyphicon-ok" );
+				},
+				unhighlight: function ( element, errorClass, validClass ) {
+					$( element ).parents( ".input-group" ).addClass( "has-success" ).removeClass( "has-error" );
+					$( element ).next( "span" ).addClass( "glyphicon-ok" ).removeClass( "glyphicon-remove" );
+				}
+			} );
+			
+		/*]]>*/	
+	</script>
+	<style>
+		.input-group{
+			width: 100%;
+		}
+	</style>
+</div>

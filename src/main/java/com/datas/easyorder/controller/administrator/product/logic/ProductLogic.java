@@ -22,8 +22,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.datas.easyorder.controller.BaseLogic;
-import com.datas.easyorder.controller.administrator.product.ProductEditView;
-import com.datas.easyorder.controller.administrator.product.ProductForm;
+import com.datas.easyorder.controller.administrator.product.view.ProductEditView;
+import com.datas.easyorder.controller.administrator.product.view.ProductForm;
+import com.datas.easyorder.controller.administrator.product.view.ProductMulitPrice;
+import com.datas.easyorder.controller.administrator.product.view.RankPrice;
 import com.datas.easyorder.db.dao.AttachmentRepository;
 import com.datas.easyorder.db.dao.BranchProductRepository;
 import com.datas.easyorder.db.dao.BranchRepository;
@@ -76,9 +78,44 @@ public class ProductLogic extends BaseLogic<Product>{
 		
 		Page<Product> page = productRepository.findAll(ProductSpecifications.getSearchSpecification(searchForm),pageable);
 		page.getContent().forEach( p -> {
-			p.getBranchProducts().stream().sorted();
+			p.setBranchProducts(p.getBranchProducts().stream().sorted((a,b)->a.getId().compareTo(b.getId())).collect(Collectors.toSet()));
+			p.setRankProductPrices(p.getRankProductPrices().stream().sorted((a,b)->a.getId().compareTo(b.getId())).collect(Collectors.toSet()));
 		});
 		return page;
+	}
+	
+	/**
+	 * search
+	 * @param searchForm
+	 * @param pageable
+	 * @return
+	 */
+	@Transactional(rollbackOn = Exception.class)
+	public List<ProductMulitPrice> getProductAndMulitiplePrice(SearchForm searchForm,Pageable pageable){
+		
+		List<ProductMulitPrice> list = new ArrayList<>();
+		Page<Product> page = productRepository.findAll(ProductSpecifications.getSearchSpecification(searchForm),pageable);
+		
+		page.getContent().forEach( p -> {
+			ProductMulitPrice pmp = new ProductMulitPrice();
+			pmp.setProduct(p);
+			
+			List<RankPrice> rankPriceList = new ArrayList<>();
+			p.getRankProductPrices().stream().sorted((a,b)->a.getId().compareTo(b.getId())).collect(Collectors.toList()).forEach(rankProductPrice ->{
+				RankPrice rp = new RankPrice();
+				rp.setRankProductPriceId(rankProductPrice.getId());
+				rp.setRankCustomerId(rankProductPrice.getRankCustomer().getId());
+				rp.setRankLevel(rankProductPrice.getRankCustomer().getRankLevel());
+				rp.setPrice(rankProductPrice.getPrice());
+				rp.setRankDesc(rankProductPrice.getRankCustomer().getRankDesc());
+				rp.setDescription(rankProductPrice.getDescription());
+				
+				rankPriceList.add(rp);
+			});
+			pmp.setRankPriceList(rankPriceList);
+			list.add(pmp);
+		});
+		return list;
 	}
 	
 	

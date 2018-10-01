@@ -19,9 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.datas.easyorder.controller.BaseController;
 import com.datas.easyorder.controller.administrator.category.logic.AttrLogic;
 import com.datas.easyorder.controller.administrator.category.logic.CategoryLogic;
-import com.datas.easyorder.controller.administrator.product.ProductAttrKeyValue;
-import com.datas.easyorder.controller.administrator.product.ProductEditView;
 import com.datas.easyorder.controller.administrator.product.logic.ProductLogic;
+import com.datas.easyorder.controller.administrator.product.view.ProductAttrKeyValue;
+import com.datas.easyorder.controller.administrator.product.view.ProductEditView;
 import com.datas.easyorder.db.entity.Product;
 import com.datas.utils.SearchForm;
 

@@ -1,5 +1,5 @@
 package com.datas.easyorder.db.entity;
-// Generated 2018-8-23 17:08:24 by Hibernate Tools 4.3.1.Final
+// Generated 2018-9-27 12:33:29 by Hibernate Tools 4.3.1.Final
 
 import java.util.Date;
 import java.util.HashSet;
@@ -33,6 +33,8 @@ public class Customer implements java.io.Serializable {
 	private CustomerFromAddress customerFromAddress;
 	@JsonIgnore
 	private CustomerToAddress customerToAddress;
+	@JsonIgnore
+	private RankCustomer rankCustomer;
 	private String email;
 	private String name;
 	private String companyEmail;
@@ -87,17 +89,18 @@ public class Customer implements java.io.Serializable {
 	}
 
 	public Customer(Branch branch, CustomerFromAddress customerFromAddress, CustomerToAddress customerToAddress,
-			String email, String name, String companyEmail, String phone, String password, byte status, double discount,
-			String logoSrc, Date createTime, Date modifyTime, String code, String gstNo, String website, String tel,
-			String fax, String address, String mobile, String bankAccount, String companyName, Double balance,
-			String shippingAddress, String identity, String customerType, String memo, Integer memberPoint,
-			Date memberPointExpiredDate, Set<Coupon> coupons, Set<CustomerToAddress> customerToAddresses,
-			Set<CustomerFromAddress> customerFromAddresses, Set<Order> ordersForSalesId,
-			Set<CustomerCommission> customerCommissions, Set<Order> ordersForCustomerId,
+			RankCustomer rankCustomer, String email, String name, String companyEmail, String phone, String password,
+			byte status, double discount, String logoSrc, Date createTime, Date modifyTime, String code, String gstNo,
+			String website, String tel, String fax, String address, String mobile, String bankAccount,
+			String companyName, Double balance, String shippingAddress, String identity, String customerType,
+			String memo, Integer memberPoint, Date memberPointExpiredDate, Set<Coupon> coupons,
+			Set<CustomerToAddress> customerToAddresses, Set<CustomerFromAddress> customerFromAddresses,
+			Set<Order> ordersForSalesId, Set<CustomerCommission> customerCommissions, Set<Order> ordersForCustomerId,
 			Set<CouponCustomer> couponCustomers, Set<CustomerPaymentHistory> customerPaymentHistories) {
 		this.branch = branch;
 		this.customerFromAddress = customerFromAddress;
 		this.customerToAddress = customerToAddress;
+		this.rankCustomer = rankCustomer;
 		this.email = email;
 		this.name = name;
 		this.companyEmail = companyEmail;
@@ -174,6 +177,16 @@ public class Customer implements java.io.Serializable {
 
 	public void setCustomerToAddress(CustomerToAddress customerToAddress) {
 		this.customerToAddress = customerToAddress;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "rank_customer_id")
+	public RankCustomer getRankCustomer() {
+		return this.rankCustomer;
+	}
+
+	public void setRankCustomer(RankCustomer rankCustomer) {
+		this.rankCustomer = rankCustomer;
 	}
 
 	@Column(name = "email", length = 128)

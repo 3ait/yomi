@@ -1,5 +1,5 @@
 package com.datas.easyorder.db.entity;
-// Generated 2018-9-4 16:40:06 by Hibernate Tools 4.3.1.Final
+// Generated 2018-9-28 16:02:05 by Hibernate Tools 4.3.1.Final
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -75,6 +75,14 @@ public class Product implements java.io.Serializable {
 	private Set<Comment> comments = new HashSet<Comment>(0);
 	@JsonIgnore
 	private Set<ProductAttr> productAttrs = new HashSet<ProductAttr>(0);
+	@JsonIgnore
+	private Set<RankProductPrice> rankProductPrices = new HashSet<RankProductPrice>(0);
+	@JsonIgnore
+	private Set<ProductStockHistory> productStockHistories = new HashSet<ProductStockHistory>(0);
+	@JsonIgnore
+	private Set<SupplierOrderItem> supplierOrderItems = new HashSet<SupplierOrderItem>(0);
+	@JsonIgnore
+	private Set<SupplierProduct> supplierProducts = new HashSet<SupplierProduct>(0);
 
 	public Product() {
 	}
@@ -89,7 +97,9 @@ public class Product implements java.io.Serializable {
 			String summary, String description, String seoKeywords, String seoDesc, Date createTime, Date modifyTime,
 			String location, String label, Integer position, String mobileDefaultSrc, String mobileDefaultDesc,
 			String norms, Set<Reply> replies, Set<OrderItem> orderItems, Set<BranchProduct> branchProducts,
-			Set<Attachment> attachments, Set<Comment> comments, Set<ProductAttr> productAttrs) {
+			Set<Attachment> attachments, Set<Comment> comments, Set<ProductAttr> productAttrs,
+			Set<RankProductPrice> rankProductPrices, Set<ProductStockHistory> productStockHistories,
+			Set<SupplierOrderItem> supplierOrderItems, Set<SupplierProduct> supplierProducts) {
 		this.menu = menu;
 		this.mpn = mpn;
 		this.productName = productName;
@@ -127,6 +137,10 @@ public class Product implements java.io.Serializable {
 		this.attachments = attachments;
 		this.comments = comments;
 		this.productAttrs = productAttrs;
+		this.rankProductPrices = rankProductPrices;
+		this.productStockHistories = productStockHistories;
+		this.supplierOrderItems = supplierOrderItems;
+		this.supplierProducts = supplierProducts;
 	}
 
 	@Id
@@ -187,7 +201,7 @@ public class Product implements java.io.Serializable {
 		this.defaultSrc = defaultSrc;
 	}
 
-	@Column(name = "cost", precision = 22, scale = 2)
+	@Column(name = "cost", precision = 22, scale = 0)
 	public Double getCost() {
 		return this.cost;
 	}
@@ -196,7 +210,7 @@ public class Product implements java.io.Serializable {
 		this.cost = cost;
 	}
 
-	@Column(name = "price1", nullable = false, precision = 22, scale = 2)
+	@Column(name = "price1", nullable = false, precision = 22, scale = 0)
 	public double getPrice1() {
 		return this.price1;
 	}
@@ -205,7 +219,7 @@ public class Product implements java.io.Serializable {
 		this.price1 = price1;
 	}
 
-	@Column(name = "price2", precision = 22, scale = 2)
+	@Column(name = "price2", precision = 22, scale = 0)
 	public Double getPrice2() {
 		return this.price2;
 	}
@@ -214,7 +228,7 @@ public class Product implements java.io.Serializable {
 		this.price2 = price2;
 	}
 
-	@Column(name = "price3", precision = 22, scale = 2)
+	@Column(name = "price3", precision = 22, scale = 0)
 	public Double getPrice3() {
 		return this.price3;
 	}
@@ -223,7 +237,7 @@ public class Product implements java.io.Serializable {
 		this.price3 = price3;
 	}
 
-	@Column(name = "price4", precision = 22, scale = 2)
+	@Column(name = "price4", precision = 22, scale = 0)
 	public Double getPrice4() {
 		return this.price4;
 	}
@@ -295,7 +309,7 @@ public class Product implements java.io.Serializable {
 		this.stock = stock;
 	}
 
-	@Column(name = "weight", precision = 22, scale = 2)
+	@Column(name = "weight", precision = 22, scale = 0)
 	public Double getWeight() {
 		return this.weight;
 	}
@@ -475,6 +489,42 @@ public class Product implements java.io.Serializable {
 
 	public void setProductAttrs(Set<ProductAttr> productAttrs) {
 		this.productAttrs = productAttrs;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+	public Set<RankProductPrice> getRankProductPrices() {
+		return this.rankProductPrices;
+	}
+
+	public void setRankProductPrices(Set<RankProductPrice> rankProductPrices) {
+		this.rankProductPrices = rankProductPrices;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+	public Set<ProductStockHistory> getProductStockHistories() {
+		return this.productStockHistories;
+	}
+
+	public void setProductStockHistories(Set<ProductStockHistory> productStockHistories) {
+		this.productStockHistories = productStockHistories;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+	public Set<SupplierOrderItem> getSupplierOrderItems() {
+		return this.supplierOrderItems;
+	}
+
+	public void setSupplierOrderItems(Set<SupplierOrderItem> supplierOrderItems) {
+		this.supplierOrderItems = supplierOrderItems;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+	public Set<SupplierProduct> getSupplierProducts() {
+		return this.supplierProducts;
+	}
+
+	public void setSupplierProducts(Set<SupplierProduct> supplierProducts) {
+		this.supplierProducts = supplierProducts;
 	}
 
 }

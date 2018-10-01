@@ -1,0 +1,93 @@
+<div class="container-fluid "  th:fragment="content">
+    <div th:replace="/administrator/customer/fragment/f-search :: search('management/rankcustomer')"></div>
+    
+    <div class="row">
+        <div class="col-lg-12">
+        	<table class="table table-hover  ">
+				 	<thead>
+				 		<tr>
+				 			<th>ID</th>
+				 			<th>Rank Level</th>
+				 			<th>Desc</th>
+				 			<th>
+				 				<a href="javascipt:void(0);" onclick="newOpen()" >
+				 				 	<span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-plus fa-stack-1x"></i>
+									</span>
+				 				</a>
+				 			</th>
+				 		</tr>
+				 		
+				 	</thead>
+				 		<tr th:each="rankCustomer :${rankCustomerList}" th:id="|tr_${rankCustomer.id}|" >
+				 			<td >
+				 				<span th:text="${rankCustomer.id}"></span>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${rankCustomer.id}, data-url=|@{/management/rankcustomer/update/colomn/}|" data-name="rankLevel"  href="#"  class="edit-name"  th:text="${rankCustomer.rankLevel}" >rank Level</a>
+				 			</td>
+				 			<td >
+				 				<a  th:attr="data-pk=${rankCustomer.id}, data-url=|@{/management/rankcustomer/update/colomn/}|" data-name="rankDesc"  href="#"  class="edit-name"  th:text="${rankCustomer.rankDesc}" >rank Customer</a>
+				 			</td>
+				 			
+				 			<td >
+				 				<a href="javascript:void(0)" th:onclick="|del('${rankCustomer.id}')|" title="Delete" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-remove fa-stack-1x"></i>
+									</span>
+				 			</td>
+				 		</tr>
+				 		
+				 		<tr >
+				 			<td colspan="3" >
+				 				
+				 			</td>
+				 			<td colspan="10" align="right">
+				 				<div th:replace="/administrator/fragment/f-page :: page"></div>
+				 			</td>
+				 		</tr>
+				</table>
+        </div>
+    </div>
+    
+    
+     <style>
+    	.sort-colomn{
+    		cursor: pointer;
+    		color: #c05a22;
+    	}
+    	
+    </style>
+     <script src="static/plugin/editable/js/bootstrap-editable.min.js"  
+     	type="text/javascript" th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
+		charset="utf-8"></script>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		           //
+			$('.edit-name').editable();
+
+			
+			/**
+			新增
+			**/
+			function newOpen(){
+				window.open([[@{/management/rankcustomer/new}]],'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			}
+			
+			/**
+			删除
+			**/
+			function del(rankcustomerId){
+				if(confirm("Confirm?")){
+					$.get([[@{/management/rankcustomer/del/}]]+rankcustomerId);
+					$("#tr_" + rankcustomerId).fadeOut('slow');
+				}
+			}
+			
+		/*]]>*/	
+	</script>
+</div>

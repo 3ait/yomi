@@ -1,4 +1,4 @@
-package com.datas.easyorder.controller.administrator.product;
+package com.datas.easyorder.controller.administrator.product.view;
 
 import java.util.List;
 import java.util.Set;

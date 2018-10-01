@@ -1,0 +1,56 @@
+<div  th:fragment="customer-rank(customerId)">
+    
+    <div th:id="|customer_rank_${customerId}|">
+    	<div  v-for="pb in productBranch" >
+    		<span>{{pb.branchName}}</span>&nbsp;:&nbsp;
+	    	<a  class="edit-name" th:attr="data-url=|@{/management/branchproduct/update/colomn/}|" v-bind:data-pk="pb.id" data-name="stock"  href="#"  >{{pb.stock}}</a>
+    	</div>
+    	<!-- 手工加库存 -->
+<!--     	<a class="branches" data-type="select" th:attr="data-pk=${productId}, data-url=|@{/management/branch/api/new/stock}|" data-name="branchId"  href="#"  >+</a> -->
+    </div>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		    
+			$('.customerRank').editable({
+		        value: "",    
+		        source: [
+		              {value: "", text: '--select--'},
+		           ]
+		    });
+		
+			new Vue({
+			el : '#customer_rank_' + [[${customerId}]],
+			data : {
+				productBranch:[],
+			},
+			created: function() {
+				var _this = this;
+				//获取所有branch
+				axios.get([[|@{/management/rankcustomer/api/all}|]] , {
+				    params: {
+				     
+				    }
+				  }).then(function (response){
+					  var data = response.data;
+					  console.log(data);
+				   
+				  }).catch(function (error) {
+				  	  console.log(error);
+				  });
+				
+				
+			},
+			methods:{
+				
+				updateNum : function(id,event){
+					var _this = this;
+				}
+			}
+		});
+		
+			
+		/*]]>*/	
+	</script>
+</div>
