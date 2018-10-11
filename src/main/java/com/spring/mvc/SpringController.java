@@ -40,7 +40,7 @@ public class SpringController {
 	@RequestMapping("/404")
 	public ModelAndView error404() {
 		logger.info("404");
-		return new ModelAndView("/error/404");
+		return new ModelAndView(new RedirectView("/management", true));
 	}
 	
 }

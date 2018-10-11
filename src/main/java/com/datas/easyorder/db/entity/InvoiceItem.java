@@ -20,7 +20,7 @@ public class InvoiceItem implements java.io.Serializable {
 
 	private Long id;
 	private Invoice invoice;
-	private Integer quantity;
+	private Double quantity;
 	private Double unitPrice;
 	private Double discount;
 	private Double amount;
@@ -29,7 +29,7 @@ public class InvoiceItem implements java.io.Serializable {
 	public InvoiceItem() {
 	}
 
-	public InvoiceItem(Invoice invoice, Integer quantity, Double unitPrice, Double discount, Double amount,
+	public InvoiceItem(Invoice invoice, Double quantity, Double unitPrice, Double discount, Double amount,
 			String title) {
 		this.invoice = invoice;
 		this.quantity = quantity;
@@ -61,12 +61,12 @@ public class InvoiceItem implements java.io.Serializable {
 		this.invoice = invoice;
 	}
 
-	@Column(name = "quantity")
-	public Integer getQuantity() {
+	@Column(name = "quantity", precision = 10)
+	public Double getQuantity() {
 		return this.quantity;
 	}
 
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
 

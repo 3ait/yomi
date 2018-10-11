@@ -291,7 +291,7 @@ public class OrderLogic extends BaseLogic<Order> {
 			duplicatedOrder.setId(null);
 			duplicatedOrder.setOrderItems(null);
 			duplicatedOrder.setInvoices(null);
-
+			duplicatedOrder.setCouponOrders(null);
 			duplicatedOrder.setCustomerPaymentHistories(null);
 			duplicatedOrder.setOrderItems(null);
 			duplicatedOrder.setInvoices(null);
@@ -348,7 +348,7 @@ public class OrderLogic extends BaseLogic<Order> {
 			duplicatedOrder.setId(null);
 			duplicatedOrder.setOrderItems(null);
 			duplicatedOrder.setInvoices(null);
-
+			duplicatedOrder.setCouponOrders(null);
 			duplicatedOrder.setCustomerPaymentHistories(null);
 			duplicatedOrder.setOrderItems(null);
 			duplicatedOrder.setInvoices(null);

@@ -177,7 +177,7 @@ public class IEMoney implements IPayment {
 			// String.valueOf(data.length));
 			conn.connect();
 			DataOutputStream writer = new DataOutputStream(conn.getOutputStream());
-			writer.writeBytes(data);
+			writer.write(data.getBytes());
 			writer.flush();
 			writer.close();
 

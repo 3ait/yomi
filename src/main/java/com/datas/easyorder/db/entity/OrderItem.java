@@ -1,11 +1,12 @@
 package com.datas.easyorder.db.entity;
-// Generated 2018-3-7 11:20:55 by Hibernate Tools 4.3.1.Final
+// Generated 2018-10-4 15:36:49 by Hibernate Tools 4.3.1.Final
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -25,7 +26,8 @@ public class OrderItem implements java.io.Serializable {
 	private Order order;
 	@JsonIgnore
 	private Product product;
-	private int num;
+	private double num;
+	private Double cost;
 	private double productPrice;
 	private String productNameCn;
 	private String productNameEn;
@@ -34,17 +36,18 @@ public class OrderItem implements java.io.Serializable {
 	public OrderItem() {
 	}
 
-	public OrderItem(Order order, int num, double productPrice) {
+	public OrderItem(Order order, double num, double productPrice) {
 		this.order = order;
 		this.num = num;
 		this.productPrice = productPrice;
 	}
 
-	public OrderItem(Order order, Product product, int num, double productPrice, String productNameCn,
+	public OrderItem(Order order, Product product, double num, Double cost, double productPrice, String productNameCn,
 			String productNameEn, String productDefaultSrc) {
 		this.order = order;
 		this.product = product;
 		this.num = num;
+		this.cost = cost;
 		this.productPrice = productPrice;
 		this.productNameCn = productNameCn;
 		this.productNameEn = productNameEn;
@@ -83,13 +86,22 @@ public class OrderItem implements java.io.Serializable {
 		this.product = product;
 	}
 
-	@Column(name = "num", nullable = false)
-	public int getNum() {
+	@Column(name = "num", nullable = false, precision = 10)
+	public double getNum() {
 		return this.num;
 	}
 
-	public void setNum(int num) {
+	public void setNum(double num) {
 		this.num = num;
+	}
+
+	@Column(name = "cost", precision = 10)
+	public Double getCost() {
+		return this.cost;
+	}
+
+	public void setCost(Double cost) {
+		this.cost = cost;
 	}
 
 	@Column(name = "product_price", nullable = false, precision = 10)

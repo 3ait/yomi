@@ -1,5 +1,5 @@
 package com.datas.easyorder.db.entity;
-// Generated 2018-9-28 16:02:05 by Hibernate Tools 4.3.1.Final
+// Generated 2018-10-4 15:36:49 by Hibernate Tools 4.3.1.Final
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -34,6 +34,7 @@ public class Product implements java.io.Serializable {
 	@JsonIgnore
 	private Menu menu;
 	private String mpn;
+	private String sku;
 	private String productName;
 	private String productNameAlias;
 	private String defaultSrc;
@@ -48,7 +49,11 @@ public class Product implements java.io.Serializable {
 	private Byte frontPage;
 	private Byte recommend;
 	private Integer soldNum;
-	private Integer stock;
+	private String batch;
+	private Integer unit;
+	private Integer unitQty;
+	private Double stock;
+	private Double presellStock;
 	private Double weight;
 	private Integer clickNum;
 	private String summary;
@@ -91,17 +96,19 @@ public class Product implements java.io.Serializable {
 		this.price1 = price1;
 	}
 
-	public Product(Menu menu, String mpn, String productName, String productNameAlias, String defaultSrc, Double cost,
-			double price1, Double price2, Double price3, Double price4, Byte status, Byte hot, Byte promote,
-			Byte frontPage, Byte recommend, Integer soldNum, Integer stock, Double weight, Integer clickNum,
-			String summary, String description, String seoKeywords, String seoDesc, Date createTime, Date modifyTime,
-			String location, String label, Integer position, String mobileDefaultSrc, String mobileDefaultDesc,
-			String norms, Set<Reply> replies, Set<OrderItem> orderItems, Set<BranchProduct> branchProducts,
-			Set<Attachment> attachments, Set<Comment> comments, Set<ProductAttr> productAttrs,
-			Set<RankProductPrice> rankProductPrices, Set<ProductStockHistory> productStockHistories,
-			Set<SupplierOrderItem> supplierOrderItems, Set<SupplierProduct> supplierProducts) {
+	public Product(Menu menu, String mpn, String sku, String productName, String productNameAlias, String defaultSrc,
+			Double cost, double price1, Double price2, Double price3, Double price4, Byte status, Byte hot,
+			Byte promote, Byte frontPage, Byte recommend, Integer soldNum, String batch, Integer unit, Integer unitQty,
+			Double stock, Double presellStock, Double weight, Integer clickNum, String summary, String description,
+			String seoKeywords, String seoDesc, Date createTime, Date modifyTime, String location, String label,
+			Integer position, String mobileDefaultSrc, String mobileDefaultDesc, String norms, Set<Reply> replies,
+			Set<OrderItem> orderItems, Set<BranchProduct> branchProducts, Set<Attachment> attachments,
+			Set<Comment> comments, Set<ProductAttr> productAttrs, Set<RankProductPrice> rankProductPrices,
+			Set<ProductStockHistory> productStockHistories, Set<SupplierOrderItem> supplierOrderItems,
+			Set<SupplierProduct> supplierProducts) {
 		this.menu = menu;
 		this.mpn = mpn;
+		this.sku = sku;
 		this.productName = productName;
 		this.productNameAlias = productNameAlias;
 		this.defaultSrc = defaultSrc;
@@ -116,7 +123,11 @@ public class Product implements java.io.Serializable {
 		this.frontPage = frontPage;
 		this.recommend = recommend;
 		this.soldNum = soldNum;
+		this.batch = batch;
+		this.unit = unit;
+		this.unitQty = unitQty;
 		this.stock = stock;
+		this.presellStock = presellStock;
 		this.weight = weight;
 		this.clickNum = clickNum;
 		this.summary = summary;
@@ -172,6 +183,15 @@ public class Product implements java.io.Serializable {
 
 	public void setMpn(String mpn) {
 		this.mpn = mpn;
+	}
+
+	@Column(name = "sku", length = 256)
+	public String getSku() {
+		return this.sku;
+	}
+
+	public void setSku(String sku) {
+		this.sku = sku;
 	}
 
 	@Column(name = "product_name", length = 256)
@@ -300,16 +320,52 @@ public class Product implements java.io.Serializable {
 		this.soldNum = soldNum;
 	}
 
-	@Column(name = "stock")
-	public Integer getStock() {
+	@Column(name = "batch", length = 1024)
+	public String getBatch() {
+		return this.batch;
+	}
+
+	public void setBatch(String batch) {
+		this.batch = batch;
+	}
+
+	@Column(name = "unit")
+	public Integer getUnit() {
+		return this.unit;
+	}
+
+	public void setUnit(Integer unit) {
+		this.unit = unit;
+	}
+
+	@Column(name = "unit_qty")
+	public Integer getUnitQty() {
+		return this.unitQty;
+	}
+
+	public void setUnitQty(Integer unitQty) {
+		this.unitQty = unitQty;
+	}
+
+	@Column(name = "stock", precision = 10)
+	public Double getStock() {
 		return this.stock;
 	}
 
-	public void setStock(Integer stock) {
+	public void setStock(Double stock) {
 		this.stock = stock;
 	}
 
-	@Column(name = "weight", precision = 22, scale = 0)
+	@Column(name = "presell_stock", precision = 10)
+	public Double getPresellStock() {
+		return this.presellStock;
+	}
+
+	public void setPresellStock(Double presellStock) {
+		this.presellStock = presellStock;
+	}
+
+	@Column(name = "weight", precision = 10)
 	public Double getWeight() {
 		return this.weight;
 	}

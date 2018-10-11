@@ -1,5 +1,5 @@
 package com.datas.easyorder.db.entity;
-// Generated 2018-9-27 12:33:29 by Hibernate Tools 4.3.1.Final
+// Generated 2018-10-4 15:36:49 by Hibernate Tools 4.3.1.Final
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -25,7 +25,9 @@ public class ProductStockHistory implements java.io.Serializable {
 	private Branch branch;
 	private Product product;
 	private String productNameEn;
-	private Integer qty;
+	private Double qty;
+	private Integer unit;
+	private Integer unitQty;
 	private Double cost;
 	private Double price;
 	private Date createTime;
@@ -37,12 +39,14 @@ public class ProductStockHistory implements java.io.Serializable {
 		this.product = product;
 	}
 
-	public ProductStockHistory(Branch branch, Product product, String productNameEn, Integer qty, Double cost,
-			Double price, Date createTime) {
+	public ProductStockHistory(Branch branch, Product product, String productNameEn, Double qty, Integer unit,
+			Integer unitQty, Double cost, Double price, Date createTime) {
 		this.branch = branch;
 		this.product = product;
 		this.productNameEn = productNameEn;
 		this.qty = qty;
+		this.unit = unit;
+		this.unitQty = unitQty;
 		this.cost = cost;
 		this.price = price;
 		this.createTime = createTime;
@@ -89,13 +93,31 @@ public class ProductStockHistory implements java.io.Serializable {
 		this.productNameEn = productNameEn;
 	}
 
-	@Column(name = "qty")
-	public Integer getQty() {
+	@Column(name = "qty", precision = 10)
+	public Double getQty() {
 		return this.qty;
 	}
 
-	public void setQty(Integer qty) {
+	public void setQty(Double qty) {
 		this.qty = qty;
+	}
+
+	@Column(name = "unit")
+	public Integer getUnit() {
+		return this.unit;
+	}
+
+	public void setUnit(Integer unit) {
+		this.unit = unit;
+	}
+
+	@Column(name = "unit_qty")
+	public Integer getUnitQty() {
+		return this.unitQty;
+	}
+
+	public void setUnitQty(Integer unitQty) {
+		this.unitQty = unitQty;
 	}
 
 	@Column(name = "cost", precision = 10)

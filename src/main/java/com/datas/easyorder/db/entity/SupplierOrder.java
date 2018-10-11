@@ -1,5 +1,5 @@
 package com.datas.easyorder.db.entity;
-// Generated 2018-9-28 16:02:05 by Hibernate Tools 4.3.1.Final
+// Generated 2018-10-4 15:36:49 by Hibernate Tools 4.3.1.Final
 
 import java.util.Date;
 import java.util.HashSet;
@@ -40,6 +40,7 @@ public class SupplierOrder implements java.io.Serializable {
 	private String supplierPhone;
 	private String supplierAddress;
 	private String adminMsg;
+	private String batch;
 	private Set<SupplierOrderItem> supplierOrderItems = new HashSet<SupplierOrderItem>(0);
 
 	public SupplierOrder() {
@@ -53,7 +54,7 @@ public class SupplierOrder implements java.io.Serializable {
 	public SupplierOrder(Supplier supplier, User user, String payType, Integer isPaid, double totalProductPrice,
 			Double totalFreight, Integer status, Date createTime, Date modifyTime, String supplierCompanyName,
 			String supplierContactName, String supplierEmail, String supplierPhone, String supplierAddress,
-			String adminMsg, Set<SupplierOrderItem> supplierOrderItems) {
+			String adminMsg, String batch, Set<SupplierOrderItem> supplierOrderItems) {
 		this.supplier = supplier;
 		this.user = user;
 		this.payType = payType;
@@ -69,6 +70,7 @@ public class SupplierOrder implements java.io.Serializable {
 		this.supplierPhone = supplierPhone;
 		this.supplierAddress = supplierAddress;
 		this.adminMsg = adminMsg;
+		this.batch = batch;
 		this.supplierOrderItems = supplierOrderItems;
 	}
 
@@ -221,6 +223,15 @@ public class SupplierOrder implements java.io.Serializable {
 
 	public void setAdminMsg(String adminMsg) {
 		this.adminMsg = adminMsg;
+	}
+
+	@Column(name = "batch", length = 1024)
+	public String getBatch() {
+		return this.batch;
+	}
+
+	public void setBatch(String batch) {
+		this.batch = batch;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "supplierOrder")

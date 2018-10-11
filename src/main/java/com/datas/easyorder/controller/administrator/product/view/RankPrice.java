@@ -1,7 +1,14 @@
 package com.datas.easyorder.controller.administrator.product.view;
 
+import com.datas.easyorder.db.entity.RankCustomer;
+import com.datas.easyorder.db.entity.RankProductPrice;
+
 public class RankPrice {
 
+	private RankProductPrice rankProductPrice;
+	private RankCustomer rankCustomer;
+	
+	
 	private Long rankProductPriceId;
 	private Long rankCustomerId;
 	private String rankLevel;

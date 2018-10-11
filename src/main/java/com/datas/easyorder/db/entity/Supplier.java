@@ -1,5 +1,5 @@
 package com.datas.easyorder.db.entity;
-// Generated 2018-9-28 16:02:05 by Hibernate Tools 4.3.1.Final
+// Generated 2018-10-4 15:36:49 by Hibernate Tools 4.3.1.Final
 
 import java.util.Date;
 import java.util.HashSet;
@@ -33,6 +33,8 @@ public class Supplier implements java.io.Serializable {
 	private Date createTime;
 	private Date modifyTime;
 	private Byte status;
+	private String userName;
+	private String password;
 	private Set<SupplierOrder> supplierOrders = new HashSet<SupplierOrder>(0);
 	private Set<SupplierProduct> supplierProducts = new HashSet<SupplierProduct>(0);
 
@@ -40,8 +42,8 @@ public class Supplier implements java.io.Serializable {
 	}
 
 	public Supplier(String companyName, String phone, String contactName, String mobile, String address, String website,
-			String memo, Date createTime, Date modifyTime, Byte status, Set<SupplierOrder> supplierOrders,
-			Set<SupplierProduct> supplierProducts) {
+			String memo, Date createTime, Date modifyTime, Byte status, String userName, String password,
+			Set<SupplierOrder> supplierOrders, Set<SupplierProduct> supplierProducts) {
 		this.companyName = companyName;
 		this.phone = phone;
 		this.contactName = contactName;
@@ -52,6 +54,8 @@ public class Supplier implements java.io.Serializable {
 		this.createTime = createTime;
 		this.modifyTime = modifyTime;
 		this.status = status;
+		this.userName = userName;
+		this.password = password;
 		this.supplierOrders = supplierOrders;
 		this.supplierProducts = supplierProducts;
 	}
@@ -158,6 +162,24 @@ public class Supplier implements java.io.Serializable {
 
 	public void setStatus(Byte status) {
 		this.status = status;
+	}
+
+	@Column(name = "user_name")
+	public String getUserName() {
+		return this.userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	@Column(name = "password")
+	public String getPassword() {
+		return this.password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "supplier")
