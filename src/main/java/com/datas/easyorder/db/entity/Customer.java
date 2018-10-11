@@ -1,14 +1,16 @@
 package com.datas.easyorder.db.entity;
-// Generated 2018-9-27 12:33:29 by Hibernate Tools 4.3.1.Final
+// Generated 2018-10-11 17:03:29 by Hibernate Tools 4.3.1.Final
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -61,6 +63,9 @@ public class Customer implements java.io.Serializable {
 	private String memo;
 	private Integer memberPoint;
 	private Date memberPointExpiredDate;
+	private String province;
+	private String city;
+	private String district;
 	@JsonIgnore
 	private Set<Coupon> coupons = new HashSet<Coupon>(0);
 	@JsonIgnore
@@ -93,9 +98,10 @@ public class Customer implements java.io.Serializable {
 			byte status, double discount, String logoSrc, Date createTime, Date modifyTime, String code, String gstNo,
 			String website, String tel, String fax, String address, String mobile, String bankAccount,
 			String companyName, Double balance, String shippingAddress, String identity, String customerType,
-			String memo, Integer memberPoint, Date memberPointExpiredDate, Set<Coupon> coupons,
-			Set<CustomerToAddress> customerToAddresses, Set<CustomerFromAddress> customerFromAddresses,
-			Set<Order> ordersForSalesId, Set<CustomerCommission> customerCommissions, Set<Order> ordersForCustomerId,
+			String memo, Integer memberPoint, Date memberPointExpiredDate, String province, String city,
+			String district, Set<Coupon> coupons, Set<CustomerToAddress> customerToAddresses,
+			Set<CustomerFromAddress> customerFromAddresses, Set<Order> ordersForSalesId,
+			Set<CustomerCommission> customerCommissions, Set<Order> ordersForCustomerId,
 			Set<CouponCustomer> couponCustomers, Set<CustomerPaymentHistory> customerPaymentHistories) {
 		this.branch = branch;
 		this.customerFromAddress = customerFromAddress;
@@ -127,6 +133,9 @@ public class Customer implements java.io.Serializable {
 		this.memo = memo;
 		this.memberPoint = memberPoint;
 		this.memberPointExpiredDate = memberPointExpiredDate;
+		this.province = province;
+		this.city = city;
+		this.district = district;
 		this.coupons = coupons;
 		this.customerToAddresses = customerToAddresses;
 		this.customerFromAddresses = customerFromAddresses;
@@ -424,6 +433,33 @@ public class Customer implements java.io.Serializable {
 
 	public void setMemberPointExpiredDate(Date memberPointExpiredDate) {
 		this.memberPointExpiredDate = memberPointExpiredDate;
+	}
+
+	@Column(name = "province")
+	public String getProvince() {
+		return this.province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	@Column(name = "city")
+	public String getCity() {
+		return this.city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	@Column(name = "district")
+	public String getDistrict() {
+		return this.district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
