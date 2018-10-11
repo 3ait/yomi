@@ -107,7 +107,7 @@ public class RankCustomerController extends BaseController<RankCustomer>{
 	 */
 	@RequestMapping("/new")
 	public ModelAndView newBranch(){
-		ModelAndView mv = new ModelAndView("administrator/rankCustomer/new");
+		ModelAndView mv = new ModelAndView("administrator/rankcustomer/new");
 		return mv;
 	}
 	
