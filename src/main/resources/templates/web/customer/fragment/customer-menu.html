@@ -1,8 +1,11 @@
 <div th:fragment="left-menu(menuName)">
+	<a th:href="@{/customer/history}" th:class="${menuName!='history'}?customter-menu-inactive"  >历史订单</a>
+	<br/>
+	<br/>
 	<a th:href="@{/customer/info}" th:class="${menuName!='info'}?customter-menu-inactive" >用户信息</a>
 	<br/>
 	<br/>
-	<a th:href="@{/customer/history}" th:class="${menuName!='history'}?customter-menu-inactive"  >历史订单</a>
+	<a th:href="@{/customer/coupon}" th:class="${menuName!='coupon'}?customter-menu-inactive" >优惠券</a>
 	<br/>
 	<br/>
 	<a th:href="@{/customer/commission}" th:class="${menuName!='payment'}?customter-menu-inactive" th:if="${customer.customerType=='sales'}">Commission</a>

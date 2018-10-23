@@ -2,7 +2,7 @@
 <!-- content -->
 
 <div th:fragment="content" class="container">
-
+	
 	<div class="row" style="margin:30px 0;">
 		<div class="col-md-2 ">
 			<th:block th:replace="/web/customer/fragment/customer-menu :: left-menu('info')"></th:block>
@@ -52,6 +52,25 @@
 				</tr>
 				
 				<tr >
+					<td  >省</td>
+					<td  data-toggle="distpicker" id="province-city-district">
+						<div style="margin-left: -15px;">
+							<div class="col-xs-3" >
+								<select class="form-control " v-model="province" th:data-province="${customer.province}"></select>
+							</div>
+							<div class="col-xs-3">
+							<select class="form-control "   v-model="city" th:data-city="${customer.city}"></select>
+							</div>
+							<div class="col-xs-3">
+							<select class="form-control "  v-model="district"  th:data-district="${customer.district}" @change="saveProvincecityDistrict()"></select>
+							</div>
+							
+						</div>
+					</td>
+				</tr>
+				
+				
+				<tr >
 					<td  >地址</td>
 					<td  >
 						<a  data-type="textarea" th:attr="data-pk=${customer.id}, data-url=|@{/customer/update/colomn/}|" data-name="shippingAddress"  href="#"  class="edit-name"  th:text="${customer.shippingAddress}" >shippingAddress</a>
@@ -75,12 +94,43 @@
 
 	 <script  type="text/javascript" th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}" charset="utf-8"></script>
 
-
+	<!-- 省市区 -->
+	<script  type="text/javascript" th:src="@{/static/plugin/distpicker/distpicker.min.js}" charset="utf-8"></script>
 	<script type="text/javascript" th:inline="javascript">
 		/*<![CDATA[*/
 		
-		           $('.edit-name').editable();
-		
+		   $('.edit-name').editable();
+		   new Vue({
+				el : '#province-city-district',
+				data : {
+					province:'',
+					city:'',
+					district:'',
+				},
+				created: function() {
+					var _this = this;
+					
+				},
+				methods:{
+					//保存省市区
+					saveProvincecityDistrict : function(couponId,value,event){
+						alert();
+						var _this = this;
+						var usp = new URLSearchParams();
+						usp.append("province",_this.province)
+						usp.append("city",_this.city)
+						usp.append("district",_this.district)
+						
+						axios.post([[@{/customer/api/provice/dity/district}]],
+								usp,).
+								then(function (response){
+								
+						  }).catch(function (error) {
+						     console.log(error);
+						  }); 
+					}
+				}
+			})
 		
 		/*]]>*/
 	</script>

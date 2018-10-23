@@ -5,7 +5,7 @@
 	
 		<div class="container" >
 			<div class="row">
-				<div class="col-sm-3 span1_of_4" th:each="menuView1,iterStat : ${bottomMenuViewList}">
+				<div class="col-xs-6 col-sm-2 span1_of_4" th:each="menuView1,iterStat : ${bottomMenuViewList}">
 					<h4> <span th:text="${menuView1.menu.name}"></span> </h4>
 					<div class="col1"  th:each="menuView2 : ${menuView1.subMenuViewList}">
 						<ul class="f_nav">
@@ -15,7 +15,7 @@
 						</ul>
 					</div>
 				</div>
-				<div class="col-sm-3 span1_of_4" >
+				<div class="col-xs-6 col-sm-2 span1_of_4" >
 					<h4> <span> 商家服务</span> </h4>
 					<div class="col1"  >
 						<ul class="f_nav">

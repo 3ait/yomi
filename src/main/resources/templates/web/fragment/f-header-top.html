@@ -16,9 +16,6 @@
 						-->
 						<li class="login">
 							<div id="loginContainer">
-								<!-- <a href="#" id="loginButton" th:if="${customer==null}" th:href="@{/customer}" > 
-									<span>登陆</span>
-								</a> -->
 								<a href="#" th:href="@{/customer/info}" th:if="${customer!=null}" title="My Account"><i  class="fa fa-user-o" aria-hidden="true"></i><span style="display: inline;"  th:text="|Hello, ${customer.name}|"></span></a>
 							</div>
 						</li> 

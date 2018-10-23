@@ -21,17 +21,17 @@
 		</div>
 			
 		<div class="row" v-for="product in productList" style="padding: 10px 0;border-bottom:1px solid #e7e7e7;">
-			<div class="col-xs-6">
-				<div class="col-sm-3  text-left block-center">
+			<div class="col-xs-6 col-xs-12">
+				<div class="col-sm-3  col-xs-6 text-left block-center">
 					<a :href="'/product/'+product.id"  target="_blank">
-						<img src="#" href="" :src="'/'+product.defaultSrc"  class="img-responsive img-thumbnail"  style="max-width: 80px;" />
-						</a>
+					<img src="#" href="" :src="'/'+product.defaultSrc"  class="img-responsive img-thumbnail"  style="max-width: 80px;" />
+					</a>
 				</div>
-				<div class="col-sm-3 col-xs-6 col-sm-offset-1 ">
+				<div class="col-sm-8 col-xs-6 col-sm-offset-1 ">
 						<a :href="'/product/'+product.id" target="_blank"><span>{{product.productName}}</span></a>
 				</div>
 			</div>
-			<div class="col-xs-6">
+			<div class="col-xs-6 col-xs-12">
 				<div class="col-sm-12 col-xs-12 text-right ">
 						<span class="col-sm-6" >
 							{{product.num}}
@@ -41,12 +41,33 @@
 				</div>
 			</div>
 		</div>
+		<br/>
+		<!-- 优惠券 -->
+		<div class="row">
 		
+			<div v-for="couponCustomer in webCustomerCouponList" class="col-sm-2 col-xs-6"  >
+				<div :class="{'coupon-unselect':true}" v-if="couponCustomer.coupon.reg <= totalAmount"  @click="selectCoupon(couponCustomer.coupon.id,couponCustomer.coupon.value,$event)">
+					{{couponCustomer.coupon.name}}<br/>
+					{{couponCustomer.coupon.value}}<br/>
+					最低可用金额  NZD:{{couponCustomer.coupon.reg}}
+				</div>
+				<div :class="{'coupon-unselect':true}" v-if="couponCustomer.coupon.reg > totalAmount">
+					{{couponCustomer.coupon.name}}<br/>
+					{{couponCustomer.coupon.value}}<br/>
+					最低可用金额  NZD:{{couponCustomer.coupon.reg}}
+				</div>
+			</div>
+		</div>
 		
 		<div class="row">
 			<div class="col-sm-12 text-right">
+				<div class="create_btn"  v-if="webCustomerCouponList.length>0">
+						<a class="arrow" href="#" onclick="javascript:window.location.reload();">取消优惠券
+						</a>
+					</div>
+				<br/>
 				<h4>
-					合计: &nbsp;$<span class="color"> {{totalAmount}}</span>
+					合计: &nbsp; $<span class="color"> {{totalAmount}}</span>
 				</h4>
 			</div>
 		</div>
@@ -79,13 +100,14 @@
 			</div>
 			<div class="col-sm-10 " data-toggle="distpicker">
 				<div class="col-sm-3" style="margin-left:  -15px;">
-					<select class="form-control " v-model="toProvince" ref="toProvince" data-province=""></select>
+					<select class="form-control " v-model="toProvince" ref="toProvince" :data-province="toProvince">
+					</select>
 				</div>
 				<div class="col-sm-3">
-		        	<select class="form-control " v-model="toCity" ref="toCity" data-city=""></select>
+		        	<select class="form-control " v-model="toCity" ref="toCity" :data-city="toCity"></select>
 				</div>
 				<div class="col-sm-3">
-		        	<select class="form-control " v-model="toDistrict" ref="toDistrict" data-district=""></select>
+		        	<select class="form-control " v-model="toDistrict" ref="toDistrict" :data-district="toDistrict"></select>
 				</div>
 			</div>
 		</div>
@@ -95,7 +117,8 @@
 				<label></label>
 			</div>
 			<div class="col-sm-10 ">
-				<input placeholder="收件地址" v-model="toShippingAddress"  ref="toShippingAddress" class="form-control" />
+				<input placeholder="收件地址" v-model="toShippingAddress"  ref="toShippingAddress" class="form-control"  />
+				
 			</div>
 		</div>
 		<br/>
@@ -119,6 +142,29 @@
 		</form>
 	</div>
 	
+	
+	<style>
+		.coupon-list {
+			padding: 5px ;
+			transition: all .5s;
+			border: 1px solid #eee;
+			cursor: pointer;
+		}
+		
+		.coupon-list:HOVER {
+			box-shadow: -3px 0 5px #9FA8AB, 0 -3px 5px #9FA8AB, 0 3px 5px #9FA8AB,3px 0 5px #9FA8AB;
+		}
+		.coupon-select{
+			border: 2px solid #357363;
+			cursor: pointer;
+		}
+		.coupon-unselect{
+			border: 1px solid #e7e7e7;
+			cursor: pointer;
+		}
+		
+		
+	</style>
 	<!-- 省市区 -->
 	<script  type="text/javascript" th:src="@{/static/plugin/distpicker/distpicker.min.js}" charset="utf-8"></script>
 	
@@ -129,6 +175,8 @@
 			el : '#order-content',
 			data : {
 				productList:[],
+				customer:{},
+				
 				totalNum:0,
 				totalAmount:0,
 				toCustomerName:'',
@@ -141,6 +189,9 @@
 				toProvince:'',
 				toCity:'',
 				toDistrict:'',
+				webCustomerCouponList:[],
+				couponId:0,
+				
 			},
 			created: function() {
 				var _this = this;
@@ -155,18 +206,33 @@
 				
 				_this.totalNum = getTotalNumber();
 				_this.totalAmount = getTotalAmount();
-				
+				_this.customer = [[${customer}]];
 				
 				_this.toCustomerName = [[${customer.name}]] ;
 				_this.toCustomerCompanyName = [[${customer.companyName}]] ;
 				_this.toTel = [[${customer.tel}]] ;
 				_this.toPhone = [[${customer.phone}]] ;
 				_this.toAddress = [[${customer.address}]]  ;
-				_this.toShippingAddress = "";
+				_this.toShippingAddress = [[${customer.shippingAddress}]];
 				
-				_this.toProvince = "";
-				_this.toCity = "";
-				_this.toDistrict = "";
+				_this.toProvince = [[${customer.province}]];
+				_this.toCity = [[${customer.city}]];
+				_this.toDistrict = [[${customer.district}]];
+				
+				//获取可用优惠券
+				var _this = this;
+				axios.get([[@{/customer/cart/coupon}]] , {
+				    params: {
+				     
+				    }
+				  })
+				  .then(function (response){
+					  _this.webCustomerCouponList = response.data;
+				  })
+				  .catch(function (error) {
+				    console.log(error);
+				  }); 
+				
 			},
 			methods:{
 				
@@ -174,6 +240,7 @@
 					if(cart.getproductlist()==null){
 						return;
 					}
+					
 					var _this = this;
 					
 					if(_this.toCustomerName.trim()==""){
@@ -217,6 +284,7 @@
 					usp.append("toProvince",_this.toProvince+"");
 					usp.append("toCity",_this.toCity+"");
 					usp.append("toDistrict",_this.toDistrict+"");
+					usp.append("couponId",_this.couponId+"");
 					
 					axios.post([[@{/customer/cart/order/place}]],
 							usp,).then(function (response){
@@ -230,6 +298,21 @@
 					     console.log(error);
 					  }); 
 					
+				},
+				//选择优惠券
+				selectCoupon : function(couponId,value,event){
+					
+					var x = document.getElementsByClassName("coupon-select");
+					for(var i=0;i<x.length;i++){
+						x[i].className="coupon-unselect";
+					}
+					
+					var _this = this;
+					_this.couponId = couponId;
+					_this.totalAmount = getTotalAmount();
+					_this.totalAmount = (_this.totalAmount-value).toFixed(2);
+					var el = event.currentTarget;
+					el.className = "coupon-select";
 				}
 			}
 		})

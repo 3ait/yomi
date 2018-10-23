@@ -1,0 +1,53 @@
+
+<!-- content -->
+
+<div th:fragment="content" class="container">
+
+	<div class="row" style="margin:30px 0;">
+		<div class="col-md-2 ">
+			<th:block th:replace="/web/customer/fragment/customer-menu :: left-menu('coupon')"></th:block>
+		</div>
+
+
+		<div class="col-md-10 w_content">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+					<th >优惠券名称</th>
+					<th >最小使用金额</th>
+					<th >价值</th>
+					<th >状态</th>
+					<th >到期日期</th>
+					</tr>
+				</thead>
+				<tr  th:each="couponCustomer : ${couponCustomerList}" >
+					<td th:text="${couponCustomer.coupon.name}"></td>
+					<td th:text="${couponCustomer.coupon.reg}"></td>
+					<td th:text="${couponCustomer.coupon.value}"></td>
+					<td th:text="${couponCustomer.status==1?'未使用':'已经使用'}"></td>
+					<td >
+					<span th:text="${#dates.format(couponCustomer.coupon.expiredTime,'yyyy-MM-dd hh:mm:ss')}"></span>
+					<span class="label label-danger" th:if="${couponCustomer.coupon.expiredTime < #dates.createNow()}">Expired</span>
+					</td>
+				</tr>
+				
+				
+			</table>
+			
+
+		</div>
+	</div>
+
+
+
+
+
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		
+		/*]]>*/
+	</script>
+
+
+</div>
+

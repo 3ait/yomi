@@ -37,9 +37,13 @@ import com.datas.easyorder.controller.administrator.customer.logic.CustomerCommi
 import com.datas.easyorder.controller.administrator.customer.logic.CustomerLogic;
 import com.datas.easyorder.controller.administrator.order.logic.OrderLogic;
 import com.datas.easyorder.controller.web.cart.logic.CartLogic;
+import com.datas.easyorder.controller.web.customer.view.CustomerView;
+import com.datas.easyorder.controller.web.customer.view.PlaceOrderForm;
+import com.datas.easyorder.controller.web.customer.view.WebCustomerCoupon;
 import com.datas.easyorder.db.dao.CustomerRepository;
 import com.datas.easyorder.db.dao.OrderRepository;
 import com.datas.easyorder.db.entity.Branch;
+import com.datas.easyorder.db.entity.CouponCustomer;
 import com.datas.easyorder.db.entity.Customer;
 import com.datas.easyorder.db.entity.Order;
 import com.datas.utils.SearchForm;
@@ -273,6 +277,58 @@ public class WebCustomerController extends BaseController{
 		modelAndView.addObject("totalCommission", orderPage.getContent().stream().map(order -> order.getTotalProductPrice()*(order.getSalesCommissionPercentage()==null?0:order.getSalesCommissionPercentage())).reduce(0D,(a,b)->a+b).doubleValue());
 			
 		return modelAndView;
+	}
+	/**
+	 * 
+	 * @param request
+	 * @param searchForm
+	 * @return ModelAndView
+	 */
+	@RequestMapping(value="/coupon")
+	public ModelAndView getCustomerCoupon(HttpServletRequest request) {
+		ModelAndView modelAndView = new ModelAndView("web/customer/coupon");
+		Customer customer = (Customer) request.getSession().getAttribute(SESSION_CUSTOMER);
+		List<CouponCustomer> couponCustomerList = couponLogic.findCouponCustomerByCustomerId(customer.getId());
+		
+		modelAndView.addObject("customer", customer);
+		modelAndView.addObject("couponCustomerList", couponCustomerList);
+		return modelAndView;
+	}
+	
+	/**
+	 * 
+	 * @param request
+	 * @param searchForm
+	 * @return ModelAndView
+	 */
+	@RequestMapping(value="/cart/coupon")
+	@ResponseBody
+	public ResponseEntity<List<WebCustomerCoupon>>  orderHistory(HttpServletRequest request) {
+		Customer customer = (Customer) request.getSession().getAttribute(SESSION_CUSTOMER);
+		List<WebCustomerCoupon> couponCustomerList = couponLogic.findWebCustomerCouponByCustomerId(customer.getId());
+		
+		
+		return new ResponseEntity<List<WebCustomerCoupon>>(couponCustomerList,HttpStatus.OK);
+	}
+	
+	/**
+	 * 保存省市区
+	 * @param request
+	 * @param searchForm
+	 * @return ModelAndView
+	 */
+	@RequestMapping(value="/api/provice/dity/district")
+	@ResponseBody
+	public ResponseEntity<Boolean>  saveProviceCityDistrict(HttpServletRequest request,@RequestParam("province") String province,
+			@RequestParam("city") String city,
+			@RequestParam("district") String district) {
+		Customer customer = (Customer) request.getSession().getAttribute(SESSION_CUSTOMER);
+		
+		customer.setProvince(province);
+		customer.setCity(city);
+		customer.setDistrict(district);
+		customerLogic.editSave(customer);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	/**

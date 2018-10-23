@@ -17,7 +17,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
 
 import com.datas.easyorder.controller.administrator.coupon.logic.CouponLogic;
-import com.datas.easyorder.controller.web.customer.PlaceOrderForm;
+import com.datas.easyorder.controller.web.customer.view.PlaceOrderForm;
 import com.datas.easyorder.db.dao.CustomerRepository;
 import com.datas.easyorder.db.dao.CustomerToAddressRepository;
 import com.datas.easyorder.db.dao.OrderItemRepository;

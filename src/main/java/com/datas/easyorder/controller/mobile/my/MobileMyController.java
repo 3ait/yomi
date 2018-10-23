@@ -31,8 +31,8 @@ import com.datas.easyorder.controller.administrator.customer.logic.CustomerLogic
 import com.datas.easyorder.controller.administrator.order.logic.OrderLogic;
 import com.datas.easyorder.controller.mobile.my.interceptor.JwtToken;
 import com.datas.easyorder.controller.web.cart.logic.CartLogic;
-import com.datas.easyorder.controller.web.customer.CustomerView;
-import com.datas.easyorder.controller.web.customer.PlaceOrderForm;
+import com.datas.easyorder.controller.web.customer.view.CustomerView;
+import com.datas.easyorder.controller.web.customer.view.PlaceOrderForm;
 import com.datas.easyorder.db.dao.OrderRepository;
 import com.datas.easyorder.db.entity.Coupon;
 import com.datas.easyorder.db.entity.Customer;

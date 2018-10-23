@@ -13,8 +13,8 @@ import com.datas.easyorder.db.entity.CouponCustomer;
 @Component("couponCustomerRepository")
 public interface CouponCustomerRepository extends CrudRepository<CouponCustomer, Long> {
 
-	public static final Integer STATUS_1 = 1;
-	public static final Integer STATUS_0 = 0;
+	public static final Integer active = 1;
+	public static final Integer inactive = 0;
 	
 	
 	List<CouponCustomer> findAllByCustomerId(Long customerId);
@@ -29,5 +29,7 @@ public interface CouponCustomerRepository extends CrudRepository<CouponCustomer,
 	CouponCustomer findOneByCouponCodeAndCustomerId(String code, Long id);
 
 	List<CouponCustomer> findAllByCustomerIdAndStatus(Long customerId, Integer status);
+
+	List<CouponCustomer> findAllByCustomerIdAndStatusAndCouponExpiredTimeAfter(Long customerId, Integer status,Date expiretime);
 
 }

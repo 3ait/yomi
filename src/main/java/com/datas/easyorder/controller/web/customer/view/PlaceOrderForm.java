@@ -1,4 +1,4 @@
-package com.datas.easyorder.controller.web.customer;
+package com.datas.easyorder.controller.web.customer.view;
 
 public class PlaceOrderForm {
 

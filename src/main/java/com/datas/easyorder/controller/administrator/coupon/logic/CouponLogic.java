@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import com.datas.easyorder.controller.BaseLogic;
 import com.datas.easyorder.controller.administrator.coupon.CouponView;
+import com.datas.easyorder.controller.web.customer.view.WebCustomerCoupon;
 import com.datas.easyorder.db.dao.CouponCustomerRepository;
 import com.datas.easyorder.db.dao.CouponOrderRepository;
 import com.datas.easyorder.db.dao.CouponRepository;
@@ -121,7 +122,7 @@ public class CouponLogic  extends BaseLogic<Coupon> {
 	 */
 	@Transactional(rollbackOn=Exception.class)
 	public List<Coupon> findAvailableCouponByCustomerId(Long customerId) {
-		List<CouponCustomer> list = couponCustomerRepository.findAllByCustomerIdAndStatus(customerId,CouponCustomerRepository.STATUS_1);
+		List<CouponCustomer> list = couponCustomerRepository.findAllByCustomerIdAndStatus(customerId,CouponCustomerRepository.active);
 		
 		List<Coupon> cList = new ArrayList<>();
 		list.forEach(cc -> {
@@ -185,7 +186,7 @@ public class CouponLogic  extends BaseLogic<Coupon> {
 			couponCustomer = new CouponCustomer();
 			couponCustomer.setCustomer(customer);
 			couponCustomer.setCoupon(coupon);
-			couponCustomer.setStatus(CouponCustomerRepository.STATUS_1);
+			couponCustomer.setStatus(CouponCustomerRepository.active);
 			couponCustomerRepository.save(couponCustomer);
 			couponView.setCollected(true);
 		}else{
@@ -221,7 +222,7 @@ public class CouponLogic  extends BaseLogic<Coupon> {
 			couponCustomer.setCustomer(customer);
 			
 			couponCustomer.setCoupon(coupon);
-			couponCustomer.setStatus(CouponCustomerRepository.STATUS_1);
+			couponCustomer.setStatus(CouponCustomerRepository.active);
 			
 			couponCustomerRepository.save(couponCustomer);
 			couponView.setCollected(true);
@@ -324,5 +325,30 @@ public class CouponLogic  extends BaseLogic<Coupon> {
 		
 		return t;
 	}
-
+	/**
+	 * 获取coupon customer
+	 * @param id
+	 * @return
+	 */
+	public List<CouponCustomer> findCouponCustomerByCustomerId(Long customerId) {
+		
+		return couponCustomerRepository.findAllByCustomerId(customerId);
+	}
+	/**
+	 * 获取coupon customer
+	 * @param id
+	 * @return
+	 */
+	public List<WebCustomerCoupon> findWebCustomerCouponByCustomerId(Long customerId) {
+		List<CouponCustomer> list = couponCustomerRepository.findAllByCustomerIdAndStatusAndCouponExpiredTimeAfter(customerId,CouponCustomerRepository.active,Calendar.getInstance().getTime());
+		List<WebCustomerCoupon> retList = new ArrayList<>();
+		list.forEach(cc ->{
+			WebCustomerCoupon wcc = new WebCustomerCoupon();
+			wcc.setCoupon(cc.getCoupon());
+			wcc.setCouponCustomer(cc);
+			retList.add(wcc);
+		});
+		
+		return retList;
+	}
 }

@@ -32,7 +32,7 @@ import com.datas.easyorder.controller.BaseLogic;
 import com.datas.easyorder.controller.administrator.customer.Transfer;
 import com.datas.easyorder.controller.administrator.customer.view.CustomerRankView;
 import com.datas.easyorder.controller.administrator.invoice.InvoiceView;
-import com.datas.easyorder.controller.web.customer.CustomerView;
+import com.datas.easyorder.controller.web.customer.view.CustomerView;
 import com.datas.easyorder.db.dao.CustomerPaymentHistoryRepository;
 import com.datas.easyorder.db.dao.CustomerRepository;
 import com.datas.easyorder.db.dao.CustomerSpecifications;
