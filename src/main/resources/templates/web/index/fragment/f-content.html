@@ -15,17 +15,27 @@
 		<th:block th:replace="/web/component/index/Brand-recommend :: brand-recommend"></th:block>
 		
 		<!-- 热销品牌
-		-->
 		<th:block th:replace="/web/component/index/Product-hot :: product-hot"></th:block>
+		-->
 	
-		<!-- logo -->
+		<!-- logo
 		<th:block th:replace="/web/component/index/Brand-self :: brand-self"></th:block>
+		 -->
 		
-		<!-- 精选 -->
+		<!-- 精选品牌
 		<th:block th:replace="/web/component/index/Product-frontpage :: product-frontpage"></th:block>
-
+		 -->
+		 
+		<!-- 健康专场-->
+		<th:block th:replace="/web/component/index/Article-urltitle :: urltitle('health')"></th:block>
+		<!-- 辣妈萌宝-->
+		<th:block th:replace="/web/component/index/Article-urltitle :: urltitle('motherandchild')"></th:block>
+		<!-- 大牌汇聚-->
+		<th:block th:replace="/web/component/index/Article-urltitle :: urltitle('brands')"></th:block>
+		<!-- 资讯速递-->
+		<th:block th:replace="/web/component/index/Article-urltitle :: urltitle('news')"></th:block>
 		<!-- 合作伙伴-->
-		<th:block th:replace="/web/component/index/Partners :: partner"></th:block>
+		<th:block th:replace="/web/component/index/Article-urltitle :: urltitle('partner')"></th:block>
 		
 		
 	</div>

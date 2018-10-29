@@ -3,9 +3,20 @@
 ##首页
 front-page -> 精选品牌
 hot -> 热销产品
-recommend -> 自有品牌
+recommend -> 自有品牌(热卖推荐)
 ###首页Slider编辑
 @{/api/web/slider/indexSlider} System -> attachemnt title字段设置为indexSlider
+###首页内容编辑，后台content 增加文章，设置urlTitle为以下值
+健康专场
+<th:block th:replace="/web/component/index/Article-urltitle :: urltitle('health')"></th:block>
+辣妈萌宝
+<th:block th:replace="/web/component/index/Article-urltitle :: urltitle('motherandchild')"></th:block>
+大牌汇聚
+<th:block th:replace="/web/component/index/Article-urltitle :: urltitle('brands')"></th:block>
+ 资讯速递
+<th:block th:replace="/web/component/index/Article-urltitle :: urltitle('news')"></th:block>
+合作伙伴
+<th:block th:replace="/web/component/index/Article-urltitle :: urltitle('partner')"></th:block>
 
 
 ##多价格

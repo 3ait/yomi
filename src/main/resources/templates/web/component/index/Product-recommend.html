@@ -4,8 +4,8 @@
 			
 			<br/>
 			<div class="row">
-				<div class="col-sm-12 text-center" style="padding: 0;">
-				<h3 style="color: #357363;">自有品牌</h3>
+				<div class="col-sm-12" style="padding: 0;">
+				<h3 style="color: #357363;">热卖推荐</h3>
 				<hr style="background: #357363;height: 2px;border: none;"/>
 				</div>
 			</div>
@@ -81,7 +81,7 @@
 			},
 			created: function() {
 				var _this = this;
-				axios.get([[@{/api/product/list/recommend?size=24&sortBy=position}]], {
+				axios.get([[@{/api/product/list/recommend?size=36&sortBy=position}]], {
 				    params: {
 				     
 				    }
