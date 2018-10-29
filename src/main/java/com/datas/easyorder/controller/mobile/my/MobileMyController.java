@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.datas.easyorder.api.diyparcel.TrackingDiyParcel;
 import com.datas.easyorder.api.nzpost.TrackingNZPost;
 import com.datas.easyorder.controller.BaseController;
 import com.datas.easyorder.controller.administrator.coupon.CouponView;
@@ -48,7 +48,7 @@ import com.plugin.utils.DateHelper;
  */
 @Controller
 @RequestMapping("/m/api/customers")
-public class MobileMyController extends BaseController {
+public class MobileMyController extends BaseController<Customer> {
 
 	@Autowired
 	CustomerLogic customerLogic;
@@ -59,7 +59,8 @@ public class MobileMyController extends BaseController {
 	TrackingNZPost trackingNZPost;
 	@Autowired
 	CouponLogic couponLogic;
-	
+	@Autowired
+	TrackingDiyParcel trackingDiyParcel;
 
 
 	@RequestMapping(value="/{customerId}",method = RequestMethod.GET)
@@ -128,7 +129,7 @@ public class MobileMyController extends BaseController {
 			}
 			return new ResponseEntity<>(ret,HttpStatus.OK);
 	}
-
+	
 	/**
 	 * phone check
 	 * 
@@ -144,26 +145,33 @@ public class MobileMyController extends BaseController {
 		}
 		return new ResponseEntity<>(ret,HttpStatus.OK);
 	}
+
 	/**
 	 * 编辑保存
 	 * 
 	 * @return String
 	 */
-	@RequestMapping(value = { "/{customerId}" },method = RequestMethod.PUT)
+	@RequestMapping(value = { "/{customerId}" },method = RequestMethod.POST)
 	public ResponseEntity<Object> save(@PathVariable("customerId") Long customerId,@ModelAttribute("customer") Customer customer) {
 		Customer customerDb = customerLogic.getCustomerById(customerId);
 
 		if (customerDb != null) {
 			customerDb.setName(customer.getName());
+			customerDb.setEmail(customer.getEmail());
 			customerDb.setMobile(customer.getMobile());
 			customerDb.setShippingAddress(customer.getShippingAddress());
+			customerDb.setIdentity(customer.getIdentity());
+			customerDb.setProvince(customer.getProvince());
+			customerDb.setCity(customer.getCity());
+			customerDb.setDistrict(customer.getDistrict());
+			customerDb.setPhone(customer.getPhone());
 			customerLogic.editSave(customerDb);
 			return new ResponseEntity<>(customerDb, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-
 	}
+	
 
 	/**
 	 * 退出
@@ -178,13 +186,12 @@ public class MobileMyController extends BaseController {
 	/**
 	 * 查询包裹
 	 * @return String
-	 * @throws IOException 
-	 * @throws JSONException 
+	 * @throws Exception 
 	 */
 	@RequestMapping(value={"/tracking/{trackingNum}"},method = RequestMethod.GET)
-	public ResponseEntity<Object> getTracking(@PathVariable("trackingNum") String trackingNum) throws JSONException, IOException {
+	public ResponseEntity<List<String>> getTracking(@PathVariable("trackingNum") String trackingNum) throws Exception {
 		
-		return new ResponseEntity<>(trackingNZPost.getTracking(trackingNum),HttpStatus.OK);
+		return new ResponseEntity<List<String>>(trackingDiyParcel.getTracking(trackingNum), HttpStatus.OK);
 	}
 	
 	/**
@@ -199,7 +206,16 @@ public class MobileMyController extends BaseController {
 			HttpServletRequest request
 			){
 		
-		Customer customer = customerLogic.update(pk,name,value);
+		Customer customer = null;
+		if(!name.equals("balance") 
+				&& !name.equals("discount")
+				&& !name.equals( "customerType") 
+				&& !name.equals("memberPoint") 
+				&& !name.equals("memberPointExpiredDate") 
+				&& !name.equals("status")){
+			
+			customer = customerLogic.update(pk,name,value);
+		}
 		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
 	}
 	
@@ -303,32 +319,32 @@ public class MobileMyController extends BaseController {
 	
 	
 	/**
-	 * 支付直接返回
+	 * 支付同步直接返回
 	 * @param request
 	 */
 	@RequestMapping(value="/payment/return", method = RequestMethod.GET)
 	public ResponseEntity<String>  latipayReturn(HttpServletRequest request){
 		
-		String orderId = request.getParameter("merchant_reference");
+		String orderId = request.getParameter("out_trade_no").split("-")[0];
 		String ret = "faild";
-		if(iEMoney.notifyCheck(request)){
-			orderLogic.update(Long.valueOf(orderId), "isPaid", OrderRepository.ispaid_yes + "");
-			orderLogic.updateProductStock(Long.valueOf(orderId));
+		if(iEMoney.notifyCheck(request).equals("SUCCESS")){
+//			orderLogic.update(Long.valueOf(orderId), "isPaid", OrderRepository.ispaid_yes + "");
+//			orderLogic.updateProductStock(Long.valueOf(orderId));
 			ret = "success";
 		}
 		return new ResponseEntity<String>(ret,HttpStatus.OK);
 	}
 	
 	/**
-	 * 支付通知
+	 * 异步支付通知
 	 * @param request
 	 */
 	@RequestMapping(value="/payment/notice", method = RequestMethod.GET)
 	@ResponseBody
 	public String latipayCallback(HttpServletRequest request){
-		String orderId = request.getParameter("merchant_reference");
+		String orderId = request.getParameter("out_trade_no").split("-")[0];
 		String ret = "faild";
-		if(iEMoney.callBackCheck(request)){
+		if(iEMoney.callBackCheck(request).equals("SUCCESS")){
 			orderLogic.update(Long.valueOf(orderId), "isPaid", OrderRepository.ispaid_yes + "");
 			orderLogic.updateProductStock(Long.valueOf(orderId));
 			ret = "success";

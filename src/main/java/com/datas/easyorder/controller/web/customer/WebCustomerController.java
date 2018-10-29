@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.datas.easyorder.api.diyparcel.TrackingDiyParcel;
 import com.datas.easyorder.controller.BaseController;
 import com.datas.easyorder.controller.administrator.branch.logic.BranchLogic;
 import com.datas.easyorder.controller.administrator.coupon.logic.CouponLogic;
@@ -58,7 +59,7 @@ import com.plugin.utils.QrCode;
  */
 @RestController
 @RequestMapping("/customer")
-public class WebCustomerController extends BaseController{
+public class WebCustomerController extends BaseController<Customer>{
 	private static Logger logger = LogManager.getLogger(WebCustomerController.class);
 	@Autowired
 	CustomerLogic customerLogic;
@@ -72,6 +73,8 @@ public class WebCustomerController extends BaseController{
 	CouponLogic couponLogic;
 	@Autowired
 	BranchLogic branchLogic;
+	@Autowired
+	TrackingDiyParcel trackingDiyParcel;
 	/**
 	 * 
 	 * @param page
@@ -278,6 +281,7 @@ public class WebCustomerController extends BaseController{
 			
 		return modelAndView;
 	}
+	
 	/**
 	 * 
 	 * @param request
@@ -311,6 +315,7 @@ public class WebCustomerController extends BaseController{
 		return new ResponseEntity<List<WebCustomerCoupon>>(couponCustomerList,HttpStatus.OK);
 	}
 	
+	
 	/**
 	 * 保存省市区
 	 * @param request
@@ -330,6 +335,7 @@ public class WebCustomerController extends BaseController{
 		customerLogic.editSave(customer);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
 	
 	/**
 	 * commission
@@ -433,9 +439,9 @@ public class WebCustomerController extends BaseController{
 		
 		QrCode.createZxing(payUrl, response.getOutputStream());
 		response.flushBuffer();
-		
-		
+
 	}
+	
 	/**
 	 * 支付宝获取支付链接
 	 * @param searchForm
@@ -447,7 +453,6 @@ public class WebCustomerController extends BaseController{
 	public ResponseEntity<String> getAliPayUrl(@PathVariable("orderId") Long orderId) throws IOException{
 		
 		Order order = orderLogic.getOrderById(orderId);
-		
 		String payUrl = iEMoney.aliPcPay(order.getTotalProductPrice()+"", order.getId()+"", order.getToCustomerName()+order.getToPhone(),order.getId()+ "-" + DateHelper.getYYYYMMDDhhmmss());
 		return new ResponseEntity<String>(payUrl,HttpStatus.OK);
 		
@@ -455,38 +460,56 @@ public class WebCustomerController extends BaseController{
 	
 	
 	/**
-	 * 支付直接返回
+	 * 同步返回结果
 	 * @param request
+	 * 
 	 */
 	@RequestMapping(value="/payment/return", method = RequestMethod.GET)
-	public ResponseEntity<String>  latipayReturn(HttpServletRequest request){
-		
-		String orderId = request.getParameter("merchant_reference");
-		String ret = "faild";
-		if(iEMoney.notifyCheck(request)){
-			orderLogic.update(Long.valueOf(orderId), "isPaid", OrderRepository.ispaid_yes + "");
-			orderLogic.updateProductStock(Long.valueOf(orderId));
-			ret = "success";
-		}
-		return new ResponseEntity<String>(ret,HttpStatus.OK);
-	}
-	
-	/**
-	 * 支付通知
-	 * @param request
-	 */
-	@RequestMapping(value="/payment/notice", method = RequestMethod.GET)
 	@ResponseBody
-	public String latipayCallback(HttpServletRequest request){
-		String orderId = request.getParameter("merchant_reference");
+	public String  payReturn(HttpServletRequest request){
+		
+		//out_trade_no = order.getId()+ "-" + DateHelper.getYYYYMMDDhhmmss();
+		String orderId = request.getParameter("out_trade_no").split("-")[0];
 		String ret = "faild";
-		if(iEMoney.callBackCheck(request)){
-			orderLogic.update(Long.valueOf(orderId), "isPaid", OrderRepository.ispaid_yes + "");
-			orderLogic.updateProductStock(Long.valueOf(orderId));
-			ret = "success";
+		logger.info("payment/return = " + orderId);
+		if(iEMoney.notifyCheck(request).equals("SUCCESS")){
+//			orderLogic.update(Long.valueOf(orderId), "isPaid", OrderRepository.ispaid_yes + "");
+//			orderLogic.updateProductStock(Long.valueOf(orderId));
+			ret = "SUCCESS";
 		}
 		return ret;
 	}
 	
+	/**
+	 * 异步支付通知
+	 * @param request
+	 */
+	@RequestMapping(value="/payment/notice", method = RequestMethod.GET)
+	@ResponseBody
+	public String payNotice(HttpServletRequest request){
+		//out_trade_no = order.getId()+ "-" + DateHelper.getYYYYMMDDhhmmss();
+		String orderId = request.getParameter("out_trade_no").split("-")[0];
+		logger.info("payment/notice = " + orderId);
+		String ret = "faild";
+		if(iEMoney.callBackCheck(request).equals("SUCCESS")){
+			orderLogic.update(Long.valueOf(orderId), "isPaid", OrderRepository.ispaid_yes + "");
+			orderLogic.updateProductStock(Long.valueOf(orderId));
+			ret = "SUCCESS";
+		}
+		return ret;
+	}
+	
+	/**
+	 * 获取tarcking
+	 * @param trackingNum
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping("/tracking/{trackingNum}")
+	public ResponseEntity<List<String>> getTracking(@PathVariable("trackingNum") String trackingNum) throws Exception {
+
+		
+		return new ResponseEntity<List<String>>(trackingDiyParcel.getTracking(trackingNum), HttpStatus.OK);
+	}
 	
 }

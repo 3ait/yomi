@@ -105,6 +105,8 @@ function productAdd(id, productName, productNameAlias, mpn, defaultSrc, price, n
 		price : price,
 		num : num
 	}
+	
+	
 	cart.addproduct(product);
 	
 
@@ -117,10 +119,12 @@ cart = {
 	// 向购物车中添加商品
 	addproduct : function(product) {
 		var ShoppingCart = utils.getParam("ShoppingCart");
+		 product.price = product.price==null?0:product.price;
 		if (ShoppingCart == null || ShoppingCart == "") {
 			if(product.num<0){
 				return;
 			}
+			
 			// 第一次加入商品
 			var jsonstr = {
 				"productlist" : [ {
@@ -135,7 +139,6 @@ cart = {
 				"totalNumber" : product.num,
 				"totalAmount" : (product.price * product.num)
 			};
-			
 			localStorage.setItem("totalNumber", jsonstr.totalNumber);
 			localStorage.setItem("totalAmount", jsonstr.totalAmount);
 			utils.setParam("ShoppingCart", "'" + JSON.stringify(jsonstr));
@@ -146,6 +149,7 @@ cart = {
 			}
 			
 		} else {
+			
 			var jsonstr = JSON.parse(ShoppingCart.substr(1, ShoppingCart.length));
 			var productlist = jsonstr.productlist;
 			var result = false;
@@ -277,5 +281,7 @@ cart = {
 		localStorage.setItem("totalNumber", jsonstr.totalNumber);
 		localStorage.setItem("totalAmount", jsonstr.totalAmount);
 		utils.setParam("ShoppingCart", "'" + JSON.stringify(jsonstr));
+
+		
 	}
 };

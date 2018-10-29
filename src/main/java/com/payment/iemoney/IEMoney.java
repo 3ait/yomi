@@ -4,8 +4,8 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 
 import com.payment.IPayment;
 import com.payment.epayment.MapKeyComparator;
-import com.plugin.utils.DateHelper;
 import com.plugin.utils.Md5;
 
 @Component
@@ -30,12 +29,17 @@ public class IEMoney implements IPayment {
 
 	private static Logger logger = LogManager.getLogger(IEMoney.class);
 	private String gateway = "https://mypay.iemoney.co.nz/api/online";
-	private String apiKey = "e560fb2e61e4d1fe6a11c278388cb965";
+	//测试
+//	private String apiKey = "e560fb2e61e4d1fe6a11c278388cb965";
+//	int mid = 10224;
+//	int tid = 10224;
+	//生产
+	private String apiKey = "a16351d9c197e8259c5f49bd0c577535";
+	int mid = 10543;
+	int tid = 10543;
 	
 	
-	private String payRate = "1.4";
-	int mid = 10224;
-	int tid = 10224;
+	private String payRate = "1";
 
 	/**
 	 *   'IE0011' = qrcode_alipay; 'IE0012' = web_alipay; 'IE0013' =
@@ -48,36 +52,62 @@ public class IEMoney implements IPayment {
 
 	
 	@Override
-	public String aliMobilePay(String total_fee, String goods, String goods_detail, String out_trade_no) {
-		return getPayUrl(total_fee, goods, goods_detail, out_trade_no, "IE0015",getAlipayPcReturnUrl(), getAlipayPcNotifyUrl());
-	}
-
-
-	@Override
 	public String wechatPcPay(String total_fee, String goods, String goods_detail, String out_trade_no) {
 		return getPayUrl(total_fee, goods, goods_detail, out_trade_no, "IE0021",getAlipayPcReturnUrl(), getAlipayPcNotifyUrl());
 	}
 
 
+
+	@Override
+	public String aliMobilePay(String total_fee, String goods, String goods_detail, String out_trade_no) {
+		return getPayUrl(total_fee, goods, goods_detail, out_trade_no, "IE0013",getAlipayPcReturnUrl(), getAlipayPcNotifyUrl());
+	}
+
 	@Override
 	public String wechatMobilePay(String total_fee, String goods, String goods_detail, String out_trade_no) {
-		return getPayUrl(total_fee, goods, goods_detail, out_trade_no, "IE0012",getAlipayPcReturnUrl(), getAlipayPcNotifyUrl());
+		return getPayUrl(total_fee, goods, goods_detail, out_trade_no, "IE0025",getAlipayPcReturnUrl(), getAlipayPcNotifyUrl());
 	}
 
 
 	
-
+	/**
+	 * 异步通知
+	 */
 	@Override
-	public boolean callBackCheck(HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		return false;
+	public String callBackCheck(HttpServletRequest request) {
+		//$url = $notify_url."?out_trade_no=".$out_trade_no."&trade_status=SUCCESS&pay_type=".$pay_type."&sign=".$sign;
+		//$sign = md5($out_trade_no.$pay_type.$api_key);
+		String trade_no = request.getParameter("trade_no");
+		String out_trade_no = request.getParameter("out_trade_no");
+		String sign = request.getParameter("sign");
+		
+		String ret = "Faild";
+		if(Md5.getMd5String(trade_no + out_trade_no + "SUCCESS" +  apiKey).equals(sign)){
+			ret = "SUCCESS";
+		}
+		logger.info("out_trade_no："+ out_trade_no + "sign："+ sign + "ret: " + ret);
+		return ret;
 	}
 
-
+	/**
+	 * 同步通知
+	 */
 	@Override
-	public boolean notifyCheck(HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		return false;
+	public String notifyCheck(HttpServletRequest request) {
+		// $url = $notify_url."?out_trade_no=".$out_trade_no."&trade_no=".$trade_no."&trade_status=SUCCESS&pay_type=".$pay_type."&sign=".$sign;
+		//$sign = md5($trade_no.$out_trade_no.'SUCCESS'.$api_key);
+		String pay_type = request.getParameter("pay_type");
+		String out_trade_no = request.getParameter("out_trade_no");
+		String trade_status = request.getParameter("trade_status");
+		String sign = request.getParameter("sign");
+		
+		String ret = "Faild";
+		if("TRADE_FINISHED".equals(trade_status)){
+			ret = "SUCCESS";
+			
+		}
+		logger.info("pay_type："+ pay_type + "out_trade_no："+ out_trade_no + "sign："+ sign + "ret: " + ret);
+		return ret;
 	}
 
 
@@ -121,14 +151,12 @@ public class IEMoney implements IPayment {
 	@Override
 	public String getAlipayMobileReturnUrl() {
 		return "http://www.ulife.co.nz/m/api/customer/payment/return";
-		
 	}
 
 	@Override
 	public String getAlipayMobileNotifyUrl() {
 		return "http://www.ulife.co.nz/m/api/customer/payment/notice";
 	}
-	
 	
 	@Override
 	public String getWechatPcReturnUrl() {
@@ -152,7 +180,7 @@ public class IEMoney implements IPayment {
 
 	/**
 	 * 支付请求
-	 * @param total_fee
+	 * @param total_fee  (cent)
 	 * @param goods
 	 * @param goods_detail
 	 * @param out_trade_no
@@ -171,10 +199,9 @@ public class IEMoney implements IPayment {
 			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
 			conn.setRequestProperty("Accept", "application/json");
 			conn.setRequestProperty("User-agent", "Mozilla/4.0");
-			// 设置文件长度
-			String data = this.getFormParam(total_fee, goods, goods_detail, out_trade_no,payCode, returnUrl,notifyUrl);
-			// conn.setRequestProperty("Content-Length",
-			// String.valueOf(data.length));
+			
+			String data = this.getFormParam(Double.valueOf(Double.valueOf(total_fee)*100).intValue()+"", goods, goods_detail, out_trade_no,payCode, returnUrl,notifyUrl);
+			conn.setRequestProperty("Content-Length",String.valueOf(data.length()));
 			conn.connect();
 			DataOutputStream writer = new DataOutputStream(conn.getOutputStream());
 			writer.write(data.getBytes());
@@ -188,7 +215,7 @@ public class IEMoney implements IPayment {
 			while ((readline = rd.readLine()) != null) {
 				sb.append(readline);
 			}
-			System.out.println(sb.toString());
+			logger.info(sb.toString());
 			JSONObject json = new JSONObject(sb.toString());
 			if ("SUCCESS".equals(json.getString("message"))) {
 				retUrl = json.getJSONObject("extra").getString("pay_url");
@@ -292,7 +319,7 @@ public class IEMoney implements IPayment {
 	 * 使用 Map按key进行排序
 	 * 
 	 * @param map
-	 * @return
+	 * @return private
 	 */
 	private static Map<String, String> sortMapByKey(Map<String, String> map) {
 		if (map == null || map.isEmpty()) {
@@ -318,7 +345,7 @@ public class IEMoney implements IPayment {
 
 		IEMoney ieMoney = new IEMoney();
 //		String s = ieMoney.aliPcPay("1.1", "goods", "good deatils",100 + "-" + DateHelper.getYYYYMMDDhhmmss());
-		
+		//http://www.test.com?out_trade_no=2123123213d213233d1212131b&trade_no=2018050421001003210531923654&trade_status=SUCCESS&pay_type=IE0012&sign=198e7f765ccaebbc2157ce5e936ee1ff
 		System.out.println(ieMoney.getRate());
 	}
 

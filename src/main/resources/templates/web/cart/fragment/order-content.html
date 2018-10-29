@@ -7,12 +7,12 @@
 	<div class="container" id="order-content" >
 		<form name="form" >
 		<div class="row" style="margin-top: 40px;border-bottom:1px solid #e7e7e7;">
-			<div class="col-sm-6 text-left">
+			<div class="col-xs-6 col-sm-6 text-left">
 				<h4>
 					<i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp; 我的购物车
 				</h4>
 			</div>
-			<div class="col-sm-6 text-right">
+			<div class="col-xs-6 col-sm-6 text-right">
 				<h4>
 					<span> 数量：{{totalNum}} </span>
 				</h4>
@@ -208,16 +208,16 @@
 				_this.totalAmount = getTotalAmount();
 				_this.customer = [[${customer}]];
 				
-				_this.toCustomerName = [[${customer.name}]] ;
-				_this.toCustomerCompanyName = [[${customer.companyName}]] ;
-				_this.toTel = [[${customer.tel}]] ;
-				_this.toPhone = [[${customer.phone}]] ;
-				_this.toAddress = [[${customer.address}]]  ;
-				_this.toShippingAddress = [[${customer.shippingAddress}]];
+				_this.toCustomerName = [[${customer.name}]] +"";
+				_this.toCustomerCompanyName = [[${customer.companyName}]]+"" ;
+				_this.toTel = [[${customer.tel}]]+"" ;
+				_this.toPhone = [[${customer.phone}]]+"" ;
+				_this.toAddress = [[${customer.address}]] +"" ;
+				_this.toShippingAddress = [[${customer.shippingAddress}]]+"";
 				
-				_this.toProvince = [[${customer.province}]];
-				_this.toCity = [[${customer.city}]];
-				_this.toDistrict = [[${customer.district}]];
+				_this.toProvince = [[${customer.province}]]+"";
+				_this.toCity = [[${customer.city}]]+"";
+				_this.toDistrict = [[${customer.district}]]+"";
 				
 				//获取可用优惠券
 				var _this = this;
@@ -240,7 +240,6 @@
 					if(cart.getproductlist()==null){
 						return;
 					}
-					
 					var _this = this;
 					
 					if(_this.toCustomerName.trim()==""){
@@ -264,7 +263,7 @@
 						this.$refs.toDistrict.focus();
 						return;
 					}
-					if(_this.toShippingAddress.trim()==""){
+					if(_this.toShippingAddress==""){
 						this.$refs.toShippingAddress.focus();
 						return;
 					}

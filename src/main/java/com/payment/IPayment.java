@@ -22,9 +22,9 @@ public interface IPayment {
 	public String wechatMobilePay(String total_fee,String goods,String goods_detail,String out_trade_no);
 	
 	
-	public boolean callBackCheck(HttpServletRequest request);
+	public String callBackCheck(HttpServletRequest request);
 	
-	public boolean notifyCheck(HttpServletRequest request);
+	public String notifyCheck(HttpServletRequest request);
 	
 	public Double getRate();
 	

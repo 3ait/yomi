@@ -105,7 +105,7 @@ public class Latipay implements IPayment {
 	}
 
 	@Override
-	public boolean callBackCheck(HttpServletRequest request) {
+	public String callBackCheck(HttpServletRequest request) {
 		
 		boolean ret = false;
 		// "merchant_reference": "dsi39ej430sks03",
@@ -135,11 +135,11 @@ public class Latipay implements IPayment {
 			// Latipay服务器期望收到此文本
 			ret = true;
 		}
-		return ret;
+		return ret+"";
 	}
 
 	@Override
-	public boolean notifyCheck(HttpServletRequest request) {
+	public String notifyCheck(HttpServletRequest request) {
 		// 签名文本: merchant_reference + payment_method + status + currency +
 		// amount
 		String merchant_reference = request.getParameter("merchant_reference") + "";
@@ -164,7 +164,7 @@ public class Latipay implements IPayment {
 		} else {
 			ret = "订单不存在。";
 		}
-		return false;
+		return ret;
 	}
 
 	@Override

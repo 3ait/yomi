@@ -23,12 +23,14 @@ import com.datas.easyorder.db.dao.CustomerToAddressRepository;
 import com.datas.easyorder.db.dao.OrderItemRepository;
 import com.datas.easyorder.db.dao.OrderRepository;
 import com.datas.easyorder.db.dao.ProductRepository;
+import com.datas.easyorder.db.dao.RankProductPriceRepository;
 import com.datas.easyorder.db.dao.UserCompanyRepository;
 import com.datas.easyorder.db.entity.Customer;
 import com.datas.easyorder.db.entity.CustomerToAddress;
 import com.datas.easyorder.db.entity.Order;
 import com.datas.easyorder.db.entity.OrderItem;
 import com.datas.easyorder.db.entity.Product;
+import com.datas.easyorder.db.entity.RankProductPrice;
 import com.datas.easyorder.db.entity.UserCompany;
 
 @Component("cartLogic")
@@ -48,6 +50,8 @@ public class CartLogic{
 	CustomerRepository customerRepository;
 	@Autowired
 	CouponLogic couponLogic;
+	@Autowired
+	RankProductPriceRepository rankProductPriceRepository;
 	
 	//default defaultCommissionPercentage
 	private double defaultCommissionPercentage = 0.15D;
@@ -126,10 +130,20 @@ public class CartLogic{
 				List<OrderItem> orderItemList = new ArrayList<>();
 				for(int i=0;i<products.length();i++){
 					JSONObject pJson = products.getJSONObject(i);
-					Product p = productRepository.findOneByIdAndStatusNot(pJson.getLong("id"), (byte)0);
+					Product p = productRepository.findOneByIdAndStatusNot(pJson.getLong("id"), ProductRepository.status_cancelled);
 					
-					//价格
-					double price = p.getPrice2()>0?p.getPrice2():p.getPrice1();
+					//价格计算,如果促销价大于0按照促销价，否则获取用户等级价格，如果用户没有等级，则默认价格
+					double price = p.getPrice1();
+					if(p.getPrice2()>0){
+						price = p.getPrice2();
+					}else{
+						if(customer.getRankCustomer()!=null){
+							RankProductPrice rankProductPrice = rankProductPriceRepository.findOneByProductIdAndRankCustomerId(p.getId(), customer.getId());
+							if(rankProductPrice!=null){
+								price = rankProductPrice.getPrice();
+							}
+						}
+					}
 					
 					OrderItem oi = new OrderItem();
 					oi.setNum(pJson.getInt("num"));
@@ -178,8 +192,6 @@ public class CartLogic{
 				order.setToDistrict(placeOrderForm.getToDistrict());
 				//default commision 0.15
 				order.setSalesCommissionPercentage(defaultCommissionPercentage);
-				
-				
 				
 				if(placeOrderForm.getSalesId()!=null){
 					Customer sales = customerRepository.findOne(placeOrderForm.getSalesId());
