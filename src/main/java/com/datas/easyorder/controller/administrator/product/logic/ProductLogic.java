@@ -26,6 +26,7 @@ import com.datas.easyorder.controller.administrator.product.view.ProductEditView
 import com.datas.easyorder.controller.administrator.product.view.ProductForm;
 import com.datas.easyorder.controller.administrator.product.view.ProductMulitPrice;
 import com.datas.easyorder.controller.administrator.product.view.RankPrice;
+import com.datas.easyorder.controller.web.product.view.ProductView;
 import com.datas.easyorder.db.dao.AttachmentRepository;
 import com.datas.easyorder.db.dao.BranchProductRepository;
 import com.datas.easyorder.db.dao.BranchRepository;
@@ -33,14 +34,19 @@ import com.datas.easyorder.db.dao.MenuRepository;
 import com.datas.easyorder.db.dao.ProductAttrRepository;
 import com.datas.easyorder.db.dao.ProductRepository;
 import com.datas.easyorder.db.dao.ProductSpecifications;
+import com.datas.easyorder.db.dao.RankCustomerRepository;
+import com.datas.easyorder.db.dao.RankProductPriceRepository;
 import com.datas.easyorder.db.entity.Attachment;
 import com.datas.easyorder.db.entity.Branch;
 import com.datas.easyorder.db.entity.BranchProduct;
+import com.datas.easyorder.db.entity.Customer;
 import com.datas.easyorder.db.entity.Menu;
 import com.datas.easyorder.db.entity.Product;
 import com.datas.easyorder.db.entity.ProductAttr;
 import com.datas.easyorder.db.entity.ProductAttrKey;
 import com.datas.easyorder.db.entity.ProductAttrValue;
+import com.datas.easyorder.db.entity.RankCustomer;
+import com.datas.easyorder.db.entity.RankProductPrice;
 import com.datas.utils.SearchForm;
 import com.plugin.utils.DateHelper;
 
@@ -65,7 +71,10 @@ public class ProductLogic extends BaseLogic<Product>{
 	BranchRepository branchRepository;
 	@Autowired
 	BranchProductRepository branchProductRepository;
-	
+	@Autowired
+	RankCustomerRepository rankCustomerRepository;
+	@Autowired
+	RankProductPriceRepository rankProductPriceRepository;
 	
 	/**
 	 * search
@@ -209,6 +218,19 @@ public class ProductLogic extends BaseLogic<Product>{
 			list.add(bp);
 		});
 		branchProductRepository.save(list);
+		//增加多价格
+		Iterable<RankCustomer> itrRankCustomer = rankCustomerRepository.findAll();
+		List<RankProductPrice> listRankProductPrice = new ArrayList<>();
+		itrRankCustomer.forEach(r ->{
+			RankProductPrice rpp = new RankProductPrice();
+			rpp.setProduct(product);
+			rpp.setRankCustomer(r);
+			rpp.setPrice(0D);
+			rpp.setPrice1(0D);
+			listRankProductPrice.add(rpp);
+		});
+		rankProductPriceRepository.save(listRankProductPrice);
+		
 	}
 
 	/**
@@ -373,6 +395,8 @@ public class ProductLogic extends BaseLogic<Product>{
 		productAttrRepository.delete(productAttrRepository.findByProductId(productId));
 		//删除库存
 		branchProductRepository.delete(branchProductRepository.findAllByProductId(productId));
+		//删除多价格
+		rankProductPriceRepository.delete(rankProductPriceRepository.findAllByProductId(productId));
 		//删除产品
 		productRepository.delete(productId);
 	}
@@ -725,7 +749,99 @@ public class ProductLogic extends BaseLogic<Product>{
 			});
 			branchProductRepository.save(list);
 		}
+	}
+	
+	
+	/**
+	 * product 根据Customer rank 获取产品价格
+	 * @param productPage
+	 * @return Page<Product> -> Page<ProductView>
+	 * 
+	 */
+	@Deprecated
+	@Transactional(rollbackOn = Exception.class)
+	public Page<ProductView> productTransfer(Page<Product> productPage,Customer customer){
 		
+		List<ProductView> pvList = new ArrayList<>();
+		productPage.getContent().forEach(p -> {
+			
+			ProductView productView = new ProductView();
+			productView.setProduct(p);
+			if(customer.getRankCustomer()!=null){
+				RankProductPrice rankProductPrice = rankProductPriceRepository.findOneByProductIdAndRankCustomerId(p.getId(),customer.getRankCustomer().getId());
+				
+				productView.setRankProductPriceId(rankProductPrice.getId());
+				productView.setRankProductPricePrice(rankProductPrice.getPrice());
+				
+				RankCustomer rankCustomer = rankCustomerRepository.findOne(rankProductPrice.getRankCustomer().getId());
+				productView.setRankCustomerId(rankCustomer.getId());
+				productView.setRankCustomerRankLevel(rankCustomer.getRankLevel());
+				productView.setRankCustomerRankDesc(rankCustomer.getRankDesc());
+				
+			}else{
+				productView.setRankProductPricePrice(p.getPrice1());
+			}
+			pvList.add(productView);
+		});
 		
+		Pageable pageable = new PageRequest(productPage.getNumber(),productPage.getSize(), productPage.getSort());
+		Page<ProductView> page = new PageImpl<>(pvList,pageable,productPage.getTotalElements());
+		
+		return page;
+	}
+	
+	
+	/**
+	 * 根据客户等级价格获取单独价格
+	 * @param productEditView
+	 * @param customer
+	 * @return ProductEditView
+	 */
+	@org.springframework.transaction.annotation.Transactional(readOnly = true)
+	public ProductEditView getSingleProductCustomerPrice(ProductEditView productEditView,Customer customer){
+		if(customer==null){
+			productEditView.getProduct().setPrice3(0D);
+		}else{
+			if(customer.getRankCustomer()!=null){
+				RankProductPrice rankProductPrice = rankProductPriceRepository.findOneByProductIdAndRankCustomerId(productEditView.getProduct().getId(),customer.getRankCustomer().getId());
+				if(rankProductPrice!=null){
+					productEditView.getProduct().setPrice3(rankProductPrice.getPrice());
+				}
+			}else{
+				productEditView.getProduct().setPrice3(productEditView.getProduct().getPrice1());
+			}
+		}
+		
+		return productEditView;
+	}
+	
+	
+	/**
+	 * 根据custmer Rank获取产品价格，放在product.price3里面
+	 * @param productPage
+	 * @param customer
+	 * @return Page<Product>
+	 */
+	@org.springframework.transaction.annotation.Transactional(readOnly = true)
+	public Page<Product> getCustomerRankPrice(Page<Product> productPage,Customer customer){
+		
+		if(customer==null){
+			productPage.getContent().forEach(p -> {
+				p.setPrice3(0D);
+			});
+		}else{
+			productPage.getContent().forEach(p -> {
+				if(customer.getRankCustomer()!=null){
+					RankProductPrice rankProductPrice = rankProductPriceRepository.findOneByProductIdAndRankCustomerId(p.getId(),customer.getRankCustomer().getId());
+					if(rankProductPrice!=null){
+						p.setPrice3(rankProductPrice.getPrice());
+					}
+				}else{
+					p.setPrice3(p.getPrice1());
+				}
+			});
+		}
+		
+		return productPage;
 	}
 }

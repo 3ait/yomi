@@ -126,17 +126,6 @@ public class WebProductController extends BaseController<Product>{
 		
 		ModelAndView modelAndView = new ModelAndView("web/product/product-list");
 		
-	/*	searchform.setSortBy("productName");
-		searchform.setSort("ASC");
-
-		Pageable pageable = new PageRequest(searchform.getPage()-1<1?0:searchform.getPage()-1, searchform.getSize(),Direction.fromString(searchform.getSort()),searchform.getSortBy());
-		
-		searchform.setStatus(0);
-		Page<Product> productPage = productLogic.productSearch(searchform,pageable);
-		
-		super.setPage(modelAndView, productPage, searchform);
-		modelAndView.addObject("productList", productPage);*/
-		
 		modelAndView.addObject("categoryId", -1);
 
 		
@@ -182,13 +171,12 @@ public class WebProductController extends BaseController<Product>{
 	public ModelAndView getProductById(@PathVariable(value="productId") Long productId,HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView("web/product/product-detail");
 		
-		ProductEditView productEditView = productLogic.getProdcutViewById(productId);
+		ProductEditView productEditView = productLogic.getSingleProductCustomerPrice(productLogic.getProdcutViewById(productId),super.getLoginCustomer(request));
 		modelAndView.addObject("productEditView",productEditView);
 		modelAndView.addObject("rate",super.getRate(request));
 		
 		return modelAndView;
 	}
-	
 	
 	/**
 	 * 特别产品跳转

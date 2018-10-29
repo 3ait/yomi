@@ -53,6 +53,9 @@ public class Product implements java.io.Serializable {
 	private Integer unit;
 	private Integer unitQty;
 	private Double stock;
+	private String volume;
+	private String groupName;
+	private Double warningStock;
 	private Double presellStock;
 	private Double weight;
 	private Integer clickNum;
@@ -95,11 +98,11 @@ public class Product implements java.io.Serializable {
 	public Product(double price1) {
 		this.price1 = price1;
 	}
-
+	
 	public Product(Menu menu, String mpn, String sku, String productName, String productNameAlias, String defaultSrc,
 			Double cost, double price1, Double price2, Double price3, Double price4, Byte status, Byte hot,
 			Byte promote, Byte frontPage, Byte recommend, Integer soldNum, String batch, Integer unit, Integer unitQty,
-			Double stock, Double presellStock, Double weight, Integer clickNum, String summary, String description,
+			Double stock, String volume,String groupName,Double warningStock, Double presellStock, Double weight, Integer clickNum, String summary, String description,
 			String seoKeywords, String seoDesc, Date createTime, Date modifyTime, String location, String label,
 			Integer position, String mobileDefaultSrc, String mobileDefaultDesc, String norms, Set<Reply> replies,
 			Set<OrderItem> orderItems, Set<BranchProduct> branchProducts, Set<Attachment> attachments,
@@ -127,6 +130,10 @@ public class Product implements java.io.Serializable {
 		this.unit = unit;
 		this.unitQty = unitQty;
 		this.stock = stock;
+		this.volume = volume;
+		this.groupName = groupName;
+		this.warningStock = warningStock;
+		
 		this.presellStock = presellStock;
 		this.weight = weight;
 		this.clickNum = clickNum;
@@ -354,6 +361,33 @@ public class Product implements java.io.Serializable {
 
 	public void setStock(Double stock) {
 		this.stock = stock;
+	}
+
+	@Column(name = "volume", length = 256)
+	public String getVolume() {
+		return volume;
+	}
+
+	public void setVolume(String volume) {
+		this.volume = volume;
+	}
+	@Column(name = "group_name", length = 256)
+	public String getGroupName() {
+		return groupName;
+	}
+	
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
+	
+	@Column(name = "warning_stock", precision = 10)
+	public Double getWarningStock() {
+		return warningStock;
+	}
+
+
+	public void setWarningStock(Double warningStock) {
+		this.warningStock = warningStock;
 	}
 
 	@Column(name = "presell_stock", precision = 10)

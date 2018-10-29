@@ -1,6 +1,7 @@
 package com.datas.easyorder.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.datas.easyorder.db.dao.UserRepository;
+import com.datas.easyorder.db.entity.Customer;
 import com.datas.easyorder.db.entity.User;
 import com.datas.utils.SearchForm;
 import com.payment.iemoney.IEMoney;
@@ -43,6 +45,17 @@ public abstract class BaseController<T> {
 		}
 		
 		return rate;
+	}
+	
+	/**
+	 * 获取登陆cusgoomer
+	 * @param request
+	 * @return
+	 */
+	public Customer getLoginCustomer(HttpServletRequest request){
+		HttpSession session = request.getSession(true);
+		Customer customer = (Customer) session.getAttribute(BaseController.SESSION_CUSTOMER);
+		return customer;
 	}
 	
 	

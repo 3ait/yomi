@@ -15,18 +15,23 @@
 					<a :href="'/product/'+ item.id" target="_blank" @click="addHistory(item.id,item.productName,item.productNameAlias,item.defaultSrc,item.price1)" >
 						<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive">
 					</a>
-				      <div class="caption" >
-				        <p>
-							<span v-if="item.price2>0" class="price-color" >NZD {{item.price2}}&nbsp;</span> 
-				        	<span :class="item.price2>0 ? 'price-del':'price-color'" >NZD {{item.price1}}</span> 
-				        </p>
-			        	<span style="color: grey;font-size: 12px;">{{item.productName}}</span>
-			        	
-				        <p style="margin-top: 10px;">
-							<span class="label label-danger">{{item.label}}</span>
-<!-- 						    <i class="fa fa-shopping-cart fa-2x cart-icon pull-right" aria-hidden="true" style="cursor: pointer;"></i> -->
-				        </p>
-				      </div>
+			      <div class="caption" >
+			        <p>
+			        	<span v-if="item.price3==0">
+							<span  :class="item.price2>0 ? 'price-del':'price-color'">NZD {{item.price1}}</span> 
+							<span v-if="item.price2>0" class="price-color" >NZD {{item.price2}}&nbsp;</span>
+			        	</span>
+			        	<span v-else>
+							<span  :class="item.price2>0 ? 'price-del':'price-color'">NZD {{item.price3}}</span> 
+							<span v-if="item.price2>0" class="price-color" >NZD {{item.price2}}&nbsp;</span>
+			        	</span>
+			        </p>
+		        	<span style="color: grey;font-size: 12px;">{{item.productName}}</span>
+		        	
+			        <p style="margin-top: 10px;">
+						<span class="label label-danger">{{item.label}}</span>
+			        </p>
+			      </div>
 			    </div>
 		    </div>
 		    <br/>

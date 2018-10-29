@@ -44,32 +44,7 @@ public class ApiIndexController extends BaseController {
 		return new ResponseEntity<List<Attachment>>(list, HttpStatus.OK);
 	}
 	
-	/**
-	 *  m 
-	 * @param searchForm
-	 * @return
-	 */
-	@RequestMapping("/product/list/hot")
-	public ResponseEntity<Page<Product>> hotProduct(@ModelAttribute SearchForm searchForm) {
-		
-		Pageable pageable = new PageRequest(0, searchForm.getSize(),Direction.fromString(searchForm.getSort()),searchForm.getSortBy());
-		Page<Product> pageProduct = productLogic.getHotProduct(pageable);
-		return new ResponseEntity<Page<Product>>(pageProduct, HttpStatus.OK);
-	}
-	@RequestMapping("/product/list/recommend")
-	public ResponseEntity<Page<Product>> recommendProduct(@ModelAttribute SearchForm searchForm) {
-		Pageable pageable = new PageRequest(0, searchForm.getSize(),Direction.fromString(searchForm.getSort()),searchForm.getSortBy());
-		
-		Page<Product> pageProduct = productLogic.getRecommendProduct(pageable);
-		return new ResponseEntity<Page<Product>>(pageProduct, HttpStatus.OK);
-	}
-	@RequestMapping("/product/list/frontpage")
-	public ResponseEntity<Page<Product>> frontPage(@ModelAttribute SearchForm searchForm) {
-		Pageable pageable = new PageRequest(0, searchForm.getSize(),Direction.fromString(searchForm.getSort()),searchForm.getSortBy());
-		
-		Page<Product> pageProduct = productLogic.getFrontPageProduct(pageable);
-		return new ResponseEntity<Page<Product>>(pageProduct, HttpStatus.OK);
-	}
+	
 
 	@RequestMapping("/product/search")
 	public ResponseEntity<Page<Product> > productList(@PathVariable("categoryId") Long categoryId,

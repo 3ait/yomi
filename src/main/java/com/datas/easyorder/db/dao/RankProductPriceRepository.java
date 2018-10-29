@@ -12,6 +12,8 @@ public interface RankProductPriceRepository extends CrudRepository<RankProductPr
 
 	List<RankProductPrice> findAllByRankCustomerId(Long rankCustomerId);
 	 
-
+	List<RankProductPrice> findAllByProductId(Long productId);
+	
+	RankProductPrice findOneByProductIdAndRankCustomerId(Long productId,Long rankCustomerId);
 
 }

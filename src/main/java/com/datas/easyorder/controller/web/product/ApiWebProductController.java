@@ -2,6 +2,8 @@ package com.datas.easyorder.controller.web.product;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +26,7 @@ import com.datas.easyorder.db.entity.Menu;
 import com.datas.easyorder.db.entity.Product;
 import com.datas.easyorder.db.entity.ProductAttrValue;
 import com.datas.utils.SearchForm;
+
 
 /**
  * 
@@ -81,17 +84,17 @@ public class ApiWebProductController extends BaseController{
 	@RequestMapping("/list")
 	public HttpEntity<Page<Product>> getProducts(@RequestParam(value="categoryId", defaultValue="-1",required = false) Long categoryId, 
 			@RequestParam(value="productAttributeValueIds",required = false) Long[] productAttributeValueIds,
-			@ModelAttribute("searchForm") SearchForm searchForm) {
+			@ModelAttribute("searchForm") SearchForm searchForm,HttpServletRequest request) {
 
 		Pageable pageable = new PageRequest(searchForm.getPage(), searchForm.getSize(), Direction.fromString(searchForm.getSort()), searchForm.getSortBy());
 
 		Page<Product> productPage = null;
 		if(categoryId>0){
-			productPage = productLogic.searchProductByAttrAndCategory(categoryId, productAttributeValueIds, pageable);
+			productPage = productLogic.getCustomerRankPrice(productLogic.searchProductByAttrAndCategory(categoryId, productAttributeValueIds, pageable), super.getLoginCustomer(request));
 		}
 		
 		if(searchForm.getQ() != null && searchForm.getQ().length() > 0){
-			productPage = productLogic.searchProductByAttrAndQ(searchForm.getQ(), productAttributeValueIds, pageable);
+			productPage = productLogic.getCustomerRankPrice(productLogic.searchProductByAttrAndQ(searchForm.getQ(), productAttributeValueIds, pageable), super.getLoginCustomer(request));
 		}
 
 		return new ResponseEntity<Page<Product>>(productPage, HttpStatus.OK);
@@ -105,12 +108,51 @@ public class ApiWebProductController extends BaseController{
 	 */
 	@RequestMapping("/attrvalue/{productAttrValueId}")
 	public HttpEntity<Page<Product>> getProductByProductAttrValueId( @PathVariable("productAttrValueId") Long productAttrValueId,
-			@ModelAttribute("searchForm")  SearchForm searchForm) {
+			@ModelAttribute("searchForm")  SearchForm searchForm,HttpServletRequest request) {
 		
 		Pageable pageable = new PageRequest(searchForm.getPage(), searchForm.getSize(), Direction.fromString(searchForm.getSort()), searchForm.getSortBy());
 
-		Page<Product> page = productLogic.getProductByAttrValueId(productAttrValueId, pageable);
+		Page<Product> page = productLogic.getCustomerRankPrice(productLogic.getProductByAttrValueId(productAttrValueId, pageable), super.getLoginCustomer(request));
 		return new ResponseEntity<Page<Product>>(page, HttpStatus.OK);
 	}	
 	
+	
+	/**
+	 *  热销
+	 * @param searchForm
+	 * @return
+	 */
+	@RequestMapping("/list/hot")
+	public ResponseEntity<Page<Product>> hotProduct(@ModelAttribute SearchForm searchForm,HttpServletRequest request) {
+		
+		Pageable pageable = new PageRequest(0, searchForm.getSize(),Direction.fromString(searchForm.getSort()),searchForm.getSortBy());
+		Page<Product> pageProduct = productLogic.getCustomerRankPrice(productLogic.getHotProduct(pageable), super.getLoginCustomer(request));
+		return new ResponseEntity<Page<Product>>(pageProduct, HttpStatus.OK);
+	}
+	
+	/**
+	 * 推荐产品
+	 * @param searchForm
+	 * @return
+	 */
+	@RequestMapping("/list/recommend")
+	public ResponseEntity<Page<Product>> recommendProduct(@ModelAttribute SearchForm searchForm,HttpServletRequest request) {
+		Pageable pageable = new PageRequest(0, searchForm.getSize(),Direction.fromString(searchForm.getSort()),searchForm.getSortBy());
+		
+		Page<Product> pageProduct = productLogic.getCustomerRankPrice(productLogic.getRecommendProduct(pageable), super.getLoginCustomer(request)) ;
+		return new ResponseEntity<Page<Product>>(pageProduct, HttpStatus.OK);
+	}
+	
+	/**
+	 * 首页
+	 * @param searchForm
+	 * @return
+	 */
+	@RequestMapping("/list/frontpage")
+	public ResponseEntity<Page<Product>> frontPage(@ModelAttribute SearchForm searchForm,HttpServletRequest request) {
+		Pageable pageable = new PageRequest(0, searchForm.getSize(),Direction.fromString(searchForm.getSort()),searchForm.getSortBy());
+		
+		Page<Product> pageProduct = productLogic.getCustomerRankPrice(productLogic.getFrontPageProduct(pageable), super.getLoginCustomer(request));
+		return new ResponseEntity<Page<Product>>(pageProduct, HttpStatus.OK);
+	}
 }
