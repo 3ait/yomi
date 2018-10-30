@@ -34,9 +34,9 @@ public class IEMoney implements IPayment {
 //	int mid = 10224;
 //	int tid = 10224;
 	//生产
-	private String apiKey = "a16351d9c197e8259c5f49bd0c577535";
-	int mid = 10543;
-	int tid = 10543;
+	private String apiKey = "342a97c6a878cb56f425f81537a48d02";
+	int mid = 10635;
+	int tid = 10635;
 	
 	
 	private String payRate = "1";
