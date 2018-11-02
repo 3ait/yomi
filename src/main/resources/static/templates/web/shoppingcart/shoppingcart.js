@@ -4,23 +4,19 @@
 
 function getFreight(productList){
 	//基础费用
-	var basePrice = 2.0;
+	var basePrice = 0;
 	//每公斤单价
-	var pricePerKg = 5.5;
-	//玻璃瓶每个产品额外加1.2, 玻璃瓶放在了location的字段中
-	var glass = 1.2;
+	var pricePerKg = 5.0;
 	
 	var freight = basePrice;
 	for(var i=0;i< productList.length;i++){
 		  if (!isNaN(productList[i].weight)) {
-			  //运费计算
-			  if(productList[i].location.indexOf('玻璃瓶')!=-1){
-				  freight += (productList[i].weight*pricePerKg*productList[i].num + productList[i].num*glass);
-			  }else{
-				  freight += (productList[i].weight*pricePerKg*productList[i].num + productList[i].num*0);
-			  }
+			  freight += productList[i].weight*pricePerKg*productList[i].num
 	        }
 	  }
+	if(freight<5){
+		freight = 5.0;
+	}
 	return freight.toFixed(2);
 }
 
