@@ -66,8 +66,14 @@
 						</a>
 					</div>
 				<br/>
+				<h4 >
+					产品:&nbsp;<span class="color"> ${{totalAmount}}</span>
+				</h4>
 				<h4>
-					合计: &nbsp; $<span class="color"> {{totalAmount}}</span>
+					运费: &nbsp;<span class="color"> ${{freight}}</span>
+				</h4>
+				<h4>
+					合计: &nbsp;<span class="color"> ${{(parseFloat(totalAmount) +  parseFloat(freight)).toFixed(2) }}</span>
 				</h4>
 			</div>
 		</div>
@@ -179,6 +185,7 @@
 				
 				totalNum:0,
 				totalAmount:0,
+				freight:0,
 				toCustomerName:'',
 				toCustomerCompanyName:'',
 				toTel:'',
@@ -203,7 +210,7 @@
 				        }
 					  
 				  }
-				
+			 	_this.freight = getFreight(cart.getproductlist());	
 				_this.totalNum = getTotalNumber();
 				_this.totalAmount = getTotalAmount();
 				_this.customer = [[${customer}]];
@@ -284,6 +291,7 @@
 					usp.append("toCity",_this.toCity+"");
 					usp.append("toDistrict",_this.toDistrict+"");
 					usp.append("couponId",_this.couponId+"");
+					usp.append("totalFreight",_this.freight+"");
 					
 					axios.post([[@{/customer/cart/order/place}]],
 							usp,).then(function (response){

@@ -126,7 +126,6 @@ public class CartLogic{
 				JSONArray products = new JSONArray(placeOrderForm.getProductList());
 				
 				Double totalPrice = 0D;
-				Double totalFreight = 0D;
 				List<OrderItem> orderItemList = new ArrayList<>();
 				for(int i=0;i<products.length();i++){
 					JSONObject pJson = products.getJSONObject(i);
@@ -157,7 +156,6 @@ public class CartLogic{
 					orderItemList.add(oi);
 					
 					totalPrice += pJson.getInt("num")*price;
-					totalFreight += p.getWeight()==null?0:p.getWeight();
 					
 					p.setSoldNum(p.getSoldNum()+pJson.getInt("num"));
 					p.setStock(p.getStock()-oi.getNum());
@@ -170,7 +168,7 @@ public class CartLogic{
 				order.setIsPaid(OrderRepository.ispaid_no);
 				order.setSettled(0);
 				order.setTotalProductPrice(totalPrice);
-				order.setTotalFreight(totalFreight);
+				order.setTotalFreight(placeOrderForm.getTotalFreight());
 				order.setStatus(OrderRepository.status_new);
 				order.setCreateTime(Calendar.getInstance().getTime());
 				order.setModifyTime(Calendar.getInstance().getTime());

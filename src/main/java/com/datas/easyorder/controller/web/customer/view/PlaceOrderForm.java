@@ -18,7 +18,7 @@ public class PlaceOrderForm {
 	
 	private Long couponId;
 	private Long salesId;
-	
+	private Double totalFreight = 0D;
 	
 	
 	public String getCustomerMsg() {
@@ -104,6 +104,12 @@ public class PlaceOrderForm {
 	}
 	public void setCouponId(Long couponId) {
 		this.couponId = couponId;
+	}
+	public Double getTotalFreight() {
+		return totalFreight;
+	}
+	public void setTotalFreight(Double totalFreight) {
+		this.totalFreight = totalFreight;
 	}
 	
 	

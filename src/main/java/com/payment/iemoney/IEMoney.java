@@ -325,7 +325,6 @@ public class IEMoney implements IPayment {
 		if (map == null || map.isEmpty()) {
 			return null;
 		}
-
 		Map<String, String> sortMap = new TreeMap<String, String>(new MapKeyComparator());
 
 		sortMap.putAll(map);
@@ -342,11 +341,11 @@ public class IEMoney implements IPayment {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-
 		IEMoney ieMoney = new IEMoney();
-//		String s = ieMoney.aliPcPay("1.1", "goods", "good deatils",100 + "-" + DateHelper.getYYYYMMDDhhmmss());
+		//String s = ieMoney.aliPcPay("1.1", "goods", "good deatils",100 + "-" + DateHelper.getYYYYMMDDhhmmss());
 		//http://www.test.com?out_trade_no=2123123213d213233d1212131b&trade_no=2018050421001003210531923654&trade_status=SUCCESS&pay_type=IE0012&sign=198e7f765ccaebbc2157ce5e936ee1ff
 		System.out.println(ieMoney.getRate());
+		
 	}
 
 }

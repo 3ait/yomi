@@ -46,6 +46,9 @@
 		<div class="row">
 			<div class="col-sm-12 text-right">
 				<h4>
+					运费: &nbsp;<span class="color"> ${{freight}}</span>
+				</h4>
+				<h4>
 					合计: &nbsp;<span class="color"> ${{totalAmount}}</span>
 				</h4>
 			</div>
@@ -72,6 +75,7 @@
 				productList:[],
 				totalNum:0,
 				totalAmount:0,
+				freight:0,
 			},
 			created: function() {
 				var ShoppingCart = utils.getParam("ShoppingCart");
@@ -88,6 +92,7 @@
 				}
 				_this.totalNum = getTotalNumber();
 				_this.totalAmount = getTotalAmount();
+				_this.freight = getFreight(cart.getproductlist());
 			},
 			methods:{
 				updateNum : function(id,event){
@@ -108,6 +113,7 @@
 					//更新页面值
 					_this.totalNum = totalNumber;
 					_this.totalAmount = totalAmount;
+					_this.freight = getFreight(cart.getproductlist());
 				},
 				del : function(id){
 					var _this = this;

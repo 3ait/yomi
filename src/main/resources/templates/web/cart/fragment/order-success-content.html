@@ -7,7 +7,7 @@
 	<div class="container" style="min-height:400px;" id="payment">
 		<div class="row" style="margin-top: 40px;border-bottom:1px solid #e7e7e7;">
 			<h3>已下单</h3> 订单号:<th:block th:text="${order.id}"></th:block> &nbsp;&nbsp;&nbsp; 
-			总价格(纽币) $:<th:block th:text="${#numbers.formatDecimal(order.totalProductPrice,1,2)}"></th:block>
+			总价格(纽币) $:<th:block th:text="${#numbers.formatDecimal((order.totalProductPrice + order.totalFreight),1,2)}"></th:block>
 			&nbsp;&asymp;&nbsp;<span  style="color: #e4393c;font-size: 12px;" >RMB</span><span th:text="${#numbers.formatDecimal(order.totalProductPrice*rate,0,2)}" style="color: #e4393c;font-size: 18px;">约等于</span>
 		</div>
 		<br/>

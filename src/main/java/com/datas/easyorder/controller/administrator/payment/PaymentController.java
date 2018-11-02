@@ -100,7 +100,8 @@ public class PaymentController extends BaseController<CustomerPaymentHistory>{
 	 * 
 	 */
 	@RequestMapping("/save")
-	public ModelAndView save(@ModelAttribute(value="customerPaymentHistory") CustomerPaymentHistory customerPaymentHistory,
+	@ResponseBody
+	public void  save(@ModelAttribute(value="customerPaymentHistory") CustomerPaymentHistory customerPaymentHistory,
 			@RequestParam("hiddenId") Long hiddenId, 
 			@RequestParam("invoiceId") Long invoiceId, 
 			HttpServletRequest request){
@@ -113,7 +114,6 @@ public class PaymentController extends BaseController<CustomerPaymentHistory>{
 		}
 		paymentLogic.savePayment(customerPaymentHistory, hiddenId,super.getLognUser());
 		
-		return new ModelAndView(new RedirectView("/management/invoice/",true));
 	}
 	
 	

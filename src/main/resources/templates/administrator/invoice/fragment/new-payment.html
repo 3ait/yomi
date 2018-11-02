@@ -13,8 +13,7 @@
 					<h4 class="modal-title">New Payment</h4>
 				</div>
 				<div class="modal-body">
-					<form id="saveForm" th:action="@{/management/payment/save}"
-						method="post">
+					<form id="saveForm"  >
 						<div class="form-group">
 							<label for="aliasId" class="control-label">InvoiceId:</label> 
 							<input type="text" class="form-control" id="aliasId" readonly="readonly" />
@@ -96,7 +95,19 @@
 				$("#companyName").focus();
 				return ;
 			}
-			$("#saveForm").submit();
+			//$("#saveForm").submit();
+			$.ajax({
+					url: [[@{/management/payment/save}]] ,//url
+					method: "POST",
+					data: $('#saveForm').serialize(),
+				}).done(function(ret){
+					if(ret=="success"){
+						$("#"+id_pre + imgId).remove();
+					}
+					window.location.reload();
+				});
+			
+
 			$('#myModal').modal('hide');
 			
 		}

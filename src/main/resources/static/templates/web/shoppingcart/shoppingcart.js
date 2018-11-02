@@ -1,8 +1,28 @@
 /**
- * localStorage cart
+ * 运费计算
  */
 
-
+function getFreight(productList){
+	//基础费用
+	var basePrice = 2.0;
+	//每公斤单价
+	var pricePerKg = 5.5;
+	//玻璃瓶每个产品额外加1.2, 玻璃瓶放在了location的字段中
+	var glass = 1.2;
+	
+	var freight = basePrice;
+	for(var i=0;i< productList.length;i++){
+		  if (!isNaN(productList[i].weight)) {
+			  //运费计算
+			  if(productList[i].location.indexOf('玻璃瓶')!=-1){
+				  freight += (productList[i].weight*pricePerKg*productList[i].num + productList[i].num*glass);
+			  }else{
+				  freight += (productList[i].weight*pricePerKg*productList[i].num + productList[i].num*0);
+			  }
+	        }
+	  }
+	return freight.toFixed(2);
+}
 
 
 /**
@@ -36,7 +56,7 @@ function addToHistory(id,productName,productNameAlias,defaultSrc,price){
 		viewHistoryList.unshift(history);
 	}
 	
-	if(viewHistoryList.length>6){
+	if(viewHistoryList.length>8){
 		viewHistoryList.pop();
 	}
 	
@@ -76,7 +96,6 @@ function showProductAfterAdd(){
 	if(cart.getproductlist()!=null){
 		for(var i=0;i<cart.getproductlist().length;i++){
 				var id = cart.getproductlist()[i].id;
-				
 				if(document.getElementById(id)!=null){
 					document.getElementById(id).innerHTML = '<i class="fa fa-shopping-cart" aria-hidden="true"></i>(' + cart.getproductlist()[i].num + ")";
 				}
@@ -90,23 +109,23 @@ function showProductAfterAdd(){
  * @param id
  * @param productName
  * @param productNameAlias
- * @param mpn
+ * @param location
+ * @param weight
  * @param defaultSrc
  * @param price
  * @param num
  */
-function productAdd(id, productName, productNameAlias, mpn, defaultSrc, price, num) {
+function productAdd(id, productName, productNameAlias, location,weight, defaultSrc, price, num) {
 	var product = {
 		id : id,
 		productName : productName,
 		productNameAlias : productNameAlias,
-		mpn : mpn,
+		location : location,
+		weight : weight,
 		defaultSrc : defaultSrc,
 		price : price,
 		num : num
 	}
-	
-	
 	cart.addproduct(product);
 	
 
@@ -119,7 +138,6 @@ cart = {
 	// 向购物车中添加商品
 	addproduct : function(product) {
 		var ShoppingCart = utils.getParam("ShoppingCart");
-		 product.price = product.price==null?0:product.price;
 		if (ShoppingCart == null || ShoppingCart == "") {
 			if(product.num<0){
 				return;
@@ -131,14 +149,16 @@ cart = {
 					"id" : product.id,
 					"productName" : product.productName,
 					"productNameAlias" : product.productNameAlias,
-					"mpn" : product.mpn,
 					"defaultSrc" : product.defaultSrc,
 					"price" : product.price,
+					"location" : product.location,
+					"weight" : product.weight,
 					"num" : product.num
 				} ],
 				"totalNumber" : product.num,
 				"totalAmount" : (product.price * product.num)
 			};
+			
 			localStorage.setItem("totalNumber", jsonstr.totalNumber);
 			localStorage.setItem("totalAmount", jsonstr.totalAmount);
 			utils.setParam("ShoppingCart", "'" + JSON.stringify(jsonstr));
@@ -149,7 +169,6 @@ cart = {
 			}
 			
 		} else {
-			
 			var jsonstr = JSON.parse(ShoppingCart.substr(1, ShoppingCart.length));
 			var productlist = jsonstr.productlist;
 			var result = false;
@@ -181,7 +200,8 @@ cart = {
 					"id" : product.id,
 					"productName" : product.productName,
 					"productNameAlias" : product.productNameAlias,
-					"mpn" : product.mpn,
+					"location" : product.location,
+					"weight" : product.weight,
 					"defaultSrc" : product.defaultSrc,
 					"price" : product.price,
 					"num" : product.num
@@ -230,7 +250,6 @@ cart = {
 	},
 	// 获取购物车中的所有商品
 	getproductlist : function() {
-		
 
 		var ShoppingCart = utils.getParam("ShoppingCart");
 		if(ShoppingCart==null){
@@ -281,7 +300,5 @@ cart = {
 		localStorage.setItem("totalNumber", jsonstr.totalNumber);
 		localStorage.setItem("totalAmount", jsonstr.totalAmount);
 		utils.setParam("ShoppingCart", "'" + JSON.stringify(jsonstr));
-
-		
 	}
 };
