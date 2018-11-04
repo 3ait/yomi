@@ -35,7 +35,7 @@
 		/*<![CDATA[*/
 		           
 		        var orderId = [[${order.id}]];
-		           
+		        
 				new Vue({
 					el:"#payment",
 					data:{
@@ -56,8 +56,8 @@
 						},
 						alipayPay : function(){
 							axios.get([[@{/customer/payment/alipay/}]] + orderId,{
-								
 							}).then(function (response){
+								  console.log(response.data);
 								  window.open(response.data,"newwindow");
 									
 							  }).catch(function (error) {

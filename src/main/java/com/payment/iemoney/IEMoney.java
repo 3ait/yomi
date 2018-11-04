@@ -29,15 +29,11 @@ public class IEMoney implements IPayment {
 
 	private static Logger logger = LogManager.getLogger(IEMoney.class);
 	private String gateway = "https://mypay.iemoney.co.nz/api/online";
-	//测试
-//	private String apiKey = "e560fb2e61e4d1fe6a11c278388cb965";
-//	int mid = 10224;
-//	int tid = 10224;
 	//生产
 	private String apiKey = "342a97c6a878cb56f425f81537a48d02";
 	int mid = 10635;
 	int tid = 10635;
-	
+	private String host = "http://www.yomi.co.nz";
 	
 	private String payRate = "1";
 
@@ -140,42 +136,42 @@ public class IEMoney implements IPayment {
 	
 	@Override
 	public String getAlipayPcReturnUrl() {
-		return "http://www.ulife.co.nz/customer/payment/return";
+		return host + "/customer/payment/return";
 	}
 
 	@Override
 	public String getAlipayPcNotifyUrl() {
-		return "http://www.ulife.co.nz/customer/payment/notice";
+		return host + "/customer/payment/notice";
 	}
 	
 	@Override
 	public String getAlipayMobileReturnUrl() {
-		return "http://www.ulife.co.nz/m/api/customer/payment/return";
+		return host + "/m/api/customer/payment/return";
 	}
 
 	@Override
 	public String getAlipayMobileNotifyUrl() {
-		return "http://www.ulife.co.nz/m/api/customer/payment/notice";
+		return host + "/m/api/customer/payment/notice";
 	}
 	
 	@Override
 	public String getWechatPcReturnUrl() {
-		return "http://www.ulife.co.nz/customer/payment/return";
+		return host + "/customer/payment/return";
 	}
 
 	@Override
 	public String getWechatPcNotifyUrl() {
-		return "http://www.ulife.co.nz/customer/payment/notice";
+		return host + "/customer/payment/notice";
 	}
 
 	@Override
 	public String getWechatMobileReturnUrl() {
-		return "http://www.ulife.co.nz/m/api/customer/payment/return";
+		return host + "/m/api/customer/payment/return";
 	}
 	
 	@Override
 	public String getWechatMobileNotifyUrl() {
-		return "http://www.ulife.co.nz/m/api/customer/payment/notice";
+		return host + "/m/api/customer/payment/notice";
 	}
 
 	/**

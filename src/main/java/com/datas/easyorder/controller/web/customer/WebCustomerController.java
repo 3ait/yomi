@@ -276,7 +276,7 @@ public class WebCustomerController extends BaseController<Customer>{
 		modelAndView.addObject("searchForm", searchForm);
 		
 		
-		modelAndView.addObject("totalPrice", orderPage.getContent().stream().map(order -> order.getTotalProductPrice()).reduce(0D,(a,b)->a+b).doubleValue());
+		modelAndView.addObject("totalPrice", orderPage.getContent().stream().map(order -> order.getTotalProductPrice()+order.getTotalFreight()).reduce(0D,(a,b)->a+b).doubleValue());
 		modelAndView.addObject("totalCommission", orderPage.getContent().stream().map(order -> order.getTotalProductPrice()*(order.getSalesCommissionPercentage()==null?0:order.getSalesCommissionPercentage())).reduce(0D,(a,b)->a+b).doubleValue());
 			
 		return modelAndView;
@@ -448,7 +448,7 @@ public class WebCustomerController extends BaseController<Customer>{
 	 * @return
 	 * @throws IOException 
 	 */
-	@RequestMapping("/payment/alipay/{orderId}")
+	@RequestMapping(value="/payment/alipay/{orderId}",produces = {"text/html;charset=utf-8"})
 	@ResponseBody
 	public ResponseEntity<String> getAliPayUrl(@PathVariable("orderId") Long orderId) throws IOException{
 		
@@ -489,7 +489,7 @@ public class WebCustomerController extends BaseController<Customer>{
 	public String payNotice(HttpServletRequest request){
 		//out_trade_no = order.getId()+ "-" + DateHelper.getYYYYMMDDhhmmss();
 		String orderId = request.getParameter("out_trade_no").split("-")[0];
-		logger.info("payment/notice = " + orderId);
+		logger.info("异步支付通知 payment/notice = " + orderId);
 		String ret = "faild";
 		if(iEMoney.callBackCheck(request).equals("SUCCESS")){
 			orderLogic.update(Long.valueOf(orderId), "isPaid", OrderRepository.ispaid_yes + "");

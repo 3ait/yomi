@@ -42,7 +42,7 @@
 					
 					<td  th:text="${order.customerMsg}" ></td>
 					<td  th:text="${order.adminMsg}" ></td>
-					<td>$<span th:text="${#numbers.formatDecimal((order.totalProductPrice + order.freight),0,2)}"></span></td>
+					<td>$<span th:text="${#numbers.formatDecimal((order.totalProductPrice + order.totalFreight),0,2)}"></span></td>
 					<td th:if="${customer.customerType=='sales'}">* &nbsp;<span th:text="${order.salesCommissionPercentage}"></span></td>
 					
 					<td  th:text="${#dates.format(order.createTime, 'dd/MM/yyyy')}"></td>
