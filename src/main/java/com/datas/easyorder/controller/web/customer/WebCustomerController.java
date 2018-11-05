@@ -435,7 +435,7 @@ public class WebCustomerController extends BaseController<Customer>{
 		
 		Order order = orderLogic.getOrderById(orderId);
 		
-		String payUrl = iEMoney.wechatPcPay(order.getTotalProductPrice()+"", order.getId()+"", order.getToCustomerName()+order.getToPhone(),order.getId()+ "-" + DateHelper.getYYYYMMDDhhmmss());
+		String payUrl = iEMoney.wechatPcPay((order.getTotalProductPrice()+ order.getTotalFreight()) + "", order.getId()+"", order.getToCustomerName()+order.getToPhone(),order.getId()+ "-" + DateHelper.getYYYYMMDDhhmmss());
 		
 		QrCode.createZxing(payUrl, response.getOutputStream());
 		response.flushBuffer();
@@ -453,7 +453,7 @@ public class WebCustomerController extends BaseController<Customer>{
 	public ResponseEntity<String> getAliPayUrl(@PathVariable("orderId") Long orderId) throws IOException{
 		
 		Order order = orderLogic.getOrderById(orderId);
-		String payUrl = iEMoney.aliPcPay(order.getTotalProductPrice()+"", order.getId()+"", order.getToCustomerName()+order.getToPhone(),order.getId()+ "-" + DateHelper.getYYYYMMDDhhmmss());
+		String payUrl = iEMoney.aliPcPay((order.getTotalProductPrice()+ order.getTotalFreight())+"", order.getId()+"", order.getToCustomerName()+order.getToPhone(),order.getId()+ "-" + DateHelper.getYYYYMMDDhhmmss());
 		return new ResponseEntity<String>(payUrl,HttpStatus.OK);
 		
 	}
@@ -465,19 +465,20 @@ public class WebCustomerController extends BaseController<Customer>{
 	 * 
 	 */
 	@RequestMapping(value="/payment/return", method = RequestMethod.GET)
-	@ResponseBody
-	public String  payReturn(HttpServletRequest request){
-		
+	public ModelAndView  payReturn(HttpServletRequest request){
+		ModelAndView modelAndView = new ModelAndView("web/cart/payment-return");
 		//out_trade_no = order.getId()+ "-" + DateHelper.getYYYYMMDDhhmmss();
 		String orderId = request.getParameter("out_trade_no").split("-")[0];
 		String ret = "faild";
-		logger.info("payment/return = " + orderId);
+		logger.info("同步通知 payment/notice = " + orderId);
 		if(iEMoney.notifyCheck(request).equals("SUCCESS")){
 //			orderLogic.update(Long.valueOf(orderId), "isPaid", OrderRepository.ispaid_yes + "");
 //			orderLogic.updateProductStock(Long.valueOf(orderId));
 			ret = "SUCCESS";
 		}
-		return ret;
+		modelAndView.addObject("orderId", orderId);
+		modelAndView.addObject("info", ret);
+		return modelAndView;
 	}
 	
 	/**
@@ -508,7 +509,6 @@ public class WebCustomerController extends BaseController<Customer>{
 	@RequestMapping("/tracking/{trackingNum}")
 	public ResponseEntity<List<String>> getTracking(@PathVariable("trackingNum") String trackingNum) throws Exception {
 
-		
 		return new ResponseEntity<List<String>>(trackingDiyParcel.getTracking(trackingNum), HttpStatus.OK);
 	}
 	
