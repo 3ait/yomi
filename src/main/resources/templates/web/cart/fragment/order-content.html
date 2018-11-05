@@ -21,13 +21,13 @@
 		</div>
 			
 		<div class="row" v-for="product in productList" style="padding: 10px 0;border-bottom:1px solid #e7e7e7;">
-			<div class="col-xs-6 col-xs-12">
-				<div class="col-sm-3  col-xs-6 text-left block-center">
+			<div class="col-xs-6 col-xs-6">
+				<div class="col-sm-3  col-xs-4 text-left block-center">
 					<a :href="'/product/'+product.id"  target="_blank">
 					<img src="#" href="" :src="'/'+product.defaultSrc"  class="img-responsive img-thumbnail"  style="max-width: 80px;" />
 					</a>
 				</div>
-				<div class="col-sm-8 col-xs-6 col-sm-offset-1 ">
+				<div class="col-sm-8 col-xs-8 col-sm-offset-1 ">
 						<a :href="'/product/'+product.id" target="_blank"><span>{{product.productName}}</span></a>
 				</div>
 			</div>
