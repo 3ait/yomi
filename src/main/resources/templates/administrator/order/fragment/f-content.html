@@ -89,13 +89,18 @@
 									  <i class="fa fa-square-o fa-stack-2x"></i>
 									  <i class="fa fa-paste fa-stack-1x"></i>
 									</span></a>
-				 				
+				 				<br/>
 				 				<a href="javascript:void(0)" th:onclick="|copyOrder(${order.id})|" title="Dupilcate" >
 				 				<span class="fa-stack" >
 									  <i class="fa fa-square-o fa-stack-2x"></i>
 									  <i class="fa fa-copy fa-stack-1x"></i>
 									</span>
 				 				</a>
+				 				<a href="javascript:void(0)" th:onclick="|printTicket(${order.id})|" title="Print" >
+				 				<span class="fa-stack" >
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-print fa-stack-1x"></i>
+									</span></a>
 				 			</td>
 				 		</tr>
 				 		
@@ -175,6 +180,7 @@
 					}
 				});
 			}
+			
 			/**
 			Duplicate Order
 			**/
@@ -223,7 +229,6 @@
 					console.log(orderIds);
 					if(orderIds.length>0){
 							//生成PDF
-// 						window.open([[@{/management/order/print.pdf}]] +"?orderIds=" +orderIds,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 						window.open([[@{/management/order/batch/print}]] +"?orderIds=" +orderIds,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 					}
 
@@ -236,12 +241,20 @@
 			function orderEdit(orderId){
 				window.open([[@{/management/order/}]]+orderId,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 			}
-			/**
 			
+			/**
+			展示客户
 			**/
 			function showCustomer(customerId){
 				window.open([[@{/management/customer/}]] +customerId,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 
+			}
+			
+			/**
+			打印小票
+			**/
+			function printTicket(orderId){
+				window.open([[@{/management/order/ticket/print/}]]+orderId,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 			}
 			
 			

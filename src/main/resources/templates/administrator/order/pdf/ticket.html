@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title><span th:replace="/administrator/fragment/f-company-name :: companyname"></span> | Order</title>
+        <th:block th:replace="/administrator/fragment/f-js-css :: public-css-js"></th:block>
+    </head>
+    
+    <body>
+    
+       
+       <div id="wrapper">
+	    	<div class="text-center">
+				<h3><a style="cursor: pointer;" th:onclick="|printInvoice()|" >Print<i class="fa fa-print fa-lg organge" data-toggle="tooltip" data-placement="top" title="Print" aria-hidden="true"></i></a>
+				</h3>
+			</div>
+	    	<!--startprint-->
+          	<th:block th:each="orderPdfView:${orderPdfViewList}">
+          		<th:block  th:replace="/administrator/order/pdf/fragment/ticket-content :: content(${orderPdfView.order}, ${orderPdfView.orderItemList})"></th:block>
+          		<!-- 分页 -->
+				<div style="page-break-after: always;"></div>
+          	</th:block>
+          	<!--endprint-->
+          	<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+		
+			function printInvoice(){ 
+				var bdhtml=window.document.body.innerHTML; 
+				sprnstr="<!--startprint-->"; //开始打印标识字符串有17个字符
+				eprnstr="<!--endprint-->"; //结束打印标识字符串
+				prnhtml=bdhtml.substr(bdhtml.indexOf(sprnstr)+17); //从开始打印标识之后的内容
+				prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr)); //截取开始标识和结束标识之间的内容
+				window.document.body.innerHTML=prnhtml; //把需要打印的指定内容赋给body.innerHTML
+				window.print(); //调用浏览器的打印功能打印指定区域
+				window.document.body.innerHTML=bdhtml; // 最后还原页面
+			}
+		
+		
+		/*]]>*/	
+	</script>
+       </div>
+    </body>
+</html>

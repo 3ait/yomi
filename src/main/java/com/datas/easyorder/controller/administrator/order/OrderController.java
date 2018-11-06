@@ -23,9 +23,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.datas.easyorder.controller.BaseController;
 import com.datas.easyorder.controller.administrator.order.logic.OrderItemLogic;
 import com.datas.easyorder.controller.administrator.order.logic.OrderLogic;
+import com.datas.easyorder.controller.administrator.setting.logic.SettingLogic;
+import com.datas.easyorder.controller.administrator.user.logic.UserLogic;
 import com.datas.easyorder.db.dao.OrderRepository;
 import com.datas.easyorder.db.entity.Invoice;
 import com.datas.easyorder.db.entity.Order;
+import com.datas.easyorder.db.entity.UserCompany;
 import com.datas.utils.SearchForm;
 import com.plugin.utils.DateHelper;
 
@@ -42,6 +45,9 @@ public class OrderController extends BaseController<Order>{
 	OrderLogic orderLogic;
 	@Autowired
 	OrderItemLogic orderItemLogic;
+
+	@Autowired
+	private SettingLogic settingLogic;
 	
 	/**
 	 * 
@@ -198,6 +204,20 @@ public class OrderController extends BaseController<Order>{
 		mv.addObject("orderPdfViewList",orderLogic.batchPrint(orderIds));
 		return mv;
 		
+	}
+	
+	/**
+	 * 打印小票
+	 * @return
+	 * @throws IOException 
+	 */
+	@RequestMapping(value="/ticket/print/{orderId}")
+	public ModelAndView ticketPrint(@PathVariable("orderId") Long orderId) throws IOException{
+		
+		ModelAndView mv = new ModelAndView("administrator/order/pdf/ticket");
+		mv.addObject("userCompany",settingLogic.getUserCompany());
+		mv.addObject("orderPdfViewList",orderLogic.batchPrint(new Long[]{orderId}));
+		return mv;
 	}
 	
 	/**

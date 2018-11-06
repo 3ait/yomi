@@ -1,0 +1,67 @@
+<div class="container-fluid " style="width: 225px;" th:fragment="content(order,orderItemList)">
+
+<style>
+		.td-bottom {
+			border-bottom: 1px solid #ddd;
+		}
+</style>
+	
+    <div class="row" >
+        	<table class="table   table-striped" >
+		 		<tr>
+		 			<th  style="text-align: center;">
+		 				<h3><span th:text="${userCompany.name}"></span></h3>
+		 			</th>
+		 		</tr>
+		 		<tr >
+		 			<th>
+					<span th:text="${userCompany.gstNo}"></span><br />
+		 			<span th:text="${userCompany.tel}"></span><br />
+		 			<span th:text="${userCompany.website}"></span><br />
+		 			<span th:text="${userCompany.email}"></span>
+		 			
+		 			</th>
+		 		</tr>
+		 		<tr >
+		 			<th>
+					<span th:text="${#dates.format(order.createTime, 'HH:mm dd/MM/yyyy')}" ></span>	 		
+		 			</th>
+		 		</tr>
+		 		
+			</table>
+				
+        	<table class="table" style="width: 225px;padding: 0;">
+        		
+		 		<tr >
+		 			<th class=" "  colspan="3">Invoice ID # <span th:text="${order.id}"></span></th>
+		 		</tr>
+        		<tr>
+        			<th  class="td-bottom"> Name</th>
+        			<th  class="td-bottom">Qty.</th>
+        			<th  class="td-bottom">Price</th>
+        		</tr>
+	 			<tr th:each="orderItem : ${orderItemList}" >
+					<td  class="td-bottom">
+						<span th:text="${orderItem.productNameCn}"></span>
+					</td>
+					<td class="td-bottom" >
+						$<span th:text="${orderItem.productPrice}"></span>*<span th:text="${#numbers.formatDecimal(orderItem.num,0,0)}"></span><br/>
+					</td>
+					<td  class="td-bottom">
+						$<span th:text="${#numbers.formatDecimal(orderItem.productPrice*orderItem.num,0,2)}"></span>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" style="text-align: right;">SUBTOTAL: $<span th:text="${#numbers.formatDecimal(order.totalProductPrice*0.85,0,2)}"></span></td>
+				</tr>
+				<tr>
+					<td colspan="3" style="text-align: right;">GST: $<span th:text="${#numbers.formatDecimal(order.totalProductPrice*0.15,0,2)}"></span></td>
+				</tr>
+				<tr>
+					<td colspan="3" style="text-align: right;">TOTAL: $<span th:text="${#numbers.formatDecimal(order.totalProductPrice,0,2)}"></span></td>
+				</tr>
+				</table> 
+    </div>
+	
+	
+</div>

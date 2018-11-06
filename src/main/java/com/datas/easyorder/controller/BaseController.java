@@ -48,7 +48,7 @@ public abstract class BaseController<T> {
 	}
 	
 	/**
-	 * 获取登陆cusgoomer
+	 * 获取登陆customer
 	 * @param request
 	 * @return
 	 */
