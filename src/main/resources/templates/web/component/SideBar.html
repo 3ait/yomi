@@ -1,6 +1,7 @@
 
 
 <th:block th:fragment="sideBar" >
+<div  class="hidden-xs">
 <link rel="stylesheet" href="css/style.css" th:href="@{/static/templates/web/sidebar/css/style.css}" type="text/css" />
 
 	<script type="text/javascript">
@@ -28,5 +29,6 @@
 			<li><a th:href="@{/tv/show}" target="_blank" ><div class="sidebox"><img th:src="@{/static/templates/web/sidebar/img/side_icon04.png}" />直播间</div></a></li>
 			<li style="border:none;"><a href="javascript:goTop();" class="sidetop"><img th:src="@{/static/templates/web/sidebar/img/side_icon05.png}" /></a></li>
 		</ul>
+</div>
 </div>
 </th:block>

@@ -17,6 +17,8 @@ recommend -> 自有品牌(热卖推荐)
 <th:block th:replace="/web/component/index/Article-urltitle :: urltitle('news')"></th:block>
 合作伙伴
 <th:block th:replace="/web/component/index/Article-urltitle :: urltitle('partner')"></th:block>
+###左侧广告
+后台attachment 修改 title 值为 leftSideAd
 
 
 ##多价格

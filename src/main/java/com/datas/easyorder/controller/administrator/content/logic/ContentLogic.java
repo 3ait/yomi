@@ -281,7 +281,7 @@ public class ContentLogic extends BaseLogic<Article>{
 	 * @return
 	 */
 	public List<Attachment> getAttachmentByTitle(String title,Pageable pageable){
-		return attachmentRepository.findAllByTitle(title,pageable);
+		return attachmentRepository.findAllByTitle(title,pageable).getContent();
 	}
 
 
@@ -354,7 +354,7 @@ public class ContentLogic extends BaseLogic<Article>{
 	 */
 	public List<Article> getHotArticle(Pageable pageable) {
 		
-		Page<Article> page = articleRepository.findByHotAndStatus((byte)1, (byte)1,pageable);
+		Page<Article> page = articleRepository.findByHotAndStatus(ArticleRepository.hot, ArticleRepository.status_active,pageable);
 		return page.getContent();
 	}
 
@@ -366,7 +366,7 @@ public class ContentLogic extends BaseLogic<Article>{
 	 */
 	public List<Article> getRecommendArticle(Pageable pageable) {
 		
-		Page<Article> page = articleRepository.findByRecommendAndStatus((byte)1, (byte)1,pageable);
+		Page<Article> page = articleRepository.findByRecommendAndStatus(ArticleRepository.recommend, ArticleRepository.status_active,pageable);
 		return page.getContent();
 	}
 }

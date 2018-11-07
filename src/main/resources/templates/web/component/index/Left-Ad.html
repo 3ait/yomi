@@ -1,0 +1,31 @@
+	<th:block th:fragment="title"  >
+	<div style="position: fixed;top: 200px;left: 0;" class="hidden-xs">
+	<div th:id="leftSideAd" v-if="attachment!=null">
+		<img width="180" alt="" :src="'/' + attachment.filePath">
+	</div>
+	
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			new Vue({
+			el : '#leftSideAd',
+			data : {
+				attachment:null,
+			},
+			created: function() {
+				var _this = this;
+				axios.get([[@{/attachment/title/leftSideAd}]], {
+				    params: {
+				     
+				    }
+				  }).then(function (response){
+					  _this.attachment = response.data;
+				   
+				  }).catch(function (error) {
+				    console.log(error);
+				  }); 
+			}
+		})
+		/*]]>*/
+	</script>
+	</div>
+</th:block>

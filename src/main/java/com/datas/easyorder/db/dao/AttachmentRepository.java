@@ -17,7 +17,7 @@ public interface AttachmentRepository extends CrudRepository<Attachment, Long> {
 
 	public Page<Attachment> findAll(Specification<Attachment> searchSpecification, Pageable pageable);
 
-	public List<Attachment> findAllByTitle(String title, Pageable pageable);
+	public Page<Attachment> findAllByTitle(String title, Pageable pageable);
 
     
 }

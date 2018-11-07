@@ -15,6 +15,7 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
 	public static final byte status_in_active = 0;
 	
 	public static final byte recommend = 1;
+	public static final byte hot = 1;
 
 	Page<Article> findAll(Specification<Article> searchSpecification, Pageable pageable);
 

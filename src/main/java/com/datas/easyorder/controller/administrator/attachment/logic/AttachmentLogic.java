@@ -112,5 +112,16 @@ public class AttachmentLogic extends BaseLogic<Attachment> {
 		return attachmentRepository.findAllByProductId(productId);
 	}
 
+	/**
+	 * 
+	 * @param title
+	 * @return
+	 */
+	public List<Attachment> getAttachmentsByTitle(String title,Pageable pageable) {
+		
+		
+		return attachmentRepository.findAllByTitle(title, pageable).getContent();
+	}
+
 
 }
