@@ -7,16 +7,11 @@ recommend -> 自有品牌(热卖推荐)
 ###首页Slider编辑
 @{/api/web/slider/indexSlider} System -> attachemnt title字段设置为indexSlider
 ###首页内容编辑，后台content 增加文章，设置urlTitle为以下值
-健康专场
-<th:block th:replace="/web/component/index/Article-urltitle :: urltitle('health')"></th:block>
-辣妈萌宝
-<th:block th:replace="/web/component/index/Article-urltitle :: urltitle('motherandchild')"></th:block>
-大牌汇聚
-<th:block th:replace="/web/component/index/Article-urltitle :: urltitle('brands')"></th:block>
- 资讯速递
-<th:block th:replace="/web/component/index/Article-urltitle :: urltitle('news')"></th:block>
-合作伙伴
-<th:block th:replace="/web/component/index/Article-urltitle :: urltitle('partner')"></th:block>
+健康专场  title=health
+辣妈萌宝  title=motherandchild
+大牌汇聚  title=health
+ 资讯速递  title=news
+合作伙伴  title=partner
 ###左侧广告
 后台attachment 修改 title 值为 leftSideAd
 

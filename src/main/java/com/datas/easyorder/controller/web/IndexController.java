@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +32,7 @@ import com.datas.easyorder.db.dao.UserCompanyRepository;
 import com.datas.easyorder.db.entity.Customer;
 import com.datas.easyorder.db.entity.UserCompany;
 import com.datas.utils.Tools;
+import com.payment.iemoney.IEMoney;
 import com.plugin.mail.logic.SendMail;
 import com.plugin.msg.SendSMS;
 import com.plugin.utils.Md5;
@@ -58,7 +62,6 @@ public class IndexController extends BaseController{
 	CustomerLogic customerLogic;
 	@Autowired
 	SendSMS sendSMS;
-	
 	
 	@Value("${project.name}")
 	String projectName;
@@ -249,5 +252,13 @@ public class IndexController extends BaseController{
 		return modelAndView;
 	}
 	
-	
+	/**
+	 * 汇率
+	 * @param 汇率
+	 * @return ResponseEntity<Product>
+	 */
+	@RequestMapping(value={"/rate"},method=RequestMethod.GET)
+	public  ResponseEntity<Double>  apiFxRate() {
+		return new ResponseEntity<Double>(iEMoney.getRate(),HttpStatus.OK);
+	}
 }

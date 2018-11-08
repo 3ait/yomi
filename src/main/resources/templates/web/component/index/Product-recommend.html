@@ -16,14 +16,26 @@
 					</a>
 				       <div class="caption" >
 				        <p>
-				        	<span v-if="item.price3==0">
-								<span  :class="item.price2>0 ? 'price-del':'price-color'">NZD {{item.price1}}</span> 
-								<span v-if="item.price2>0" class="price-color" >NZD {{item.price2}}&nbsp;</span>
-				        	</span>
-				        	<span v-else>
-								<span  :class="item.price2>0 ? 'price-del':'price-color'">NZD {{item.price3}}</span> 
-								<span v-if="item.price2>0" class="price-color" >NZD {{item.price2}}&nbsp;</span>
-				        	</span>
+							<span v-if="item.price3==0">
+							<span  :class="item.price2>0 ? 'price-del':'price-color'">${{item.price1}}
+							<span v-if="item.price2<=0" >
+							<span style="font-size: 12px;">￥</span><span class="price-color">{{item.price1*rate | priceFilter}}</span>
+							</span>
+							</span> 
+							<span v-if="item.price2>0" class="price-color" >${{item.price2}}&nbsp;
+							<span style="font-size: 12px;">￥</span><span class="price-color">{{item.price2*rate | priceFilter}}</span>
+							</span>
+			        	</span>
+			        	<span v-else>
+							<span  :class="item.price2>0 ? 'price-del':'price-color'">${{item.price3}}
+							<span v-if="item.price2<=0" >
+							<span style="font-size: 12px;">￥</span><span class="price-color">{{item.price3*rate | priceFilter}}</span>
+							</span>
+							</span> 
+							<span v-if="item.price2>0" class="price-color" >${{item.price2}}&nbsp;
+							<span style="font-size: 12px;">￥</span><span class="price-color">{{item.price2*rate | priceFilter}}</span>
+							</span>
+			        	</span>
 				        </p>
 			        	<span style="color: grey;font-size: 12px;">{{item.productName}}</span>
 			        	
@@ -77,7 +89,13 @@
 			el : '#product-recommend',
 			data : {
 				recommendProductList:[
-				]
+				],
+				rate:5.5,
+			},
+			filters: {
+				priceFilter:function(price){
+					return price.toFixed(2);
+				}
 			},
 			created: function() {
 				var _this = this;

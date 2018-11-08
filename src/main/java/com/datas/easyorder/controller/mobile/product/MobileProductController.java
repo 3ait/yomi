@@ -22,6 +22,7 @@ import com.datas.easyorder.db.entity.Attachment;
 import com.datas.easyorder.db.entity.Product;
 import com.datas.utils.SearchForm;
 import com.payment.IPayment;
+import com.payment.iemoney.IEMoney;
 import com.payment.latipay.Latipay;
 
 /**
@@ -38,7 +39,7 @@ public class MobileProductController{
 	@Autowired
 	AttachmentLogic attachmentLogic;
 	@Autowired
-	IPayment latipay;
+	IEMoney iEMoney;
 	/**
 	 * product search
 	 * @param searchForm
@@ -91,7 +92,7 @@ public class MobileProductController{
 	 */
 	@RequestMapping(value={"/rate"},method=RequestMethod.GET)
 	public  ResponseEntity<Double>  apiFxRate() {
-		return new ResponseEntity<Double>(latipay.getRate(),HttpStatus.OK);
+		return new ResponseEntity<Double>(iEMoney.getRate(),HttpStatus.OK);
 	}
 	
 	/**

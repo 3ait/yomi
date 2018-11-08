@@ -25,15 +25,15 @@
 								<span  th:if="${productEditView.product.price2 == 0}">
 									<span th:if="${productEditView.product.price3 == 0}">
 										<span style="color: grey;font-size: 12px;" >市 场 价：</span>
-										<span th:text="|NZD ${#numbers.formatDecimal(productEditView.product.price1,0,2)}|" style="color:#e4393c;" ></span>
+										<span th:text="|NZD $${#numbers.formatDecimal(productEditView.product.price1,0,2)}|" style="color:#e4393c;" ></span>
 										&nbsp;&asymp;&nbsp;<span  style="color: #e4393c;font-size: 12px;" >RMB</span><span th:text="${#numbers.formatDecimal(productEditView.product.price1*rate,0,2)}" style="color: #e4393c;font-size: 18px;">约等于</span>
 									</span>
 									<span th:if="${productEditView.product.price3 &gt;  0}">
 										<span style="color: grey;font-size: 12px;" >市 场 价：</span>
-										<span th:text="|NZD ${#numbers.formatDecimal(productEditView.product.price1,0,2)}|" style="text-decoration: line-through;" ></span>
+										<span th:text="|NZD $${#numbers.formatDecimal(productEditView.product.price1,0,2)}|" style="text-decoration: line-through;" ></span>
 										<br/>
 										<span style="color: grey;font-size: 12px;" >会员价：</span>
-										<span th:text="|NZD ${#numbers.formatDecimal(productEditView.product.price3,0,2)}|" style="color:#e4393c;" ></span>
+										<span th:text="|NZD $${#numbers.formatDecimal(productEditView.product.price3,0,2)}|" style="color:#e4393c;" ></span>
 										&nbsp;&asymp;&nbsp;<span  style="color: #e4393c;font-size: 12px;" >RMB</span><span th:text="${#numbers.formatDecimal(productEditView.product.price3*rate,0,2)}" style="color: #e4393c;font-size: 18px;">约等于</span>
 									</span>
 								</span>
@@ -41,10 +41,10 @@
 								<!-- 有促销的时候 -->
 								<span  th:if="${productEditView.product.price2}  &gt;  0">
 									<span style="color: grey;font-size: 12px;" >市 场 价：</span>
-									<span th:text="|NZD ${#numbers.formatDecimal(productEditView.product.price1,0,2)}|" style="text-decoration: line-through;" ></span>
+									<span th:text="|NZD $${#numbers.formatDecimal(productEditView.product.price1,0,2)}|" style="text-decoration: line-through;" ></span>
 									<br/>
 									<span style="color: grey;font-size: 12px;" >促销价：</span>
-									<span th:text="|NZD ${#numbers.formatDecimal(productEditView.product.price2,0,2)}|" style="color:#e4393c;" ></span>
+									<span th:text="|NZD $${#numbers.formatDecimal(productEditView.product.price2,0,2)}|" style="color:#e4393c;" ></span>
 									&nbsp;&asymp;&nbsp;<span  style="color: #e4393c;font-size: 12px;" >RMB</span><span th:text="${#numbers.formatDecimal(productEditView.product.price2*rate,0,2)}" style="color: #e4393c;font-size: 18px;">约等于</span>
 								</span>
 								
