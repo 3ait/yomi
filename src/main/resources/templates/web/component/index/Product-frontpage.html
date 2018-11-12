@@ -38,11 +38,21 @@
 			        	</span>
 							
 				        </p>
-			        	<span style="color: grey;font-size: 12px;">{{item.productName}}</span>
+			        	<span style="color: grey;font-size: 12px;text-overflow:ellipsis;white-space:nowrap;width:100px;">{{item.productName}}</span>
 			        	
 				        <p style="margin-top: 10px;">
 							<span class="label label-danger">{{item.label}}</span>
 				        </p>
+				        
+				        <!-- 加入购物车 -->
+				        <span v-if="item.price2==0" >
+							<button  class="btn btn-default"   @click="addToCart(item.id, item.productName, item.productNameAlias, item.location, item.weight, item.defaultSrc, item.price3)">加入购物车</button>
+						</span>
+						<span  v-if="item.price2 > 0" >
+							<button  class="btn btn-default"   @click="addToCart(item.id, item.productName, item.productNameAlias, item.location, item.weight, item.defaultSrc, item.price2)">加入购物车</button>
+						</span>
+						<span :id="item.id+ 'remindTxt'" style="color: #e4393c;display: none;" >&#10004;</span>
+				        <!-- ！加入购物车 -->
 				      </div>
 				</div>
 			</div> 
@@ -100,7 +110,7 @@
 			},
 			created: function() {
 				var _this = this;
-				axios.get([[@{/api/web/product/list/frontpage?size=24&sortBy=position}]], {
+				axios.get([[@{/api/product/list/frontpage?size=24&sortBy=position}]], {
 				    params: {
 				     
 				    }
@@ -121,7 +131,11 @@
 				  }); 
 			},
 			methods:{
-				
+				//添加购物车
+				addToCart : function (productId,productName,productNameAlias,location,weight,defaultSrc,price){
+					 productAdd(productId,productName,productNameAlias,location,weight,defaultSrc,price,1);
+					 $("#"+productId+"remindTxt").show();
+				}
 			}
 		})
 		/*]]>*/

@@ -112,6 +112,20 @@ function showProductAfterAdd(){
  * @param num
  */
 function productAdd(id, productName, productNameAlias, location,weight, defaultSrc, price, num) {
+	
+	//检查登陆
+	$.ajax({
+		url:"/login/check" ,
+		method: "GET",
+		data:{
+		}
+	}).done(function(ret){
+		if(ret==false){
+			window.location.href = "/customer";
+			return;
+		}
+	});
+	
 	var product = {
 		id : id,
 		productName : productName,
@@ -133,6 +147,7 @@ function productAdd(id, productName, productNameAlias, location,weight, defaultS
 cart = {
 	// 向购物车中添加商品
 	addproduct : function(product) {
+		
 		var ShoppingCart = utils.getParam("ShoppingCart");
 		if (ShoppingCart == null || ShoppingCart == "") {
 			if(product.num<0){

@@ -261,4 +261,20 @@ public class IndexController extends BaseController{
 	public  ResponseEntity<Double>  apiFxRate() {
 		return new ResponseEntity<Double>(iEMoney.getRate(),HttpStatus.OK);
 	}
+	
+	/**
+	 * phone check 
+	 * @return String
+	 */
+	@RequestMapping(value={"/login/check"})
+	@ResponseBody
+	public Boolean loginCheck(HttpServletRequest request) {
+		Boolean ret = false;
+		Customer customer = super.getLoginCustomer(request);
+		if(customer!=null){
+			ret = true;
+		}
+		
+		return ret;
+	}
 }
