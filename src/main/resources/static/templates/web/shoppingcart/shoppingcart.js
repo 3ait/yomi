@@ -120,11 +120,9 @@ function productAdd(id, productName, productNameAlias, location,weight, defaultS
 		data:{
 		}
 	}).done(function(ret){
-		alert("abc");
 		if(ret==false){
 			window.location.href = "/customer";
 		}else{
-			alert(ret);
 			var product = {
 					id : id,
 					productName : productName,
