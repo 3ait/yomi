@@ -13,12 +13,13 @@
 			},
 			created: function() {
 				var _this = this;
-				axios.get([[@{/attachment/title/leftSideAd}]], {
+				axios.get([[@{/web/attachment/title/leftSideAd}]], {
 				    params: {
 				     
 				    }
 				  }).then(function (response){
 					  _this.attachment = response.data;
+					  console.log(_this.attachment);
 				   
 				  }).catch(function (error) {
 				    console.log(error);

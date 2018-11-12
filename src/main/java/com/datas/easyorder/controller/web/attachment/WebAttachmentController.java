@@ -23,7 +23,7 @@ import com.datas.easyorder.db.entity.Attachment;
  *
  */
 @RestController
-@RequestMapping("/attachment")
+@RequestMapping("/web/attachment")
 public class WebAttachmentController extends BaseController<Attachment> {
 
 	@Autowired
