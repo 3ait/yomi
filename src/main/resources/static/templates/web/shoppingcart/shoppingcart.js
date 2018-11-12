@@ -120,27 +120,29 @@ function productAdd(id, productName, productNameAlias, location,weight, defaultS
 		data:{
 		}
 	}).done(function(ret){
+		alert("abc");
 		if(ret==false){
 			window.location.href = "/customer";
-			return;
+		}else{
+			alert(ret);
+			var product = {
+					id : id,
+					productName : productName,
+					productNameAlias : productNameAlias,
+					location : location,
+					weight : weight,
+					defaultSrc : defaultSrc,
+					price : price,
+					num : num
+			}
+			cart.addproduct(product);
+			
+			
+			$(".totalNum").html(getTotalNumber());
+			$("#totalAmount").html(getTotalAmount());
 		}
 	});
 	
-	var product = {
-		id : id,
-		productName : productName,
-		productNameAlias : productNameAlias,
-		location : location,
-		weight : weight,
-		defaultSrc : defaultSrc,
-		price : price,
-		num : num
-	}
-	cart.addproduct(product);
-	
-
-	$(".totalNum").html(getTotalNumber());
-	$("#totalAmount").html(getTotalAmount());
 
 }
 

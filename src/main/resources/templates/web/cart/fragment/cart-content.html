@@ -85,7 +85,8 @@
 				if(_this.productList!=null){
 					for(var i=0;i< _this.productList.length;i++){
 						  if (!isNaN(_this.productList[i].price)) {
-							  _this.productList[i].price = _this.productList[i].price.toFixed(2);
+							   var formatedPrice = parseFloat(_this.productList[i].price).toFixed(2);
+							  _this.productList[i].price = formatedPrice; 
 					        }
 						  
 					  }
