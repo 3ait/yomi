@@ -11,7 +11,7 @@
 				 			<th><br/> ID</th>
 				 			<th>Img</th>
 				 			<th >Category</th>
-				 			<th>MPN <br/> <span onclick="colomnSort('productName')" class="sort-colomn">Name</span></th>
+				 			<th >MPN <br/> <span onclick="colomnSort('productName')" class="sort-colomn">Name</span></th>
 				 			<th onclick="colomnSort('status')" class="sort-colomn">Status</th>
 				 			<th  onclick="colomnSort('price1')" class="sort-colomn">Price</th>
 				 			<th onclick="colomnSort('unit')" class="sort-colomn">Unit<br/>Unit Qty</th>
@@ -35,7 +35,6 @@
 				 				</a>
 				 			</th>
 				 		</tr>
-				 		
 				 	</thead>
 				 		<tr th:each="product : ${productList}" th:id="|tr_${product.id}|" >
 				 			<td >
@@ -48,7 +47,7 @@
 				 				<img style="width: 50px;" alt="" class="img-responsive img-thumbnail" src="#" th:src="|/${product.defaultSrc}|" />
 				 			</td>
 				 			<td th:text="${product.menu==null}?'':${product.menu.name}">CategoryName</td>
-				 			<td >
+				 			<td style="width: 200px;word-break: break-all;">
 				 				<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="mpn"  href="#"  class="edit-name"  th:text="${product.mpn}" >mpn</a>
 				 				<br/>
 			 					<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="productName"  href="#"  class="edit-name"  th:text="${product.productName}" >productName</a>
