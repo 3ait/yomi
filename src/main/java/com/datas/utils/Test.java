@@ -136,10 +136,45 @@ public class Test {
 		
 	}
 	
+	public void insertRankProductPrice() throws IOException{
+		
+		
+		PrintWriter pw = new PrintWriter( new OutputStreamWriter(new FileOutputStream(new File("d:/new.txt"))));
+		
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("D:/aa.txt")), "utf-8"));
+		String line = null;
+		
+		//INSERT INTO `member` VALUES ('1755', 'Glengyle', 'Ebony/Stev', 'Hessey', 'accounts@glengyle.co.nz', '1', '09-6369540', '021433810', '0', '13 Fleming Street', 'Onehunga', 'Auckland', '', '', '', '', '', 'f08f84d1817fbec882308b904d9d0daedbc67056', '0', '', '351.56', 'steve@glengyle.co.nz\nebony@glengyle.co.nz', '2012-01-01', '0');
+//		Pattern p = Pattern.compile("INSERT INTO `member` VALUES \\('(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', \\);");
+//		Pattern p = Pattern.compile("INSERT INTO `member` VALUES \\('(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', '(.*)', \\);");
+		
+		Pattern p1 = Pattern.compile(".*'(.*)'");
+		while((line=br.readLine())!=null){
+			
+			StringBuffer newsb = new StringBuffer();
+			newsb.append(String.format("INSERT into rank_product_price (product_id,rank_customer_id,price,price1, description) values (%s,%s,%s,%s,'');", line,"7","0","0",""));
+			newsb.append(String.format("INSERT into rank_product_price (product_id,rank_customer_id,price,price1, description) values (%s,%s,%s,%s,'');", line,"8","0","0",""));
+			newsb.append(String.format("INSERT into rank_product_price (product_id,rank_customer_id,price,price1, description) values (%s,%s,%s,%s,'');", line,"9","0","0",""));
+			newsb.append(String.format("INSERT into rank_product_price (product_id,rank_customer_id,price,price1, description) values (%s,%s,%s,%s,'');", line,"10","0","0",""));
+			
+			pw.println(newsb);
+			
+
+		}
+		
+		pw.flush();
+		pw.close();
+		br.close();
+		
+		
+	}
+	
 	public static void main(String[] args) throws IOException, FileNotFoundException {
 		Test test = new Test();
 //		test.newCustomer();
-		test.newProduct();
+//		test.newProduct();
+		test.insertRankProductPrice();
 		
 	}
 	

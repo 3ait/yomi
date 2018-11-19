@@ -37,15 +37,16 @@ public abstract class BaseController<T> {
 		return userRepository.findOne(userDetails.getId());
 	}
 	
+	
 	public Double getRate(HttpServletRequest request){
 		Double rate = (Double)request.getSession().getAttribute("rate");
 		if(rate==null){
 			rate = iEMoney.getRate();
 			request.getSession().setAttribute("rate", rate);
 		}
-		
 		return rate;
 	}
+	
 	
 	/**
 	 * 获取登陆customer

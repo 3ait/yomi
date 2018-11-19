@@ -30,6 +30,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 		.excludePathPatterns("/m/api/customers")
 		.excludePathPatterns("/m/api/customers/email")
 		.excludePathPatterns("/m/api/customers/login")
+		.excludePathPatterns("/m/api/customer/payment/return")
+		.excludePathPatterns("/m/api/customer/payment/notice")
 		.excludePathPatterns("/m/api/customers/register");
 
 		
@@ -40,6 +42,9 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 		.excludePathPatterns("/customer")
 		.excludePathPatterns("/customer/email/check")
 		.excludePathPatterns("/customer/login")
+		.excludePathPatterns("/customer/login")
+		.excludePathPatterns("/customer/payment/return")
+		.excludePathPatterns("/customer/payment/notice")
 		.excludePathPatterns("/customer/register");
 
 	}

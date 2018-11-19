@@ -137,7 +137,7 @@ public class CartLogic{
 						price = p.getPrice2();
 					}else{
 						if(customer.getRankCustomer()!=null){
-							RankProductPrice rankProductPrice = rankProductPriceRepository.findOneByProductIdAndRankCustomerId(p.getId(), customer.getId());
+							RankProductPrice rankProductPrice = rankProductPriceRepository.findOneByProductIdAndRankCustomerId(p.getId(), customer.getRankCustomer().getId());
 							if(rankProductPrice!=null){
 								price = rankProductPrice.getPrice();
 							}
