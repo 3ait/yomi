@@ -6,13 +6,14 @@
 	
 	<div class="container" style="min-height:400px;" id="payment">
 		<div class="row" style="margin-top: 40px;border-bottom:1px solid #e7e7e7;">
-			<h3>已下单</h3> 订单号:<th:block th:text="${order.id}"></th:block> &nbsp;&nbsp;&nbsp; 
+			<h3>已下单，支付成功请刷新页面。</h3> 
+			订单号:<th:block th:text="${order.id}"></th:block> &nbsp;&nbsp;&nbsp; 
 			总价格(纽币) $:<th:block th:text="${#numbers.formatDecimal((order.totalProductPrice + order.totalFreight),1,2)}"></th:block>
 			&nbsp;&asymp;&nbsp;<span  style="color: #e4393c;font-size: 12px;" >RMB</span><span th:text="${#numbers.formatDecimal((order.totalProductPrice + order.totalFreight)*rate,0,2)}" style="color: #e4393c;font-size: 18px;">约等于</span>
 		</div>
 		<br/>
-		<div class="row">
-			<div class="col-sm-3 col-xs-6 text-center">
+		<div class="row" th:if="${order.status!=1}">
+			<div class="col-sm-3 col-xs-6 text-center" >
 				<div class="create_btn">
 <!-- 					<a v-on:click="wechatPay()" style="cursor: pointer;"  >微信支付</a><br/><br/> -->
 					<a  style="cursor: pointer;"  >微信支付</a><br/><br/>
@@ -25,6 +26,9 @@
 					<a v-on:click="alipayPay()" style="cursor: pointer;"  >支付宝支付</a>
 				</div>
 			</div>
+		</div>
+		<div class="row" th:if="${order.status==1}">
+			<h4>支付成功。</h4>
 		</div>
 		<br/>
 		
