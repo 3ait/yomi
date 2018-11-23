@@ -12,7 +12,7 @@
 			&nbsp;&asymp;&nbsp;<span  style="color: #e4393c;font-size: 12px;" >RMB</span><span th:text="${#numbers.formatDecimal((order.totalProductPrice + order.totalFreight)*rate,0,2)}" style="color: #e4393c;font-size: 18px;">约等于</span>
 		</div>
 		<br/>
-		<div class="row" th:if="${order.status!=1}">
+		<div class="row" th:if="${order.isPaid!=1}">
 			<div class="col-sm-3 col-xs-6 text-center" >
 				<div class="create_btn">
 <!-- 					<a v-on:click="wechatPay()" style="cursor: pointer;"  >微信支付</a><br/><br/> -->
@@ -27,7 +27,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row" th:if="${order.status==1}">
+		<div class="row" th:if="${order.isPaid==1}">
 			<h4>支付成功。</h4>
 		</div>
 		<br/>

@@ -317,6 +317,7 @@ public class CustomerController extends BaseController<Customer>{
 		
 		customerLogic.delCustomer(customerId);
 	}
+	
 	/**
 	 * 关联词查询customer
 	 */
@@ -326,7 +327,6 @@ public class CustomerController extends BaseController<Customer>{
 		
 		Pageable pageable = new PageRequest(searchForm.getPage()-1<1?0:searchForm.getPage()-1, searchForm.getSize(), Direction.fromString(searchForm.getSort()), searchForm.getSortBy());
 		List<CustomerRankView> list = customerLogic.findAllWithCustomerRank(searchForm,CustomerRepository.customerType_customer, pageable);
-		
 		
 		return new ResponseEntity<List<CustomerRankView>>(list,HttpStatus.OK);
 		
