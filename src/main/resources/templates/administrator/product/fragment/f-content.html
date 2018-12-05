@@ -56,12 +56,17 @@
 					 			<a class="productStatus" data-type="select" th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="status"  href="#"    th:text="${product.status==0?'Off line': (product.status==1?'On line':'Out stock')}" >status</a>
 				 			</td>
 				 			<td >
+				 				<a href="javascript:void(0);" th:onclick="|display(${product.id})|">
+									<i  class="toggle-icon fa fa-angle-double-down" aria-hidden="true"></i>
+								</a>
+				 				<div th:id="|td_price_${product.id}|" style="display: none;">
 				 				Default price: <a class="edit-name"  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="price1"  href="#"  th:text="${product.price1}" >price1</a>
 				 				<br/>
 				 				Promote price: <a class="edit-name"  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="price2"  href="#"  th:text="${product.price2}" >price2</a>
 				 				<div th:each="rpp : ${#lists.toList(product.rankProductPrices)}">
 				 					<span th:text="${rpp.rankCustomer.rankLevel}"></span>&nbsp;:&nbsp;
 	    							<a  class="edit-name" th:attr="data-pk=${rpp.id} ,data-url=|@{/management/rankproductprice/update/colomn/}|"  data-name="price"  href="#"  th:text="${rpp.price}">price</a>
+				 				</div>
 				 				</div>
 				 			</td>
 				 			<td >
@@ -261,6 +266,9 @@
 				});
 			}
 			
+			function display(id){
+				$("#td_price_"+id).toggle('slow');
+			}
 			
 		/*]]>*/	
 	</script>

@@ -3,11 +3,13 @@
 <style>
 		.td-bottom {
 			border-bottom: 1px solid #ddd;
+			padding: 0 ; margin: 0 ;
+			border-bottom: 1px solid;
 		}
 </style>
 	
-    <div class="row" >
-        	<table class="table   table-striped" >
+    <div class="row" style="padding: 0 ; margin: 0 ;width: 225px">
+        	<table class="table   table-striped" style="padding: 0 ; margin: 0 ;" >
 		 		<tr>
 		 			<th  style="text-align: center;">
 		 				<h3><span th:text="${userCompany.name}"></span></h3>
@@ -15,8 +17,8 @@
 		 		</tr>
 		 		<tr >
 		 			<th>
-					<span th:text="${userCompany.gstNo}"></span><br />
-		 			<span th:text="${userCompany.tel}"></span><br />
+					GST:<span th:text="${userCompany.gstNo}"></span><br />
+		 			Tel:<span th:text="${userCompany.tel}"></span><br />
 		 			<span th:text="${userCompany.website}"></span><br />
 		 			<span th:text="${userCompany.email}"></span>
 		 			
@@ -30,7 +32,7 @@
 		 		
 			</table>
 				
-        	<table class="table" style="width: 225px;padding: 0;">
+        	<table class="table" style="width: 225px;padding: 0 ; margin: 0 ;">
         		
 		 		<tr >
 		 			<th class=" "  colspan="3">Invoice ID # <span th:text="${order.id}"></span></th>

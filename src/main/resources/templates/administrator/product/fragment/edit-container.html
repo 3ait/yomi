@@ -214,8 +214,8 @@
 			</div>
 			<div class="col-sm-2">
 				<div class="form-group input-group">
-					<input th:if="${user.status=='Superadmin'}" type="number" min="0" max="100000" class="form-control" name="product.stock" value="100" th:value="${productEditView.product.stock}"/>
-					<input th:if="${user.status=='Staff'}" readonly="readonly"type="number" min="0" max="100000" class="form-control" name="product.stock" value="100" th:value="${productEditView.product.stock}"/>
+					<input th:if="${user.status=='Superadmin'}" type="number" max="100000" step="0.01" class="form-control" name="product.stock" value="100" th:value="${productEditView.product.stock}"/>
+					<input th:if="${user.status=='Staff'}" readonly="readonly" type="number"  step="0.01" max="100000" class="form-control" name="product.stock" value="100" th:value="${productEditView.product.stock}"/>
 				</div>
 			</div>
 		</div>
@@ -437,7 +437,6 @@
 						maxlength: 50,
 					},
 					'product.location': {
-						required: true,
 						minlength: 1
 					},
 					'product.cost': {
@@ -452,7 +451,7 @@
 						max:10000,
 					},
 					'product.stock': {
-						digits: true,
+						number: true,
 						min:-1000,
 						max:10000,
 					},
