@@ -8,6 +8,15 @@
 					      <input type="text" name="q"  th:value="${searchForm.q}" class="form-control" min="0" maxlength="30" placeholder="Search"  />
 				  	</div>
 				  	&nbsp;
+				  	<div class="form-group">
+					      <select class="form-control" name="status" >
+					      	<option value="-1" >--Status--</option>
+					      	<option value="1" th:selected="${searchForm.status==1?true:false}">On line</option>
+					      	<option value="0" th:selected="${searchForm.status==0?true:false}">Off line</option>
+					      	<option value="2" th:selected="${searchForm.status==2?true:false}">Out stock</option>
+					      </select>
+				  	</div>
+				  	&nbsp;
 					<th:block th:replace="/administrator/product/fragment/category-select :: category-select">
 					</th:block>
 				  	&nbsp;

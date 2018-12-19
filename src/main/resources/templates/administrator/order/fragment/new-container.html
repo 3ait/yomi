@@ -74,7 +74,7 @@
 				</div>
 				<div class="col-sm-8">
 					<div class="form-group input-group" >
-						<input class="form-control" autocomplete="off" id="companyName" placeholder="Company Name" v-model="companyName" @keypress="getCustomer()" type="text" name="companyName"  />
+						<input class="form-control" autocomplete="off" id="companyName" placeholder="Company Name" v-model="companyName" @input="getCustomer()" type="text" name="companyName"  />
 						<input type="hidden" v-model="customerId" name="customerId"  />
 						
 					</div>
@@ -87,7 +87,8 @@
 				</div>
 				<div class="col-sm-8">
 					<div class="form-group input-group" >
-						<input class="form-control"  id="productName" v-model="searchQ"  placeholder="Product" type="text" name="productName"  @keyup="getProduct()"  @change="getProduct()"/>
+<!-- 						<input class="form-control"  id="productName" v-model="searchQ"  placeholder="Product" type="text" name="productName"  @keyup="getProduct()"  @change="getProduct()"/> -->
+						<input class="form-control"  id="productName" v-model="searchQ"  placeholder="Product" type="text" name="productName"   @input="getProduct()" />
 					</div>
 				</div>
 			</div>

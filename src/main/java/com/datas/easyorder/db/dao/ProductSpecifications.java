@@ -64,7 +64,7 @@ public class ProductSpecifications {
 					}
 				}
 				
-				if(searchForm.getStatus()==ProductRepository.status_cancelled){
+				if(searchForm.getStatus()!=-1){
 					Predicate predicate = criteriaBuilder.notEqual(status, new Byte(searchForm.getStatus() + ""));
 					list.add(predicate);
 				}
