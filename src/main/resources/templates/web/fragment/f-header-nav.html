@@ -4,8 +4,8 @@
 			
 			<br/>
 			<div class="row">
-				<div class="col-sm-4 col-xs-12">
-					<a th:href="@{/}" href="#"><img style="width: 200px;" class="img-responsive" th:src="@{/static/templates/web/logo.png}"  /> </a>
+				<div class="col-sm-4 col-xs-12  ">
+					<a th:href="@{/}" href="#"><img style="width: 200px;" class="img-responsive wow swing delay-1s" th:src="@{/static/templates/web/logo.png}"  /> </a>
 				</div>
 				<div class="col-sm-4 col-xs-12 margin-top-1"  >
 					<div class="search">
@@ -16,7 +16,7 @@
 						</div>
 				</div>
 				<div class="col-sm-2 col-xs-6  margin-top-1 text-right" >
-					<ul class="icon1 sub-icon1 profile_img">
+					<ul class="icon1 sub-icon1 profile_img ">
 						<li>
 							<a th:href="@{/cart}" href="#"><i class="fa fa-shopping-cart fa-2x cart-icon" aria-hidden="true"></i></a> 
 							<span class="badge label-success totalNum"></span> 
@@ -31,7 +31,7 @@
 						</li>
 					</ul>
 				</div>
-				<div class=" col-sm-2 col-xs-6  margin-top-1 text-right" >
+				<div class=" col-sm-2 col-xs-6  margin-top-1 text-right " >
 					
 					<div class="create_btn">
 						<a class="arrow" th:href="@{/customer}" href="#" th:if="${customer}==null">登录
@@ -44,11 +44,10 @@
 			</div>
 			<div class="row">
 				<div class="col-sm-12 col-xs-12">
-					<img class="img-responsive" th:src="@{/static/templates/web/index/msg.jpg}">
+					<img class="img-responsive wow fadeInRight delay-1s" th:src="@{/static/templates/web/index/msg.jpg}">
 				</div>
 			</div>
 			
-		
 			<div class="row">
 				<!-- start header menu -->
 				<ul class="megamenu skyblue">

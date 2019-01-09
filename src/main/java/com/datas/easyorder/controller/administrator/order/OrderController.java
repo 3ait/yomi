@@ -24,11 +24,9 @@ import com.datas.easyorder.controller.BaseController;
 import com.datas.easyorder.controller.administrator.order.logic.OrderItemLogic;
 import com.datas.easyorder.controller.administrator.order.logic.OrderLogic;
 import com.datas.easyorder.controller.administrator.setting.logic.SettingLogic;
-import com.datas.easyorder.controller.administrator.user.logic.UserLogic;
 import com.datas.easyorder.db.dao.OrderRepository;
 import com.datas.easyorder.db.entity.Invoice;
 import com.datas.easyorder.db.entity.Order;
-import com.datas.easyorder.db.entity.UserCompany;
 import com.datas.utils.SearchForm;
 import com.plugin.utils.DateHelper;
 
