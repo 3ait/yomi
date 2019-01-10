@@ -193,6 +193,7 @@
 						var _this = this;
 						axios.get([[@{/api/product/list}]], {
 							params: {
+							 q:[[${searchForm.q}]],
 						     categoryId:[[${categoryId}]],
 						     page:_this.retData.number-1,
 						     size:_this.retData.size,
@@ -215,6 +216,7 @@
 						var _this = this;
 						axios.get([[@{/api/product/list}]], {
 							params: {
+								 q:[[${searchForm.q}]],
 						     categoryId:[[${categoryId}]],
 						     page:_this.retData.number+1,
 						     size:_this.retData.size,
@@ -240,6 +242,7 @@
 						var _this = this;
 						axios.get([[@{/api/product/list}]], {
 							params: {
+								 q:[[${searchForm.q}]],
 						     categoryId:[[${categoryId}]],
 						     page:pageNum,
 						     size:_this.retData.size,
@@ -272,6 +275,7 @@
 						}
 						axios.get([[@{/api/product/list}]], {
 							params: {
+								 q:[[${searchForm.q}]],
 						     categoryId:[[${categoryId}]],
 						     page:pageNum,
 						     size:_this.retData.size,
