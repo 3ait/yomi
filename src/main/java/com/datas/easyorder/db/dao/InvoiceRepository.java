@@ -1,6 +1,7 @@
 package com.datas.easyorder.db.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,10 +45,11 @@ public interface InvoiceRepository extends CrudRepository<Invoice, Long> {
 
 	public Page<Invoice> findByStatusInAndModifyTimeBefore(Byte[] statuses, Date startDate, Pageable pageable);
 
-	public Page<Invoice> findByCustomerIdAndStatusInAndModifyTimeBefore(Long customerId, Byte[] openStatus,
-			Date startDate, Pageable pageable);
+	public Page<Invoice> findByCustomerIdAndStatusInAndModifyTimeBefore(Long customerId, Byte[] openStatus,Date startDate, Pageable pageable);
+
+	public List<Invoice> findAllByCustomerIdAndPaidIn(Long customerId, Byte[] status);
 
 	public Page<Invoice> findByCustomerIdAndStatusInAndModifyTimeBetween(Long customerId, Byte[] status, Date startDate,
-			Date endDate, Pageable pageable);
+			Date time, Pageable pageable);
     
 }

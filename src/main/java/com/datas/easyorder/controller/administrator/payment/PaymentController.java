@@ -96,7 +96,7 @@ public class PaymentController extends BaseController<CustomerPaymentHistory>{
 	/**
 	 * 增加Payment
 	 * @param customerPaymentHistory
-	 * @param hiddenId
+	 * @param hiddenId customerId
 	 * 
 	 */
 	@RequestMapping("/save")
@@ -113,6 +113,25 @@ public class PaymentController extends BaseController<CustomerPaymentHistory>{
 			customerPaymentHistory.setInvoice(null);
 		}
 		paymentLogic.savePayment(customerPaymentHistory, hiddenId,super.getLognUser());
+		
+	}
+	
+	
+	/**
+	 * 
+	 * 增加Payment,支付多个Invoice
+	 * @param customerPaymentHistory
+	 * @param hiddenId customerId
+	 * 
+	 */
+	@RequestMapping("/batch/save")
+	@ResponseBody
+	public void  batchSave(CustomerPaymentHistory customerPaymentHistory,
+			@RequestParam("customerId") Long customerId, 
+			@RequestParam(value="invoiceIds",required=false) Long[] invoiceIds, 
+			HttpServletRequest request){
+
+		paymentLogic.batchSavePayment(customerPaymentHistory, customerId,invoiceIds,super.getLognUser());
 		
 	}
 	

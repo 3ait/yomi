@@ -196,29 +196,30 @@
 				});
 			}
 			/**
-			    批量发送邮件
-			**/
-			function emailBatch(){
-				if(confirm("Confirm?")){
-					$("input[name='checkbox_email']").each(function(index,value){
-						if($(value).prop("checked")){
-							$.ajax({
-								url:[[@{/management/invoice/email/}]] + $(value).val(),
-								method: "GET",
-								data:{
-								}
-							}).done(function(ret){
-								if(ret=='true'){
-									window.location.reload();
-								}else{
-									alert(ret);
-								}
-							});
-						}
-					});
-					window.location.reload();
-				}
+		    批量发送邮件
+		**/
+		function emailBatch(){
+			if(confirm("Confirm?")){
+				var checkedInvoice = new Array();
+				$("input[name='checkbox_email']").each(function(index,value){
+					if($(value).prop("checked")){
+						checkedInvoice.push(value.value);
+					}
+				});
+				$.ajax({
+					url:[[@{/management/invoice/email/batch?invoiceIds=}]] + checkedInvoice,
+					method: "GET",
+					data:{
+					}
+				}).done(function(ret){
+					if(ret=='true'){
+						console.log("Batch send email");
+						console.log(checkedInvoice);
+					}
+				});
+				
 			}
+		}
 			
 			/**
 			     批量打印预览

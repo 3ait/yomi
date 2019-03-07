@@ -570,4 +570,29 @@ public class CustomerLogic extends BaseLogic<Customer>{
 		}
 		return t;
 	}
+	
+	/**
+	 * 批量发送邮件
+	 * @param customerIds
+	 * @param lognUser
+	 * @param searchForm
+	 * @param request
+	 * @param response
+	 */
+	public void statementEmailBatch(Long[] customerIds, User lognUser, SearchForm searchForm,
+			HttpServletRequest request, HttpServletResponse response) {
+		
+		for(Long id: customerIds){
+			statementEmail(id, lognUser, searchForm, request, response);
+		}
+	}
+	
+	/**
+	 * 获取未支付的customer INvocie列表
+	 * @param customerId
+	 * @return List<Invoice>
+	 */
+	public List<Invoice> getUnpaidInvoice(Long customerId) {
+		return invoiceRepository.findAllByCustomerIdAndPaidIn(customerId,new Byte[]{InvoiceRepository.paid_unpaid,InvoiceRepository.paid_paidInPart});
+	}
 }

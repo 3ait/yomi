@@ -5,8 +5,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.transaction.Transactional;
+import javax.xml.parsers.DocumentBuilder;
 
 import org.json.JSONObject;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -125,6 +127,46 @@ public class PaymentLogic extends BaseLogic<CustomerPaymentHistory> {
 		}
 		customer.setBalance(customer.getBalance() - customerPaymentHistory.getPayment());
 		customerRepository.save(customer);
+	}
+
+	/**
+	 * 批量保存记录
+	 * 
+	 * @param customerId 
+	 * @param customerPaymentHistory
+	 * @param customerIds
+	 * @param lognUser
+	 */
+	@Transactional(rollbackOn = Exception.class)
+	public void batchSavePayment(CustomerPaymentHistory customerPaymentHistory, Long customerId, Long[] invoiceIds, User lognUser) {
+		
+		//invoiceID==0的时候，直接增加用户Balance
+		if(invoiceIds==null){
+			savePayment(customerPaymentHistory, customerId, lognUser);
+		}else{
+			Double payLeft = customerPaymentHistory.getPayment();
+			for(Long invoiceId: invoiceIds){
+				
+				CustomerPaymentHistory newCph = new CustomerPaymentHistory();
+				BeanUtils.copyProperties(customerPaymentHistory, newCph);
+				
+				Invoice invoice = invoiceRepository.findOne(invoiceId);
+				newCph.setInvoice(invoice);
+				
+				if(payLeft-invoice.getBalance()>0){
+					newCph.setPayment(invoice.getBalance());
+				}else{
+					newCph.setPayment(payLeft);
+				}
+				payLeft -= invoice.getBalance();
+				savePayment(newCph, customerId, lognUser);
+				if(payLeft<=0){
+					break;
+				}
+			}
+		}
+		
+		
 	}
 
 }

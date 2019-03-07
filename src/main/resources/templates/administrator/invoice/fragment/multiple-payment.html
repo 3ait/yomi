@@ -1,0 +1,195 @@
+<th:block  th:fragment="content">
+    
+    
+    <!-- new payment -->
+	<div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">New Payment</h4>
+				</div>
+				<div class="modal-body">
+					<form id="saveForm" method="post">
+						<div class="form-group">
+							<label for="aliasId" class="control-label">InvoiceId:</label><br/>
+							<table class="table">
+								<tr>
+									<td>ID</td>
+									<td>Total</td>
+									<td>Balance</td>
+									<td>Create date</td>
+									<td>Due date</td>
+									<td></td>
+								</tr>
+								<tr v-for="invoice in invoiceList">
+									<td>
+										<input type="checkbox"  :value="invoice.id" :id="invoice.id" name="invoiceIds" onchange="appendToMemo(this)" >
+										&nbsp;<label :for="invoice.id">{{invoice.aliasId}}</label>
+										
+									</td>
+									<td>${{invoice.total}}</td>
+									<td>${{invoice.balance}}</td>
+									<td>{{invoice.createTime|dateFormate}}</td>
+									<td></td>
+									<td>
+										<a target="_blank" :href="'/management/invoice/edit/'+invoice.id"    title="Edit" >
+						 					<span class="fa-stack" >
+											  <i class="fa fa-square-o fa-stack-2x"></i>
+											  <i class="fa fa-edit fa-stack-1x"></i>
+											</span></a>
+									</td>
+								</tr>
+							</table>
+								
+						</div>
+						<div class="form-group">
+							<label class="control-label">CustomerName:</label>
+							<input class="form-control" id="companyName"  readonly="readonly"  :value="customer.companyName" />
+							<input type="hidden" id="customerId" name="customerId" :value="customer.id" />
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label">CustomerBalance:</label>
+							<input class="form-control" id="customerBalance"  readonly="readonly" :value="customer.balance"  />
+						</div>
+						
+						<div class="form-group">
+							<label for="Payment" class="control-label">Payment:</label> <input
+								type="number" step="0.01" class="form-control" id="payment"
+								name="payment" />
+						</div>
+						<div class="form-group">
+							<label for="Payment" class="control-label">PaymentMethord</label>
+							<select class="form-control"
+								name="paymentMethod">
+								<option value="Eftpos">Eftpos</option>
+								<option value="Cash">Cash</option>
+								<option value="Cheque">Check</option>
+								<option value="Banks">Banks</option>
+								<option value="Other">Other</option>
+							</select>
+
+						</div>
+						<div class="form-group">
+							<label for="Memo" class="control-label">Memo:</label>
+							<textarea class="form-control" id="memo"  name="memo" maxlength="1000" ></textarea>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" onclick="save()">Save</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+    
+    
+		<script th:src="@{/static/plugin/jquery/jquery-ui-1.9.2.custom.min.js}" src="js/jquery-ui-1.9.2.custom.min.js"></script>
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			
+		   
+			/**
+			***/
+		   function showModel(customerId){
+			   
+				new Vue({
+					el : '#myModal',
+					data : {
+						invoiceList:[],
+						customer:{},
+					},
+					watch:{
+					},
+					filters:{
+						dateFormate:function(val){
+							var value=new Date(val);
+				            var year=value.getFullYear();
+				            var month=value.getMonth()+1
+				            var day=value.getDate()
+							return day + "-" + month + "-" + year;
+						}
+					},
+					created() {
+						var _this = this;
+						//获取Invoice
+						axios.get([[@{/management/customer/api/unpaid/invoice/}]]+customerId, {
+							params: {
+						    }
+						  })
+						  .then(function (response){
+							  _this.invoiceList = response.data;
+						  })
+						  .catch(function (error) {
+						    console.log(error);
+						  }); 
+						//获取Customer
+						axios.get([[@{/management/customer/api/}]]+customerId, {
+							params: {
+						    }
+						  })
+						  .then(function (response){
+							  _this.customer = response.data;
+						  })
+						  .catch(function (error) {
+						    console.log(error);
+						  }); 
+					},
+					methods: {
+						
+						
+					}
+				});
+				
+			    $("#myModal").draggable();
+				$('#myModal').modal('show').on('shown.bs.modal', function (e) {
+					
+				}); 
+				$('#myModal').modal('show').on('hide.bs.modal', function (e) {
+					window.location.reload();
+				});
+			}
+			
+		/**
+			payment save
+		**/
+		function save(){
+			
+			if($("#payment").val()==""){
+				$("#payment").focus();
+				return ;
+			}
+			console.log($('#saveForm').serialize());
+			$.ajax({
+					url: [[@{/management/payment/batch/save}]] ,//url
+					method: "POST",
+					data: $('#saveForm').serialize(),
+				}).done(function(ret){
+					window.location.reload();
+				});
+			
+
+			$('#myModal').modal('hide');
+			
+		}
+		
+		function appendToMemo (_self){
+			if($(_self).prop("checked")){
+				$("#memo").val( $("#memo").val() + " " + $(_self).next().html() );
+			}else{
+				var str = $("#memo").val().replace($(_self).next().html(),"")
+				$("#memo").val(str);
+			}
+			
+		}		
+		/*]]>*/	
+	</script>
+</th:block>

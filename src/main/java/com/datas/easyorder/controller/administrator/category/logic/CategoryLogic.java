@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.datas.easyorder.controller.BaseLogic;
 import com.datas.easyorder.controller.administrator.product.logic.ProductLogic;
@@ -234,5 +235,22 @@ public class CategoryLogic extends BaseLogic<Menu>{
 		}
 		return menuList;
 	}
+	/**
+	 * 上传分类图片
+	 * @param categoryId
+	 * @param attachments
+	 */
+	@Transactional(rollbackOn = Exception.class)
+	public void uploadImg(Long categoryId, MultipartFile[] attachments) {
+		// category img 只有 一个图片
+		if(attachments.length==1){
+			MultipartFile mf = attachments[0];
+			Menu menu = menuRepository.findOne(categoryId);
+			String defaultImgSrc = "/category/" + categoryId + "_" + menu.getName();
+			super.saveImgs(attachments, defaultImgSrc);
+			menu.setDefaultSrc(contentPath + defaultImgSrc + "/" + mf.getOriginalFilename());
+			menuRepository.save(menu);
+		}
 		
+	}
 }

@@ -14,7 +14,8 @@
 						<a  class="edit-name" href="#" data-type="text" date-placement="bottom" data-name="name" th:attr="data-pk=${menu.id}, data-url=|@{/management/category/update/}|"  data-original-title="Edit"  th:text="${menu.name}">name</a>
 						<a href="#" th:onclick="|deleteCategoryById('category1List',${menu.id},1)|"><i class="fa fa-remove  pull-right fa-2x " aria-hidden="true"></i></a>
 						<span  class="label label-default pull-right" th:text="${menu.menuType}">Menu Type</span>
-						<a  class="status pull-right" href="#" data-type="select" date-placement="bottom" data-name="status" th:attr="data-pk=${menu.id}, data-url=|@{/management/category/update/}|"  data-original-title="Edit"  th:text="|${menu.status}&nbsp;&nbsp;|">status</a>
+						<a class="status pull-right" href="#" data-type="select" date-placement="bottom" data-name="status" th:attr="data-pk=${menu.id}, data-url=|@{/management/category/update/}|"  data-original-title="Edit"  th:text="|${menu.status}&nbsp;&nbsp;|">status</a>
+						<div th:replace="/administrator/category/component/Category-attachment :: content(${menu})"></div>
 					</li>
 				</ul>
 			</div>
@@ -47,6 +48,7 @@
 					<li th:each="menu :${menuList}" class="list-group-item"   th:attr="data-id=${menu.id}" th:onclick="|loadCategory3(${menu.id},this)|">
 						<a  class="edit-name" href="#" data-type="text" date-placement="bottom" data-name="name" th:attr="data-pk=${menu.id}, data-url=|@{/management/category/update/}|"  data-original-title="Edit"  th:text="${menu.name}">superuser</a>
 						<a href="#" th:onclick="|deleteCategoryById('category2List',${menu.id},2)|"><i class="fa fa-remove pull-right fa-2x" aria-hidden="true"></i></a>
+						<div th:replace="/administrator/category/component/Category-attachment :: content(${menu})"></div>
 					</li>
 					
 					<script type="text/javascript" th:inline="javascript">
@@ -126,6 +128,7 @@
 						<a  class="edit-name" href="#" data-type="text" date-placement="bottom" data-name="name" th:attr="data-pk=${menu.id}, data-url=|@{/management/category/update/}|"  data-original-title="Edit"  th:text="${menu.name}">superuser</a>
 						
 						<a href="#" th:onclick="|deleteCategoryById('category3List',${menu.id},3)|"><i class="fa fa-remove fa-2x pull-right" aria-hidden="true"></i></a>
+						<div th:replace="/administrator/category/component/Category-attachment :: content(${menu})"></div>
 					</li>
 					<script type="text/javascript" th:inline="javascript">
 						/*<![CDATA[*/

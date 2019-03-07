@@ -649,4 +649,14 @@ public class OrderLogic extends BaseLogic<Order> {
 		}
 		
 	}
+	
+	/**
+	 * 
+	 * @param customerId
+	 * @param pageable
+	 * @return
+	 */
+	public Page<Order> getOrderByCustomerId(Long customerId, Pageable pageable) {
+		return orderRepository.findByCustomerByCustomerIdId(customerId, pageable);
+	}
 }

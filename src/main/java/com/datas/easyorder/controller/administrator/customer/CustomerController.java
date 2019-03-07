@@ -1,6 +1,7 @@
 package com.datas.easyorder.controller.administrator.customer;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -30,9 +31,12 @@ import com.datas.easyorder.controller.BaseController;
 import com.datas.easyorder.controller.administrator.customer.logic.CustomerCommissionLogic;
 import com.datas.easyorder.controller.administrator.customer.logic.CustomerLogic;
 import com.datas.easyorder.controller.administrator.customer.view.CustomerRankView;
+import com.datas.easyorder.controller.administrator.order.logic.OrderLogic;
 import com.datas.easyorder.db.dao.CustomerRepository;
 import com.datas.easyorder.db.entity.Customer;
 import com.datas.easyorder.db.entity.CustomerCommission;
+import com.datas.easyorder.db.entity.Invoice;
+import com.datas.easyorder.db.entity.Order;
 import com.datas.utils.SearchForm;
 import com.plugin.utils.DateHelper;
 
@@ -49,6 +53,8 @@ public class CustomerController extends BaseController<Customer>{
 	private CustomerLogic customerLogic;
 	@Autowired
 	private CustomerCommissionLogic customerCommissionLogic;
+	@Autowired
+	OrderLogic orderLogic;
 	
 	/**
 	 * 获取所有Customer
@@ -65,7 +71,7 @@ public class CustomerController extends BaseController<Customer>{
 		
 		if (StringHelper.isEmpty(searchForm.getDateFrom())) {
 			Calendar calendar = Calendar.getInstance();
-			calendar.add(Calendar.MONTH, -12);
+			calendar.add(Calendar.MONTH, -36);
 			searchForm.setDateFrom(DateHelper.getYYYYMMDD(calendar.getTime().getTime()));
 		}
 		if (StringHelper.isEmpty(searchForm.getDateTo())) {
@@ -221,7 +227,7 @@ public class CustomerController extends BaseController<Customer>{
 		
 		if (StringHelper.isEmpty(searchForm.getDateFrom())) {
 			Calendar calendar = Calendar.getInstance();
-			calendar.add(Calendar.MONTH, -6);
+			calendar.add(Calendar.MONTH, -36);
 			searchForm.setDateFrom(DateHelper.getYYYYMMDD(calendar.getTime().getTime()));
 		}
 		if (StringHelper.isEmpty(searchForm.getDateTo())) {
@@ -301,12 +307,40 @@ public class CustomerController extends BaseController<Customer>{
 	 * @return
 	 */
 	@RequestMapping("/{customerId}")
-	public ModelAndView commissionSave(@PathVariable("customerId") Long customerId){
+	public ModelAndView getCustomer(@PathVariable("customerId") Long customerId){
 		ModelAndView mv = new ModelAndView("administrator/customer/edit");
 		
 		mv.addObject("customer",customerLogic.getCustomerById(customerId));
 		return mv;
 	}
+	
+	/**
+	 * 获取一个Customer API
+	 * @param orderIds
+	 * @param customerCommission
+	 * @return
+	 */
+	@RequestMapping("/api/{customerId}")
+	public ResponseEntity<Customer> getCustomerEnity(@PathVariable("customerId") Long customerId){
+		
+		return new ResponseEntity<>(customerLogic.getCustomerById(customerId),HttpStatus.OK);
+	}
+	
+	
+	/**
+	 * 获取一个Customer 未支付的INvoice 列表
+	 * @param orderIds
+	 * @param customerCommission
+	 * @return ResponseEntity
+	 */
+	@RequestMapping("/api/unpaid/invoice/{customerId}")
+	public ResponseEntity<List<Invoice>> getUnpaidInvoice(@PathVariable("customerId") Long customerId){
+		return new ResponseEntity<>(customerLogic.getUnpaidInvoice(customerId),HttpStatus.OK);
+		
+	}
+	
+	
+	
 	/**
 	 * 删除一个Customer
 	 * @return
@@ -317,7 +351,6 @@ public class CustomerController extends BaseController<Customer>{
 		
 		customerLogic.delCustomer(customerId);
 	}
-	
 	/**
 	 * 关联词查询customer
 	 */
@@ -327,6 +360,7 @@ public class CustomerController extends BaseController<Customer>{
 		
 		Pageable pageable = new PageRequest(searchForm.getPage()-1<1?0:searchForm.getPage()-1, searchForm.getSize(), Direction.fromString(searchForm.getSort()), searchForm.getSortBy());
 		List<CustomerRankView> list = customerLogic.findAllWithCustomerRank(searchForm,CustomerRepository.customerType_customer, pageable);
+		
 		
 		return new ResponseEntity<List<CustomerRankView>>(list,HttpStatus.OK);
 		
@@ -371,4 +405,56 @@ public class CustomerController extends BaseController<Customer>{
 		
 		return ret.toString();
 	}
+	
+	/**
+	 * 根据CustomerId获取所有customer订单
+	 * @return
+	 */
+	@RequestMapping(value={"/{customerId}/orders"})
+	public ModelAndView getCustomerOrders(@PathVariable("customerId") Long customerId,@ModelAttribute(value = "searchForm") SearchForm searchForm){
+		ModelAndView mv = new ModelAndView("administrator/customer/order/index");
+		
+		Pageable pageable = new PageRequest(searchForm.getPage()-1<1?0:searchForm.getPage()-1, searchForm.getSize(), Direction.fromString(searchForm.getSort()), searchForm.getSortBy());
+		
+		Page<Order> page = orderLogic.getOrderByCustomerId(customerId,pageable);
+		
+		
+		mv.addObject("salesList", orderLogic.geSalesList());
+		
+		//获取订单下的所有产品的cost，求和
+		List<Double> orderCostList = new ArrayList<>();
+		page.getContent().forEach(order ->{
+			orderCostList.add(order.getOrderItems().stream().map( oi -> oi.getCost()*oi.getNum()).reduce(0D,(a,b) -> a+b).doubleValue());
+		});
+		
+		mv.addObject("totalCost",orderCostList.stream().mapToDouble(c -> c.doubleValue()).reduce(0D,(a,b) -> a+b));
+		mv.addObject("totalPrice",page.getContent().stream().map(order -> order.getTotalProductPrice()).reduce(0D,(a,b) -> a+b).doubleValue());
+		
+		mv.addObject("totalFreight",page.getContent().stream().map(order -> order.getTotalFreight()).reduce(0D,(a,b) -> a+b).doubleValue());
+		
+		mv.addObject("user", super.getLognUser());
+		
+		mv.addObject("orderList", page.getContent());
+		mv.addObject("totalPages", page.getTotalPages());
+		mv.addObject("number", searchForm.getPage() > page.getTotalPages() ? 0 : page.getNumber() + 1);
+		mv.addObject("totalNum", page.getTotalElements());
+		mv.addObject("searchForm", searchForm);
+		
+		mv.addObject("customer", customerLogic.getCustomerById(customerId));
+		return mv;
+		
+	}
+	/**
+	 * email batch
+	 * @return emailBatch
+	 */
+	@RequestMapping("/statement/pdf/email/batch")
+	@ResponseBody
+	public void emailBatch(@RequestParam("customerIds") Long[] customerIds ,
+			@ModelAttribute(value = "searchForm") SearchForm searchForm,
+			HttpServletRequest request,HttpServletResponse response){
+		
+		customerLogic.statementEmailBatch(customerIds,super.getLognUser(),searchForm,request,response);
+	}
+	
 }

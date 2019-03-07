@@ -5,8 +5,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -150,6 +153,17 @@ public class CategoryController extends BaseController {
 		request.getSession().removeAttribute(SESSIONO_TOP_MENU);
 		request.getSession().removeAttribute(SESSIONO_BOTTOM_MENU);
 		return new ModelAndView(new RedirectView("/management/category/", true));
+	}
+	
+	 /** 
+	  * 上传分类图片
+	 */
+	@RequestMapping(value="/upload/{categoryId}",method=RequestMethod.POST)
+	@ResponseBody
+	public void updateAttribute(
+			@PathVariable("categoryId") Long categoryId, @RequestParam("attachments") MultipartFile[] attachments
+			){
+		categoryLogic.uploadImg(categoryId,attachments);
 	}
 	
 }

@@ -146,4 +146,14 @@ public class InvoiceController extends BaseController<Invoice>{
 			){
 		invoiceLogic.update(pk,name,value,super.getLognUser());
 	}
+	/**
+	 * email batch
+	 * @return emailBatch
+	 */
+	@RequestMapping("/email/batch")
+	@ResponseBody
+	public void emailBatch(@RequestParam("invoiceIds") Long[] invoiceIds ,HttpServletRequest request,HttpServletResponse response){
+		
+		invoiceLogic.emailBatch(invoiceIds, super.getLognUser(), request, response);
+	}
 }

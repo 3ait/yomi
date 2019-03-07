@@ -4,6 +4,7 @@
 	<script src="#" type="text/javascript" th:src="@{/static/plugin/vue/vue-form.js}" charset="utf-8"></script>
     <div th:replace="/administrator/customer/fragment/f-search :: search('management/customer')"></div>
     
+    
     <div class="row">
         <div class="col-lg-12" >
         	<table class="table table-hover  ">
@@ -20,7 +21,7 @@
 				 			<th>Login Email <br/>Password <br/> <span onclick="colomnSort('status')" class="sort-colomn">Status</span></th>
 				 			<th ><span  onclick="colomnSort('discount')" class="sort-colomn">Discount</span>
 				 				<br/>
-				 				<span onclick="colomnSort('rankCustomer.id')" class="sort-colomn">Customer Rank</span>
+				 				<span onclick="colomnSort('rankCustomer.id')" class="sort-colomn">Customer Group</span>
 				 			</th>
 				 			<th >Memo</th>
 				 			<th>Create Time<br/>Modify Time</th>
@@ -30,7 +31,9 @@
 									  <i class="fa fa-plus fa-stack-1x"></i>
 									</span>
 				 				
-				 				</a></th>
+				 				</a>
+				 				
+				 			</th>
 				 		</tr>
 				 	</thead>
 				 		<tr th:each="customer :${customerList}" th:id="|tr_${customer.id}|" th:class="${#dates.format(customer.modifyTime, 'dd/MM/yyyy')}==${#dates.format(new java.util.Date().getTime(), 'dd/MM/yyyy')}?'':alert-info">
@@ -72,7 +75,7 @@
 				 			<td >
 				 				<a  th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="discount"  href="#"  class="edit-name"  th:text="${customer.discount}" >phone</a>
 				 				<br />
-				 				<span th:if="${customer.rankCustomer!=null}" id="customer_content">
+				 				<span th:if="${customer.rankCustomer!=null}" id="customer_group">
 					 				<a data-type="select" th:attr="data-pk=${customer.id}, data-url=|@{/management/customer/update/colomn/}|" data-name="rankCustomer"  href="#"  class="customerRank" th:text="${customer.rankCustomer.rankLevel}" >rankCustomer</a>
 				 				</span>
 				 				<span th:if="${customer.rankCustomer==null}" >
@@ -98,12 +101,21 @@
 									  <i class="fa fa-file-text-o fa-stack-1x"></i>
 									</span></a>
 								&nbsp;
-								<a href="javascript:void(0)" th:onclick="|showModel('','','${customer.id}','${customer.name}')|" title="Payment"  target="_blank">
+								<a href="javascript:void(0)" th:onclick="|showModel(${customer.id})|" title="Payment"  target="_blank">
 								<span class="fa-stack"> <i
 									class="fa fa-square-o fa-stack-2x"></i> <i
 									class="fa fa-plus fa-stack-1x"></i>
 									</span></a>
-									<a href="javascript:void(0)" th:onclick="|delCustomer('${customer.id}')|" title="Delete Customer" >
+									<br/>
+									
+				 				<a href="#" th:href="|@{/management/customer/}${customer.id}/orders|" target="_blank" title="Orders">
+				 				 <span class="fa-stack">
+									  <i class="fa fa-square-o fa-stack-2x"></i>
+									  <i class="fa fa-list fa-stack-1x"></i>
+									</span>
+				 				
+				 				</a>&nbsp;
+				 				<a href="javascript:void(0)" th:onclick="|delCustomer('${customer.id}')|" title="Delete Customer" >
 				 				<span class="fa-stack" >
 									  <i class="fa fa-square-o fa-stack-2x"></i>
 									  <i class="fa fa-remove fa-stack-1x"></i>
@@ -125,7 +137,8 @@
 									  <i class="fa fa-square-o fa-stack-2x"></i>
 									  <i class="fa fa-print fa-stack-1x"></i>
 									</span></a>
-									
+								
+								
 				 			</td>
 				 			<td colspan="10" align="right">
 				 				<div th:replace="/administrator/fragment/f-page :: page"></div>
@@ -135,14 +148,13 @@
         </div>
     </div>
     
-    <th:block th:replace="/administrator/invoice/fragment/new-payment :: content"></th:block>
-    
-     <style>
+    <th:block th:replace="/administrator/invoice/fragment/multiple-payment :: content"></th:block>
+  
+    <style>
     	.sort-colomn{
     		cursor: pointer;
     		color: #c05a22;
     	}
-    	
     </style>
      <script src="static/plugin/editable/js/bootstrap-editable.min.js"  
      	type="text/javascript" th:src="@{/static/plugin/editable/js/bootstrap-editable.min.js}"
@@ -173,7 +185,7 @@
 			
 		
 			new Vue({
-				el : '#customer_content',
+				el : '#customer_group',
 				data : {
 					
 				},
@@ -187,8 +199,7 @@
 					  }).then(function (response){
 						  var data = response.data;
 						  
-						  console.log(data);
-						  var rank = [{value:"",text:"--Customer Rank--"}];
+						  var rank = [{value:"",text:"--Customer Group--"}];
 						  
 						  for(var i=0;i<data.length;i++){
 							  rank.push({value:data[i].id,text:data[i].rankLevel});
@@ -244,28 +255,30 @@
 				}
 			}
 			/**
-			批量发送邮件
-			**/
-			function emailBatch(dateFrom,dateTo){
-				if(confirm("Confirm?")){
-					$("input[name='checkbox_email']").each(function(index,value){
-						if($(value).prop("checked")){
-							$.ajax({
-								url:[[@{/management/customer/statement/pdf/email/}]] + $(value).val() +  "?dateFrom="+dateFrom + "&dateTo=" + dateTo,
-								method: "GET",
-								data:{
-								}
-							}).done(function(ret){
-								if(ret=='success'){
-									$("#tr_"+$(value).val()).addClass("alert-info");
-								}else{
-									$("#tr_"+$(value).val()).addClass("alert-danger");
-								}
-							});
-						}
-					});
-				}
+		    批量发送邮件
+		**/
+		function emailBatch(){
+			if(confirm("Confirm?")){
+				var ids = new Array();
+				$("input[name='checkbox_email']").each(function(index,value){
+					if($(value).prop("checked")){
+						checkedInvoice.push(value.value);
+					}
+				});
+				$.ajax({
+					url:[[@{/management/customer/statement/pdf/email/batch?customerIds=}]] + ids,
+					method: "GET",
+					data:{
+					}
+				}).done(function(ret){
+					if(ret=='true'){
+						console.log("Batch send email");
+						console.log(checkedInvoice);
+					}
+				});
+				
 			}
+		}
 			
 			/**
 			  批量打印Statement

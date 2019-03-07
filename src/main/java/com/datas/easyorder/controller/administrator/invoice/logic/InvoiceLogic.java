@@ -232,5 +232,20 @@ public class InvoiceLogic extends BaseLogic<Invoice>{
 		
 		return list;
 	}
+	/**
+	 * 批量发送Email
+	 * @param invoiceIds
+	 * @param lognUser
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	public void emailBatch(Long[] invoiceIds, User lognUser, HttpServletRequest request,
+			HttpServletResponse response) {
+		for(Long id:invoiceIds){
+			email(id, lognUser, request, response);
+		}
+	}
+	
 	
 }

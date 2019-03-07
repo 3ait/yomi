@@ -1,0 +1,58 @@
+<th:block th:fragment="content(category)">
+	<div th:id="|id_${category.id}|" style="height: 50px;" >
+		<img th:if="${category.defaultSrc}!=null" class="col-xs-2 img-thumbnail img-responsive"  th:src="|@{/}${category.defaultSrc}|" style="height: 50px;">
+		<input type="file"  name="attachment" v-on:change="uploadFiles($event)" />
+	</div>
+
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			new Vue({
+				el : '#id_'+[[${category.id}]],
+				data : {
+					
+				},
+				created() {
+					var _this = this;
+					
+				},
+				methods:{
+					
+					uploadFiles: function(event){
+						 var _this = this;
+						 var _self = event.target;
+						 for(var i=0;i<_self.files.length;i++){
+							var reader  = new FileReader();
+							reader.readAsDataURL(_self.files[i]);
+							reader.onload = function(e){
+								$(_self).prev().replaceWith("<img class='col-xs-2 img-thumbnail img-responsive'   src='" + this.result  +  "'></img>");
+							}
+						}
+						 
+						 
+						 var  formdata = new FormData();
+						 for(var i=0;i<event.target.files.length;i++ ){
+						     formdata.append('attachments',event.target.files[i]);
+						 }
+					     console.log(formdata.get("attachments")); //FormData私有类对象，访问不到，可以通过get判断值是否传进去  
+						 
+					     var config = {  
+					          headers:{'Content-Type':'multipart/form-data'}  
+					        }; 
+						axios.post([[@{/management/category/upload/}]] + [[${category.id}]] , 
+								formdata,
+								config
+						).then(function (response){
+							  _this.attachments = response.data;
+						  })
+						  .catch(function (error) {
+						    console.log(error);
+						  });  
+					}
+				
+				}
+			})
+			
+			
+		/*]]>*/	
+	</script>
+</th:block> 

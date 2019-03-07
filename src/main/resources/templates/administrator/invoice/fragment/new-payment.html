@@ -13,7 +13,7 @@
 					<h4 class="modal-title">New Payment</h4>
 				</div>
 				<div class="modal-body">
-					<form id="saveForm"  >
+					<form id="saveForm" method="post">
 						<div class="form-group">
 							<label for="aliasId" class="control-label">InvoiceId:</label> 
 							<input type="text" class="form-control" id="aliasId" readonly="readonly" />
@@ -41,7 +41,7 @@
 								name="paymentMethod">
 								<option value="Eftpos">Eftpos</option>
 								<option value="Cash">Cash</option>
-								<option value="Cheque">Cheque</option>
+								<option value="Cheque">Check</option>
 								<option value="Banks">Banks</option>
 								<option value="Other">Other</option>
 							</select>
@@ -66,21 +66,22 @@
 	<!-- /.modal -->
     
     
-		
+		<script th:src="@{/static/plugin/jquery/jquery-ui-1.9.2.custom.min.js}" src="js/jquery-ui-1.9.2.custom.min.js"></script>
 		<script type="text/javascript" th:inline="javascript">
 		/*<![CDATA[*/
 			
 			/**
 			    增加Payment
 			**/
-			function showModel(invoiceId, invoiceAliasId,customerId,customerCompanyName){
+			function showModel(invoiceId, invoiceAliasId,hiddenId,customerCompanyName){
+				$("#myModal").draggable();
 				$('#myModal').modal('show').on('shown.bs.modal', function (e) {
 					  
 					  $("#companyName").val(customerCompanyName);
-					  $("#hiddenId").val(customerId);
+					  $("#hiddenId").val(hiddenId);
 					  $("#hiddenInvoiceId").val(invoiceId);
 					  $("#aliasId").val(invoiceAliasId);
-					  $.get([[@{/management/customer/get/}]]+ customerId + "/balance",function(data){
+					  $.get([[@{/management/customer/get/}]]+ hiddenId + "/balance",function(data){
 						  $("#customerBalance").val("$" +  data);
 					  });
 					 	
@@ -91,8 +92,8 @@
 		**/
 		function save(){
 			
-			if($("#hiddenId").val()==""){
-				$("#companyName").focus();
+			if($("#payment").val()==""){
+				$("#payment").focus();
 				return ;
 			}
 			//$("#saveForm").submit();
