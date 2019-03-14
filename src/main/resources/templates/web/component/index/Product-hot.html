@@ -12,7 +12,7 @@
 			<div class="row">
 				<div class="col-sm-2 col-xs-6 product-list" v-for="(item, index) in hotProductList" style="">
 					<a :href="'/product/'+ item.id" target="_blank" @click="addHistory(item.id,item.productName,item.productNameAlias,item.defaultSrc,item.price1)" >
-						<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive">
+						<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive" style="max-height: 160px;">
 					</a>
 				       <div class="caption" >
 				         <p>
@@ -37,7 +37,7 @@
 							</span>
 			        	</span>
 				        </p>
-			        	<span style="color: grey;font-size: 12px;">{{item.productName}}</span>
+			        	<span style="color: grey;font-size: 12px;">{{item.productName | nameFilter}}</span>
 			        	
 				        <p style="margin-top: 10px;">
 							<span class="label label-danger">{{item.label}}</span>
@@ -105,6 +105,12 @@
 			filters: {
 				priceFilter:function(price){
 					return price.toFixed(2);
+				},
+				nameFilter:function(name){
+					if(name && name.length > 15) {
+						name= name.substring(0,8)+ '...';
+					    }
+					     return name;
 				}
 			},
 			created: function() {
