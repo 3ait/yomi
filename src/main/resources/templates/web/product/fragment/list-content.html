@@ -65,45 +65,7 @@
 		/*<![CDATA[*/
 			
 		   
-           /**
-			属性选择
-			**/
-			/* 
-			function listProduct(sortBy,sort){
-				
-				var i = 0;
-				var attrValueIds = new Array(); 
-				$("input[name='attr_value_checkbox']").each(function(index,value){
-					if($(value).prop("checked")){
-						attrValueIds[i] = $(value).val();
-						i++;
-					}
-				});
-								
-				$("#product_list").load([[@{/product/attr}]],{
-					'attrValueIds':attrValueIds,
-					'categoryId': $("#hidden_categoryId").val(),
-					'q': $("#hidden_q").val(),
-					'page': $("#hidden_pageNum").val(),
-					'sortBy':sortBy,
-					'sort':sort,
-				}); 
-			}
-			
-
-		  
-		    var flag = 0;
-			function sort(sortBy){
-				var sort = 'asc';
-				if(flag%2==0){
-					order = 'desc'
-				}else{
-					order = 'asc'
-				}
-				flag++;
-				listProduct(sortBy,sort);
-			} 
-			*/
+         
 		/*]]>*/	
 		</script>	
 </div>
