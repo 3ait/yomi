@@ -54,6 +54,7 @@ public class ApiWebProductController extends BaseController{
 	public HttpEntity<Page<ProductAttrValue>> getAttribteValues( @PathVariable("key") String key,
 			@ModelAttribute("searchForm") SearchForm searchForm) {
 
+		searchForm.setSize(Integer.MAX_VALUE);
 		Pageable pageable = new PageRequest(searchForm.getPage() - 1 < 1 ? 0 : searchForm.getPage() - 1, searchForm.getSize(), Direction.DESC, searchForm.getSortBy());
 
 		Page<ProductAttrValue> page = attrLogic.findAllValuesByKey(key,pageable);
@@ -144,7 +145,7 @@ public class ApiWebProductController extends BaseController{
 	}
 	
 	/**
-	 * 首页
+	 * 首页frontpage
 	 * @param searchForm
 	 * @return
 	 */
@@ -153,6 +154,19 @@ public class ApiWebProductController extends BaseController{
 		Pageable pageable = new PageRequest(0, searchForm.getSize(),Direction.fromString(searchForm.getSort()),searchForm.getSortBy());
 		
 		Page<Product> pageProduct = productLogic.getCustomerRankPrice(productLogic.getFrontPageProduct(pageable), super.getLoginCustomer(request));
+		return new ResponseEntity<Page<Product>>(pageProduct, HttpStatus.OK);
+	}
+	
+	/**
+	 * new Arrvails
+	 * @param searchForm
+	 * @return
+	 */
+	@RequestMapping("/list/promote")
+	public ResponseEntity<Page<Product>> newArrivals(@ModelAttribute SearchForm searchForm,HttpServletRequest request) {
+		Pageable pageable = new PageRequest(0, searchForm.getSize(),Direction.fromString(searchForm.getSort()),searchForm.getSortBy());
+		
+		Page<Product> pageProduct = productLogic.getCustomerRankPrice(productLogic.getPromoteProduct(pageable), super.getLoginCustomer(request));
 		return new ResponseEntity<Page<Product>>(pageProduct, HttpStatus.OK);
 	}
 }

@@ -424,7 +424,7 @@ public class CustomerController extends BaseController<Customer>{
 		//获取订单下的所有产品的cost，求和
 		List<Double> orderCostList = new ArrayList<>();
 		page.getContent().forEach(order ->{
-			orderCostList.add(order.getOrderItems().stream().map( oi -> oi.getCost()*oi.getNum()).reduce(0D,(a,b) -> a+b).doubleValue());
+			orderCostList.add(order.getOrderItems().stream().map( oi -> oi.getCost()==null?0:oi.getCost()*oi.getNum()).reduce(0D,(a,b) -> a+b).doubleValue());
 		});
 		
 		mv.addObject("totalCost",orderCostList.stream().mapToDouble(c -> c.doubleValue()).reduce(0D,(a,b) -> a+b));

@@ -84,8 +84,8 @@
 				 				<span class="label label-danger" th:if="${product.stock}<${product.warningStock}" th:text="|Stock less ${product.warningStock}|"></span>
 				 			</td>
 				 			<td >
-				 				<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="clickNum"  href="#"  class="edit-name"  th:text="${product.clickNum}" >clickNum</a><br/>
-				 				<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="position"  href="#"  class="edit-name"  th:text="${product.position}" >position</a>
+				 				<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="position"  href="#"  class="edit-name"  th:text="${product.position}" >position</a><br/>
+				 				<span  th:text="${product.clickNum}" ></span>
 				 			</td>
 				 			<td>
 				 				<a  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="location"  href="#"  class="edit-name"  th:text="${product.location}" >location</a>

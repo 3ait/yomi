@@ -1,7 +1,16 @@
 <div class="container-fluid "  th:fragment="content">
-    <div th:replace="/administrator/order/fragment/f-search :: search('management/order')"></div>
+    <div th:replace="/administrator/customer/order/fragment/f-search :: search(|management/customer/${customer.id}/orders|)"></div>
+    
+    <br/>
+     <div class="row  bg-info">
+        <div class="col-lg-12 col-sm-12">
+        	&nbsp;<span class="label label-primary"  th:text="${customer.name}"></span>
+        	&nbsp;<span class="label label-primary"  th:text="${customer.companyName}"></span>
+        	&nbsp;<span class="label label-primary"  th:text="${customer.phone}"></span>
+        </div>
+       </div>
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-12 col-sm-12">
         	<table class="table   ">
 				 	<thead>
 				 		<tr>
@@ -12,20 +21,20 @@
 									  <i class="fa fa-square-o fa-stack-2x"></i>
 									  <i class="fa fa-print fa-stack-1x"></i>
 									</span></a>
-								<a href="javascript:void(0)" th:onclick="|download()|" title="Export Invoice" >
-				 				<span class="fa-stack" >
-									  <i class="fa fa-square-o fa-stack-2x"></i>
-									  <i class="fa fa-download fa-stack-1x"></i>
-									</span></a>
 				 			
 				 			</th>
 				 			<th>ID</th>
 				 			<th>Company Name</th>
 				 			<th>Tracking No.</th>
-				 			<th>Total Price(<span th:text="${#numbers.formatDecimal(totalPrice,0,2)}" th:if="${user.status=='Superadmin'}"></span>)
-				 				<br/> Total Freight(<span th:text="${#numbers.formatDecimal(totalFreight,0,2)}"></span>)
+				 			<th>Total Price(<span th:text="${#numbers.formatDecimal(totalPrice,1,2)}" th:if="${user.status=='Superadmin'}"></span>)
+				 				<br/> Total Freight(<span th:text="${#numbers.formatDecimal(totalFreight,1,2)}"></span>)
 				 				
 				 			</th>
+				 			<!-- +0.0000001 to avoid totalcost==0 -->
+				 			<th title="Cost" >Cost($<span th:text="${#numbers.formatDecimal((totalCost+0.000000001),1,2)}"></span>)
+				 				<br/>
+				 				GPM(<span th:text="${#numbers.formatPercent((totalPrice-totalCost)/(totalPrice+0.000000001),1,2)}">totalPrice</span>)
+				 				</th>
 				 			<th onclick="colomnSort('status')" class="sort-colomn">Status</th>
 				 			<th onclick="colomnSort('isPaid')" class="sort-colomn">Paid</th>
 				 			<th onclick="colomnSort('invoiced')" class="sort-colomn">Invoiced</th>
@@ -56,9 +65,18 @@
 				 				<a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="trackingNum"  href="#"  class="edit-name"  th:text="${order.trackingNum}" >Tracking Num</a>
 				 			</td>
 				 			<td>
-				 				<span th:text="${#numbers.formatDecimal(order.totalProductPrice,0,2)}" th:if="${user.status=='Superadmin'}"></span>
+				 				$<span th:text="${#numbers.formatDecimal(order.totalProductPrice,1,2)}" th:if="${user.status=='Superadmin'}"></span>
 				 				<br/>
-				 				<a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="totalFreight"  href="#"  class="edit-name"  th:text="${#numbers.formatDecimal(order.totalFreight,1,2)}" >Total Freight</a> 
+				 				$<a  th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="totalFreight"  href="#"  class="edit-name"  th:text="${#numbers.formatDecimal(order.totalFreight,1,2)}" >Total Freight</a> 
+				 			</td>
+				 			<td>
+				 				<div th:with="orderCost = ${#aggregates.sum(order.orderItems.![cost * num])} " th:if="${order.orderItems!=null}">
+					 				<span th:if="${orderCost!=null}"  th:text="|$${#numbers.formatDecimal(orderCost,1,2)}|">Cost</span><br/>
+					 				<th:block th:if="${orderCost!=null}" >
+					 					<span th:if="${orderCost!=0}"  th:text="${#numbers.formatPercent((order.totalProductPrice-orderCost)/(orderCost),1,2)}">Cost</span>
+					 					<span th:if="${orderCost==0}"  th:text="${#numbers.formatPercent(1,1,2)}">Cost</span>
+					 				</th:block>
+				 				</div>
 				 			</td>
 				 			<td >
 				 				<th:block th:replace="/administrator/order/fragment/order-status :: content(${order})"></th:block>
@@ -94,18 +112,13 @@
 									  <i class="fa fa-square-o fa-stack-2x"></i>
 									  <i class="fa fa-paste fa-stack-1x"></i>
 									</span></a>
-				 				<br/>
+				 				
 				 				<a href="javascript:void(0)" th:onclick="|copyOrder(${order.id})|" title="Dupilcate" >
 				 				<span class="fa-stack" >
 									  <i class="fa fa-square-o fa-stack-2x"></i>
 									  <i class="fa fa-copy fa-stack-1x"></i>
 									</span>
 				 				</a>
-				 				<a href="javascript:void(0)" th:onclick="|printTicket(${order.id})|" title="Print" >
-				 				<span class="fa-stack" >
-									  <i class="fa fa-square-o fa-stack-2x"></i>
-									  <i class="fa fa-print fa-stack-1x"></i>
-									</span></a>
 				 			</td>
 				 		</tr>
 				 		
@@ -160,9 +173,18 @@
 		    });
 			
 			
+			
+			var saleSource = [];
+			
+			for(var i=0;i<[[${salesList}]].length;i++){
+				saleSource[i] = {
+						'value':[[${salesList}]][i].id,'text':[[${salesList}]][i].name
+				};
+			}
+			
 			$('.customerBySalesId').editable({
 		        value: -1,    
-		        source: [[${salesArray}]],
+		        source: saleSource,
 		    });
 			
 			/**
@@ -185,7 +207,6 @@
 					}
 				});
 			}
-			
 			/**
 			Duplicate Order
 			**/
@@ -234,6 +255,7 @@
 					console.log(orderIds);
 					if(orderIds.length>0){
 							//生成PDF
+// 						window.open([[@{/management/order/print.pdf}]] +"?orderIds=" +orderIds,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 						window.open([[@{/management/order/batch/print}]] +"?orderIds=" +orderIds,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 					}
 
@@ -248,35 +270,12 @@
 			}
 			
 			/**
-			展示客户
 			**/
 			function showCustomer(customerId){
 				window.open([[@{/management/customer/}]] +customerId,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 
 			}
 			
-			/**
-			打印小票
-			**/
-			function printTicket(orderId){
-				window.open([[@{/management/order/ticket/print/}]]+orderId,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
-			}
-			/**
-			下载
-			**/
-			function download(){
-				var ids = new Array();
-				$("input[name='checkbox_select']").each(function(index,value){
-					if($(value).prop("checked")){
-						ids.push(value.value);
-					}
-				});
-				if(checkedInvoice.length==0){
-					return;
-				}
-				window.location.href=[[@{/management/order/download?ids=}]] +ids;
-
-			}
 			
 		/*]]>*/	
 	</script>

@@ -94,15 +94,6 @@ public class CategoryLogic extends BaseLogic<Menu>{
 		Pageable pageable = new PageRequest(0, Integer.MAX_VALUE,Direction.ASC,POSITION);
 		
 		List<Menu>  menus = menuRepository.findByMenuId(fatherId,pageable);
-		Pageable productPage = new PageRequest(0,1,Direction.DESC,"id");
-		menus.forEach(m ->{
-			if(null==m.getDefaultSrc() || "".equals(m.getDefaultSrc())){
-				Page<Product> product = productLogic.getProductByMenuId(m.getId(),productPage);
-				if(product.getContent().size()==1){
-					m.setDefaultSrc(product.getContent().get(0).getDefaultSrc());
-				}
-			}
-		});
 		
 		
 		
@@ -172,16 +163,6 @@ public class CategoryLogic extends BaseLogic<Menu>{
 			menuView.setSubMenuViewList(subMenu);
 			retList.add(menuView);
 			
-			
-			Pageable productPage = new PageRequest(0,1,Direction.DESC,"id");
-			subMenu.forEach(m ->{
-				if(null==m.getMenu().getDefaultSrc() || "".equals(m.getMenu().getDefaultSrc())){
-					Page<Product> product = productLogic.getProductByMenuId(m.getMenu().getId(),productPage);
-					if(product.getContent().size()==1){
-						m.getMenu().setDefaultSrc(product.getContent().get(0).getDefaultSrc());
-					}
-				}
-			});
 		}
 		
 		

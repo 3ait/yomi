@@ -3,7 +3,10 @@
 		<script src="#" type="text/javascript" th:src="@{/static/plugin/vue/axios.min.js}" charset="utf-8"></script>
 		<script src="#" type="text/javascript" th:src="@{/static/plugin/vue/vue-form.js}" charset="utf-8"></script>
 		
-	<div id="slider"  >
+			<link th:href="@{/static/templates/web/index/css/fwslider.css}" rel="stylesheet" href="css/fwslider.css" media="all" />
+	<script th:src="@{/static/templates/web/index/js/fwslider.js}" src="js/fwslider.js"></script>
+		
+	<div id="slider" class="wow fadeIn delay-1s" >
 	
 		<!-- start slider -->
 			<div id="fwslider" >
@@ -53,6 +56,5 @@
 		/*]]>*/
 	</script>
 	
-	<link th:href="@{/static/templates/web/index/css/fwslider.css}" rel="stylesheet" href="css/fwslider.css" media="all" />
-	<script th:src="@{/static/templates/web/index/js/fwslider.js}" src="js/fwslider.js"></script>
+
 </th:block>

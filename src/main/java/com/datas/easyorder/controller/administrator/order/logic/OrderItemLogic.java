@@ -42,9 +42,15 @@ public class OrderItemLogic extends BaseLogic<OrderItem> {
 	@Transactional(rollbackOn = Exception.class)
 	public void removeOrderItem(Long orderItemId) {
 		
-		Order order = orderRepository.findOne(orderItemRepository.findOne(orderItemId).getOrder().getId());
+		Long OrderId = orderItemRepository.findOne(orderItemId).getOrder().getId();
 		orderItemRepository.delete(orderItemId);
 		
+		Order order = orderRepository.findOne(OrderId);
+		order.getOrderItems().forEach(oi -> {
+			if(oi.getId()==orderItemId){
+				order.getOrderItems().remove(oi);
+			}
+		});
 		Double sumPrice = order.getOrderItems().stream().collect(Collectors.summingDouble(oi -> oi.getProductPrice()*oi.getNum())).doubleValue();
 		order.setTotalProductPrice(sumPrice);
 		order.setModifyTime(Calendar.getInstance().getTime());

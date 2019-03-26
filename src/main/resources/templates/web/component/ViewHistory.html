@@ -5,7 +5,7 @@
 		<div class="history-list" v-for="item in historyList" >
 		
 			<a :href="'/product/'+ item.id" target="_blank">
-				<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive">
+				<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive" style="max-height: 160px;">
 			</a>
 			       <div class="caption" >
 			        	<span style="color: grey;font-size: 12px;">{{item.productName}}</span>

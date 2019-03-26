@@ -5,14 +5,14 @@
 			<br/>
 			<div class="row">
 				<div class="col-sm-12" style="padding: 0;">
-				<h3 style="color: #357363;" class="wow bounceInDown delay-1s">热卖推荐</h3>
+				<h3 style="color: #357363;" class="wow bounceInDown delay-1s">产品推荐</h3>
 				<hr style="background: #357363;height: 2px;border: none;"/>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-sm-2 col-xs-6 product-list" v-for="(item, index) in recommendProductList" style="">
 					<a :href="'/product/'+ item.id" target="_blank" @click="addHistory(item.id,item.productName,item.productNameAlias,item.defaultSrc,item.price1)" >
-						<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive" style="max-height: 160px;">
+						<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive" style="height: 160px;">
 					</a>
 				       <div class="caption" >
 				        <p>
@@ -37,7 +37,9 @@
 							</span>
 			        	</span>
 				        </p>
-			        	<span style="color: grey;font-size: 12px;">{{item.productName | nameFilter}}</span>
+			        	 <div style="height: 45px;overflow: hidden;">
+			        	<span style="color: grey;font-size: 12px;">{{item.productName }}</span>
+				        </div>
 			        	
 				        <p style="margin-top: 10px;">
 							<span class="label label-danger">{{item.label}}</span>
@@ -152,7 +154,11 @@
 				addToCart : function (productId,productName,productNameAlias,location,weight,defaultSrc,price){
 					 productAdd(productId,productName,productNameAlias,location,weight,defaultSrc,price,1);
 					 $("#"+productId+"remindTxt").show();
-				}
+				},
+				addHistory : function (id,productName,productNameAlias,defaultSrc,price){
+					
+					addToHistory(id,productName,productNameAlias,defaultSrc,price);
+				},
 			}
 		})
 		/*]]>*/

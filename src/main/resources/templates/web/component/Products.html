@@ -13,7 +13,7 @@
 			<div class="row"  style="padding-left: 10px;">
 				<div class="col-xs-6 col-sm-3 product-list" v-for="(item, index) in retData.content">
 					<a :href="'/product/'+ item.id" target="_blank" @click="addHistory(item.id,item.productName,item.productNameAlias,item.defaultSrc,item.price1)" >
-						<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive" style="max-height: 160px;">
+						<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive" style="height: 160px;">
 					</a>
 			      <div class="caption" >
 			        <p>
@@ -38,7 +38,9 @@
 							</span>
 			        	</span>
 			        </p>
-		        	<span style="color: grey;font-size: 12px;">{{item.productName | nameFilter}}</span>
+		        	<div style="height: 45px;overflow: hidden;">
+			        	<span style="color: grey;font-size: 12px;">{{item.productName }}</span>
+				        </div>
 		        	
 			        <p style="margin-top: 10px;">
 						<span class="label label-danger">{{item.label}}</span>
@@ -145,12 +147,6 @@
 				priceFilter:function(price){
 					return price.toFixed(2);
 				},
-				nameFilter:function(name){
-					if(name && name.length > 30) {
-						name= name.substring(0,29)+ '...';
-					    }
-					     return name;
-				}
 			},
 			created: function() {
 				
@@ -200,7 +196,10 @@
 					 productAdd(productId,productName,productNameAlias,location,weight,defaultSrc,price,1);
 					 $("#"+productId+"remindTxt").show();
 				},
-				
+				addHistory : function (id,productName,productNameAlias,defaultSrc,price){
+					
+					addToHistory(id,productName,productNameAlias,defaultSrc,price);
+				},
 				//上一页面
 				prePage :function(){
 					var _this = this;
@@ -248,7 +247,7 @@
 					}
 				},
 				
-				//nexpage
+				//go
 				go :function(){
 					var _this = this;
 					var pageNum = parseInt($("#pageGo").val())-1;

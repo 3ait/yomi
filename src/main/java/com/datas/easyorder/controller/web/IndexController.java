@@ -65,8 +65,6 @@ public class IndexController extends BaseController{
 	
 	@Value("${project.name}")
 	String projectName;
-	@Value("${index.slider}")
-	public String indexSlider;
 	
 	
 	/**
@@ -81,17 +79,6 @@ public class IndexController extends BaseController{
 	public ModelAndView index() {
 		
 		ModelAndView modelAndView = new ModelAndView("web/index");
-		
-		
-		Pageable pageable = new PageRequest(0, 10,Direction.ASC,"position");
-		ArticleEditView articleEditView = contentLogic.getArtitleByUrlTitle(indexSlider, (byte)1, pageable);
-		modelAndView.addObject("articleEditView",articleEditView);
-		
-		Pageable hotPageRequest = new PageRequest(0, 24,Direction.ASC,"position");
-		Pageable frontPageRequest = new PageRequest(0, 24,Direction.ASC,"position");
-		
-		modelAndView.addObject("frontPageProductList",productLogic.getFrontPageProduct(hotPageRequest).getContent());
-		modelAndView.addObject("PromoteProductList",productLogic.getPromoteProduct(frontPageRequest).getContent());
 		
 		
 		return modelAndView;
