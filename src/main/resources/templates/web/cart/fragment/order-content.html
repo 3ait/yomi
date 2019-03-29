@@ -261,19 +261,19 @@
 						return;
 					}
 					
-					if(_this.toProvince.trim()==""){
+					if(_this.toProvince.trim()=="" || _this.toProvince.trim()=="null"){
 						this.$refs.toProvince.focus();
 						return;
 					}
-					if(_this.toCity.trim()==""){
+					if(_this.toCity.trim()==""|| _this.toCity.trim()=="null"){
 						this.$refs.toCity.focus();
 						return;
 					}
-					if(_this.toDistrict.trim()==""){
+					if(_this.toDistrict.trim()==""|| _this.toDistrict.trim()=="null"){
 						this.$refs.toDistrict.focus();
 						return;
 					}
-					if(_this.toShippingAddress==""){
+					if(_this.toShippingAddress==""|| _this.toProvince.trim()=="null"){
 						this.$refs.toShippingAddress.focus();
 						return;
 					}

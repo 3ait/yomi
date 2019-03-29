@@ -1,6 +1,12 @@
 package com.datas.easyorder.controller.administrator.order.logic;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,6 +25,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -47,6 +56,7 @@ import com.datas.easyorder.db.entity.UserCompany;
 import com.datas.utils.SearchForm;
 import com.plugin.mail.logic.SendMail;
 import com.plugin.pdf.HtmlPDF;
+import com.plugin.utils.DateHelper;
 
 @Component
 public class OrderLogic extends BaseLogic<Order> {
@@ -658,5 +668,94 @@ public class OrderLogic extends BaseLogic<Order> {
 	 */
 	public Page<Order> getOrderByCustomerId(Long customerId, Pageable pageable) {
 		return orderRepository.findByCustomerByCustomerIdId(customerId, pageable);
+	}
+	
+	/**
+	 * 导出报表
+	 * 
+	 * @param orderIds
+	 * @return
+	 * @throws FoundException
+	 */
+	@Transactional(rollbackOn = Exception.class)
+	public ResponseEntity<byte[]> getOrderExport(Long[] orderIds) throws Exception {
+
+		List<Order> list = orderRepository.findByIdIn(orderIds);
+
+		File file = new File(absoultPath + "/order/" + DateHelper.getYYYYMMDD() + ".csv");
+
+		PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file)));
+		pw.write(new String(new byte[] { (byte) 0xEF, (byte) 0xBB,(byte) 0xBF })); 
+		StringBuffer title = new StringBuffer();
+		title.append("序号").append(",");
+		title.append("NAL No.").append(",");
+		title.append("地址").append(",");
+		title.append("姓名").append(",");
+		title.append("省").append(",");
+		title.append("市").append(",");
+		title.append("区").append(",");
+		title.append("SKU products").append(",");
+		title.append("产品名称").append(",");
+		title.append("产品规格 CODE").append(",");
+		title.append("手机").append(",");
+		title.append("电话").append(",");
+		title.append("QTY").append(",");
+		title.append("PO No.").append(",");
+		title.append("售价").append(",");
+		
+		pw.println(title.toString());
+		
+		
+		for (Order order : list) {
+			order.getOrderItems().forEach( oi ->{
+				StringBuffer row = new StringBuffer();
+				//序号
+				row.append(order.getId()).append(",");
+				//NAL No.
+				row.append("").append(",");
+				//地址
+				row.append(order.getToProvince() + order.getToDistrict() + order.getToDistrict() + order.getToShippingAddress()).append(",");
+				//姓名
+				row.append(order.getToCustomerName()).append(",");
+				//省
+				row.append(order.getToProvince()).append(",");
+				//市
+				row.append(order.getToCity()).append(",");
+				//区
+				row.append(order.getToDistrict()).append(",");
+				//SKU products
+				row.append("").append(",");
+				//产品名称
+				row.append(oi.getProductNameCn()).append(",");
+				//产品规格 CODE
+				row.append(oi.getProduct().getMpn()).append(",");
+				//手机
+				row.append(order.getToPhone()).append(",");
+				//电话
+				row.append(order.getToPhone()).append(",");
+				//QTY
+				row.append(oi.getNum()).append(",");
+				//PO No.
+				row.append("").append(",");
+				//售价
+				row.append("").append(",");
+				pw.println(row.toString());
+			});
+		}
+		pw.flush();
+		pw.close();
+		
+		
+		InputStream in = new FileInputStream(file);
+		byte[] body =new byte[in.available()];
+        in.read(body);
+		in.close();
+		
+
+		HttpHeaders headers = new HttpHeaders();// 设置响应头
+		headers.add("Content-Disposition", "attachment;filename=" + DateHelper.getYYYYMMDD() + ".csv" );
+		HttpStatus statusCode = HttpStatus.OK;// 设置响应吗
+		return new ResponseEntity<byte[]>(body, headers, statusCode);
+
 	}
 }

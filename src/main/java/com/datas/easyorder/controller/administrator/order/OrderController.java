@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -243,64 +244,17 @@ public class OrderController extends BaseController<Order>{
 	}
 	
 	/**
-	 * download
+	 * export
 	 * @return
 	 * @throws IOException 
 	 */
-	@RequestMapping(value="/download",produces="application/csv;")
-	public void invoiceDownload(@RequestParam("ids") Long[] ids ,HttpServletResponse response) throws IOException{
+	@RequestMapping(value="/export")
+	public ResponseEntity<byte[]> export(@RequestParam("orderIds") Long[] orderIds,HttpServletRequest request,HttpServletResponse response) throws Exception{
 		
-		/**
-		 * 
-		response.setContentType("application/csv");
-		response.setHeader("Content-Disposition", "attachment;filename=Invoice-download.csv"); 
-		User user = super.getLognUser();
-		List<InvoiceView> invoiceViewList =  orderLogic.invoicePreview(ids,user);
+		return orderLogic.getOrderExport(orderIds);
 		
-		PrintWriter pw = new PrintWriter(new OutputStreamWriter(response.getOutputStream()));
-		StringBuilder title = new StringBuilder();
-		title.append("Company Name").append(",");
-		title.append("Invoice ID").append(",");
-		title.append("Date").append(",");
-		title.append("Sales Name").append(",");
-		title.append("Percentage").append(",");
-		title.append("Total Product Pirce").append(",");
-		title.append("Paid").append(",");
-		title.append("P/O No.");
-		pw.println(title.toString());
-		invoiceViewList.forEach(iv ->{
-			try {
-				StringBuilder row = new StringBuilder();
-				row.append(iv.getCustomer().getCompanyName()).append(",");
-				row.append(iv.getInvoice().getAliasId()).append(",");
-				row.append(DateHelper.getMMDDYYYY(iv.getInvoice().getCreateTime().getTime())).append(",");
-				if(iv.getInvoice().getOrder().getCustomerBySalesId()!=null){
-					row.append(iv.getInvoice().getOrder().getCustomerBySalesId().getName()).append(",");
-					row.append(iv.getInvoice().getOrder().getSalesCommissionPercentage() + "").append(",");
-				}else{
-					row.append("").append(",");
-					row.append("").append(",");
-				}
-				
-				row.append("$ " + iv.getInvoice().getOrder().getTotalProductPrice()).append(",");
-				if(iv.getInvoice().getPaid() == InvoiceRepository.paid_paid){
-					row.append("Paid").append(",");
-				}else if(iv.getInvoice().getPaid()  ==  InvoiceRepository.paid_unpaid){
-					row.append("Unpaid").append(",");
-				}else {
-					row.append("Unpaid").append(",");
-				}
-				row.append(iv.getInvoice().getAdminInfo());
-				pw.println(row.toString());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		});
-		pw.flush();
-		pw.close();
-		 */
 	}
+	
 	
 	
 }

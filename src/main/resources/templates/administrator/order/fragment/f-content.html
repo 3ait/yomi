@@ -12,7 +12,7 @@
 									  <i class="fa fa-square-o fa-stack-2x"></i>
 									  <i class="fa fa-print fa-stack-1x"></i>
 									</span></a>
-								<a href="javascript:void(0)" th:onclick="|download()|" title="Export Invoice" >
+								<a href="javascript:void(0)" th:onclick="|exportOrders()|" title="Export" >
 				 				<span class="fa-stack" >
 									  <i class="fa fa-square-o fa-stack-2x"></i>
 									  <i class="fa fa-download fa-stack-1x"></i>
@@ -261,21 +261,26 @@
 			function printTicket(orderId){
 				window.open([[@{/management/order/ticket/print/}]]+orderId,'newwindow','height=600,width=1000,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 			}
-			/**
-			下载
-			**/
-			function download(){
-				var ids = new Array();
-				$("input[name='checkbox_select']").each(function(index,value){
-					if($(value).prop("checked")){
-						ids.push(value.value);
-					}
-				});
-				if(checkedInvoice.length==0){
-					return;
-				}
-				window.location.href=[[@{/management/order/download?ids=}]] +ids;
 
+			/**
+			导出订单
+			**/
+			function exportOrders(){
+				if(confirm("Confirm?")){
+					var orderIds = new Array();
+					var i = 0;
+					$("input[name='checkbox_select']").each(function(index,value){
+						if($(value).prop("checked")){
+							orderIds[i] = parseInt($(value).val());
+							i++;
+							
+						}
+					});
+					if(orderIds.length>0){
+						window.location.href = [[@{/management/order/export}]] +"?orderIds=" +orderIds;
+					}
+
+				}
 			}
 			
 		/*]]>*/	
