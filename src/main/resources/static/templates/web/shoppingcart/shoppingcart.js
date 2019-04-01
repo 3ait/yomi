@@ -4,18 +4,27 @@
 
 function getFreight(productList){
 	//基础费用
-	var basePrice = 0;
+	var basePrice = 5;
 	//每公斤单价
 	var pricePerKg = 5.0;
 	
-	var freight = basePrice;
+	var weight = 0;
+	
+	var totalPrice = 0;
 	for(var i=0;i< productList.length;i++){
 		  if (!isNaN(productList[i].weight)) {
-			  freight += productList[i].weight*pricePerKg*productList[i].num
+			  weight += productList[i].weight*productList[i].num
 	        }
-	  }
-	if(freight<5){
-		freight = 5.0;
+		  totalPrice += productList[i].price*productList[i].num;
+	 }
+	
+	var freight = 0;
+	if(totalPrice<49){
+		if(freight<1){
+			freight = basePrice;
+		}else{
+			freight = basePrice + (weight-1)*pricePerKg;
+		}
 	}
 	return freight.toFixed(2);
 }

@@ -208,6 +208,12 @@ public class InvoiceLogic extends BaseLogic<Invoice>{
 		calendar.set(Calendar.DATE, 20);
 		webContext.setVariable("dueDate", calendar.getTime());
 		
+		String url = request.getRequestURL().toString();
+        String uri = request.getRequestURI();
+        String urlprefix = url.substring(0, url.length() - uri.length()) + request.getContextPath();
+        webContext.setVariable("urlprefix", urlprefix);
+		
+		
         return webContext;
 	}
 

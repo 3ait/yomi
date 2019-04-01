@@ -26,7 +26,7 @@
 		<table style="width: 100%;">
 			<tr>
 				<td width="50%">
-					<h2>TAX INVOICE</h2>
+					<h2>CREDIT NOTE</h2>
 					<table style="padding-left: 20px;">
 						<thead>
 							<tr>
@@ -54,20 +54,13 @@
 				<td width="50%">
 					<div style="float:left;">
 						<p>
-							<span style="font-weight: bold;">Invoice Date</span><br/>
+							<span style="font-weight: bold;">Date</span><br/>
 							<span  th:text="${#dates.format(invoiceView.invoice.modifyTime, 'dd/MM/yyyy')}"></span>
 						</p>
+							<br/>
 						<p>
-							<span style="font-weight: bold;">Invoice Number</span><br/>
+							<span style="font-weight: bold;">Credit Note Number</span><br/>
 							<span th:text="${invoiceView.invoice.aliasId}"></span>
-						</p>
-						<p>
-							<span style="font-weight: bold;">PO</span><br/>
-							<span ></span>
-						</p>
-						<p>
-							<span style="font-weight: bold;">Due Date </span><br/>
-							
 						</p>
 						
 					</div>
@@ -97,44 +90,53 @@
 				<!-- <td ><span th:text="${invoiceItem.title}"></span></td> -->
 				<td class="td-bottom" colspan="2">
 					<span th:text="${invoiceItem.title}"></span>
+					<span th:text="${invoiceItem.description}"></span>
 				</td>
-				<td class="td-bottom"><span th:text="${invoiceItem.quantity}"></span></td>
+				<td class="td-bottom"><span th:text="${-1*invoiceItem.quantity}"></span></td>
 				<td class="td-bottom" style="text-align: right;"><span th:text="${invoiceItem.unitPrice}"></span></td>
-				<td class="td-bottom" style="text-align: right;"><span th:text="${#numbers.formatDecimal(invoiceItem.unitPrice*invoiceItem.quantity,1,2)}"></span></td>
+				<td class="td-bottom" style="text-align: right;"><span th:text="${#numbers.formatDecimal(-1*invoiceItem.unitPrice*invoiceItem.quantity,1,2)}"></span></td>
 			</tr>
 			
 			<tr>
 				<td class="" colspan="3" ></td>
 				<td style="text-align: right;">Subtotal</td>
-				<td style="text-align: right;"><span th:text="${#numbers.formatDecimal(invoiceView.invoice.total-invoiceView.invoice.gst-invoiceView.invoice.freight,1,2)}"></span></td>
+				<td style="text-align: right;"><span th:text="${#numbers.formatDecimal(-1*invoiceView.invoice.total-invoiceView.invoice.gst-invoiceView.invoice.freight,1,2)}"></span></td>
 			</tr>
 			<tr>
 				<td  class="" colspan="3" ></td>
 				<td style="text-align: right;">Freight</td>
-				<td style="text-align: right;"><span th:text="${#numbers.formatDecimal(invoiceView.invoice.freight,1,2)}"></span></td>
+				<td style="text-align: right;"><span th:text="${#numbers.formatDecimal(-1*invoiceView.invoice.freight,1,2)}"></span></td>
 			</tr>
 			<tr>
 				<td class=""  colspan="3" ></td>
 				<td style="text-align: right;border-bottom: 1px solid black;">TOTAL GST 15%</td>
-				<td  style="text-align: right;border-bottom: 1px solid black;" ><span th:text="${#numbers.formatDecimal(invoiceView.invoice.gst,1,2)}"></span></td>
+				<td  style="text-align: right;border-bottom: 1px solid black;" ><span th:text="${#numbers.formatDecimal(-1*invoiceView.invoice.gst,1,2)}"></span></td>
 			</tr>
 			<tr>
 				<td class="" colspan="3" style="text-align: right;border-bottom: 0;"></td>
 				<td class="" style="text-align: right;border-bottom: 0;" >TOTAL NZD</td>
 				<td style="text-align: right;border-bottom: 0;">
-					<span th:text="${#numbers.formatDecimal(invoiceView.invoice.total,1,2)}"></span>
+					<span th:text="${#numbers.formatDecimal(-1*invoiceView.invoice.total,1,2)}"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="" colspan="3" style="text-align: right;border-bottom: 0;"></td>
+				<td  style="text-align: right;border-bottom: 1px solid black;" >Credit to Invoice(s)</td>
+				<td  style="text-align: right;border-bottom: 1px solid black;">
+					<span th:text="${#numbers.formatDecimal(-1*invoiceView.invoice.total,1,2)}"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="" colspan="3" style="text-align: right;border-bottom: 0;"></td>
+				<td style="text-align: right;" >REMAINING CREDIT</td>
+				<td style="text-align: right;"  >
+					 0.00
 				</td>
 			</tr>
 		</table>
 		
 		<br/>
-		<div >
-			Due Date <span ></span><br/>
-			PAYMENT BY D/CREDIT TO <span th:text="${invoiceView.invoice.userCompanyBankAccount}"></span>
-			<p>
-			<span th:text="${invoiceView.invoice.adminInfo}" ></span>
-			</p>
-		</div>
+		
 		
 		<div  th:utext="${invoiceView.invoice.invoiceTermsConditions}" style="padding-top: 100px;">
 			Terms &amp; conditions
@@ -149,15 +151,10 @@
 			</div>
 			
 			<div style="float: left;width: 50%;padding-top: 30px;">
-				<h2>PAYMENT ADVICE</h2>
+				<h2>CREDIT ADVICE</h2>
 				<div>
-					<span>To</span>
-					<div style="padding-left: 30px;">
-						<span th:text="${invoiceView.invoice.userCompanyName}"></span> <br/>
-						<span th:text="${invoiceView.invoice.userCompanyAddress}"></span> <br/>
-						<span >GST:<span th:text="${invoiceView.userCompany.gstNo}"></span></span> 
+					Please do not pay on this advice. Deduct the amount of this Credit Note from your nextpay menttous.
 					
-					</div>
 				</div>
 				
 				
@@ -169,20 +166,12 @@
 						<td style="width: 60%;"><span th:text="${invoiceView.invoice.customerCompanyName}"></span></td>
 					</tr>
 					<tr>
-						<td>Invoice Number</td>
+						<td>Credit Note #</td>
 						<td th:text="${invoiceView.invoice.aliasId}"></td>
 					</tr>
 					<tr>
-						<td>Amount Due</td>
-						<td >$<span th:text="${#numbers.formatDecimal(invoiceView.invoice.total,1,2)}"></span></td>
-					</tr>
-					<tr>
-						<td>Due Date</td>
-						<td ><span th:text="${#dates.format(dueDate,'dd/MM/yyyy')}" ></span></td>
-					</tr>
-					<tr>
-						<td>Amount Enclosed</td>
-						<td >________</td>
+						<td>Credit Amount</td>
+						<td >0.00</td>
 					</tr>
 				</table>
 			</div>		
