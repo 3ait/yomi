@@ -55,7 +55,8 @@ public class ApiWebProductController extends BaseController{
 			@ModelAttribute("searchForm") SearchForm searchForm) {
 
 		searchForm.setSize(Integer.MAX_VALUE);
-		Pageable pageable = new PageRequest(searchForm.getPage() - 1 < 1 ? 0 : searchForm.getPage() - 1, searchForm.getSize(), Direction.DESC, searchForm.getSortBy());
+		searchForm.setSortBy("attrValue");
+		Pageable pageable = new PageRequest(searchForm.getPage() - 1 < 1 ? 0 : searchForm.getPage() - 1, searchForm.getSize(), Direction.ASC, searchForm.getSortBy());
 
 		Page<ProductAttrValue> page = attrLogic.findAllValuesByKey(key,pageable);
 
