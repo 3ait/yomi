@@ -63,7 +63,7 @@
 				 				Default price: <a class="edit-name"  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="price1"  href="#"  th:text="${product.price1}" >price1</a>
 				 				<br/>
 				 				Promote price: <a class="edit-name"  th:attr="data-pk=${product.id}, data-url=|@{/management/product/update/colomn/}|" data-name="price2"  href="#"  th:text="${product.price2}" >price2</a>
-				 				<div th:each="rpp : ${#lists.toList(product.rankProductPrices)}">
+				 				<div th:each="rpp : ${product.rankProductPriceList}">
 				 					<span th:text="${rpp.rankCustomer.rankLevel}"></span>&nbsp;:&nbsp;
 	    							<a  class="edit-name" th:attr="data-pk=${rpp.id} ,data-url=|@{/management/rankproductprice/update/colomn/}|"  data-name="price"  href="#"  th:text="${rpp.price}">price</a>
 				 				</div>

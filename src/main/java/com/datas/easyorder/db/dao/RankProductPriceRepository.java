@@ -2,6 +2,7 @@ package com.datas.easyorder.db.dao;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,8 @@ public interface RankProductPriceRepository extends CrudRepository<RankProductPr
 	List<RankProductPrice> findAllByRankCustomerId(Long rankCustomerId);
 	 
 	List<RankProductPrice> findAllByProductId(Long productId);
+	
+	List<RankProductPrice> findAllByProductId(Long productId, Pageable pageable);
 	
 	RankProductPrice findOneByProductIdAndRankCustomerId(Long productId,Long rankCustomerId);
 

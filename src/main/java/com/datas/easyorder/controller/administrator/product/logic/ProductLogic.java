@@ -86,10 +86,13 @@ public class ProductLogic extends BaseLogic<Product>{
 	public Page<Product> productSearch(SearchForm searchForm,Pageable pageable){
 		
 		Page<Product> page = productRepository.findAll(ProductSpecifications.getSearchSpecification(searchForm),pageable);
-		/*page.getContent().forEach( p -> {
-			p.setBranchProducts(p.getBranchProducts().stream().sorted((a,b)->a.getId().compareTo(b.getId())).collect(Collectors.toSet()));
-			p.setRankProductPrices(p.getRankProductPrices().stream().sorted((a,b)->a.getId().compareTo(b.getId())).collect(Collectors.toSet()));
-		});*/
+		
+		page.getContent().forEach(p ->{
+			String[] sortBy = {"rankCustomer.rankLevel"};
+			Pageable rankCustomerSort = new PageRequest(0, Integer.MAX_VALUE,Direction.ASC,sortBy);
+			p.setRankProductPriceList(rankProductPriceRepository.findAllByProductId(p.getId(),rankCustomerSort));
+		});
+		
 		return page;
 	}
 	

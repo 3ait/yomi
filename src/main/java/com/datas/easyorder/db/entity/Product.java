@@ -5,6 +5,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -18,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -71,6 +73,10 @@ public class Product implements java.io.Serializable {
 	private String mobileDefaultSrc;
 	private String mobileDefaultDesc;
 	private String norms;
+	
+	@Transient
+	private List<RankProductPrice> rankProductPriceList;
+	
 	@JsonIgnore
 	private Set<Reply> replies = new HashSet<Reply>(0);
 	@JsonIgnore
@@ -615,6 +621,15 @@ public class Product implements java.io.Serializable {
 
 	public void setSupplierProducts(Set<SupplierProduct> supplierProducts) {
 		this.supplierProducts = supplierProducts;
+	}
+
+	@Transient
+	public List<RankProductPrice> getRankProductPriceList() {
+		return rankProductPriceList;
+	}
+
+	public void setRankProductPriceList(List<RankProductPrice> rankProductPriceList) {
+		this.rankProductPriceList = rankProductPriceList;
 	}
 
 }
