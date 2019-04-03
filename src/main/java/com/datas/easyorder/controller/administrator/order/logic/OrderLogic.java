@@ -687,21 +687,19 @@ public class OrderLogic extends BaseLogic<Order> {
 		PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file)));
 		pw.write(new String(new byte[] { (byte) 0xEF, (byte) 0xBB,(byte) 0xBF })); 
 		StringBuffer title = new StringBuffer();
-		title.append("序号").append(",");
-		title.append("NAL No.").append(",");
-		title.append("地址").append(",");
+		title.append("运单编号").append(",");
+		title.append("订单编号").append(",");
 		title.append("姓名").append(",");
+		title.append("手机").append(",");
+		title.append("电话").append(",");
+		title.append("地址").append(",");
 		title.append("省").append(",");
 		title.append("市").append(",");
 		title.append("区").append(",");
-		title.append("SKU products").append(",");
-		title.append("产品名称").append(",");
-		title.append("产品规格 CODE").append(",");
-		title.append("手机").append(",");
-		title.append("电话").append(",");
-		title.append("QTY").append(",");
-		title.append("PO No.").append(",");
-		title.append("售价").append(",");
+		title.append("寄件人").append(",");
+		title.append("货物详情").append(",");
+		title.append("数量").append(",");
+		title.append("留言").append(",");
 		
 		pw.println(title.toString());
 		
@@ -709,36 +707,32 @@ public class OrderLogic extends BaseLogic<Order> {
 		for (Order order : list) {
 			order.getOrderItems().forEach( oi ->{
 				StringBuffer row = new StringBuffer();
-				//序号
+				//运单编号
+				row.append(order.getTrackingNum()).append(",");
+				//订单编号
 				row.append(order.getId()).append(",");
-				//NAL No.
-				row.append("").append(",");
-				//地址
-				row.append(order.getToProvince() + order.getToDistrict() + order.getToDistrict() + order.getToShippingAddress()).append(",");
 				//姓名
 				row.append(order.getToCustomerName()).append(",");
+				//手机
+				row.append(order.getToPhone()).append(",");
+				//电话
+				row.append(order.getToPhone()).append(",");
+				//地址
+				row.append(order.getToProvince() + order.getToDistrict() + order.getToDistrict() + order.getToShippingAddress()).append(",");
 				//省
 				row.append(order.getToProvince()).append(",");
 				//市
 				row.append(order.getToCity()).append(",");
 				//区
 				row.append(order.getToDistrict()).append(",");
-				//SKU products
+				//寄件人
 				row.append("").append(",");
-				//产品名称
+				//货物详情
 				row.append(oi.getProductNameCn()).append(",");
-				//产品规格 CODE
-				row.append(oi.getProduct().getMpn()).append(",");
-				//手机
-				row.append(order.getToPhone()).append(",");
-				//电话
-				row.append(order.getToPhone()).append(",");
-				//QTY
+				//数量
 				row.append(oi.getNum()).append(",");
-				//PO No.
-				row.append("").append(",");
-				//售价
-				row.append("").append(",");
+				//留言
+				row.append(order.getCustomerMsg()).append(",");
 				pw.println(row.toString());
 			});
 		}
