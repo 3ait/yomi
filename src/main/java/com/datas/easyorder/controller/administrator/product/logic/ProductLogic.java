@@ -305,6 +305,8 @@ public class ProductLogic extends BaseLogic<Product>{
 		productFromDb.setRecommend(product.getRecommend());
 		productFromDb.setSoldNum(product.getSoldNum());
 		productFromDb.setStock(product.getStock());
+		productFromDb.setWarningStock(product.getWarningStock());
+		
 		productFromDb.setWeight(product.getWeight());
 		productFromDb.setClickNum(product.getClickNum());
 		productFromDb.setSummary(product.getSummary());
@@ -331,7 +333,6 @@ public class ProductLogic extends BaseLogic<Product>{
 		product.setModifyTime(Calendar.getInstance().getTime());
 		
 		productRepository.save(productFromDb);
-		
 		
 		
 		

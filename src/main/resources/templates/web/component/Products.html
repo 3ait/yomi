@@ -11,10 +11,12 @@
 				</div>
 			</div>
 			<div class="row"  style="padding-left: 10px;">
-				<div class="col-xs-6 col-sm-3 product-list" v-for="(item, index) in retData.content">
-					<a :href="'/product/'+ item.id" target="_blank" @click="addHistory(item.id,item.productName,item.productNameAlias,item.defaultSrc,item.price1)" >
-						<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive" style="height: 160px;">
-					</a>
+				<div class="col-xs-6 col-sm-3 product-list " v-for="(item, index) in retData.content">
+					<div style="display:flex;justify-content: space-around;">
+						<a :href="'/product/'+ item.id" target="_blank" @click="addHistory(item.id,item.productName,item.productNameAlias,item.defaultSrc,item.price1)" >
+							<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive" style="height: 160px;">
+						</a>
+					</div>
 			      <div class="caption" >
 			        <p>
 			        	<span v-if="item.price3==0">
@@ -77,7 +79,7 @@
 								Go
 							</span>
 						 
-					</div>
+						</div>
 					</div>
 			</div>
 		</div>
