@@ -1,5 +1,7 @@
 package com.datas.easyorder.controller.web.cart;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.hibernate.annotations.common.util.StringHelper;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.datas.easyorder.controller.BaseController;
+import com.datas.easyorder.db.entity.Customer;
 
 /**
  * 
@@ -31,9 +34,9 @@ public class CartController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value={"","/"})
-	public ModelAndView index() {
+	public ModelAndView index(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView("web/cart/cart");
-		
+		modelAndView.addObject("customer",super.getLoginCustomer(request));	
 		return modelAndView;
 	}
 

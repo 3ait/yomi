@@ -25,7 +25,9 @@
 			<div class="row" >
 				<div class="row">
 				<div class="col-sm-2 col-xs-6 product-list" v-for="(item, index) in productData.content" >
-				
+					<p style="position: absolute;">
+							<span class="label label-danger">{{item.label}}</span>
+				     </p>
 					<a :href="'/product/'+ item.id" target="_blank" @click="addHistory(item.id,item.productName,item.productNameAlias,item.defaultSrc,item.price1)" >
 						<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive" style="height: 160px;">
 					</a>
@@ -57,9 +59,7 @@
 			        	<div style="height: 45px;overflow: hidden;">
 			        		<span style="color: grey;font-size: 12px;">{{item.productName }}</span>
 				        </div>
-				        <p style="margin-top: 10px;">
-							<span class="label label-danger">{{item.label}}</span>
-				        </p>
+				        
 				        
 				         <!-- 加入购物车 -->
 			        <span v-if="item.price2==0" >

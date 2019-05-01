@@ -34,7 +34,10 @@
 					<td  >
 						<a  th:attr="data-pk=${customer.id}, data-url=|@{/customer/update/colomn/}|" data-name="name"  href="#"  class="edit-name"  th:text="${customer.name}" >customer.name</a>
 					</td>
-					
+				</tr>
+				<tr  >
+					<td  >折扣</td>
+					<td> <span  th:text="${customer.discount}"></span></td>
 				</tr>
 				<tr  >
 					<td  >身份证号</td>
