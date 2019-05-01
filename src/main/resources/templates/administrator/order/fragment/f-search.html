@@ -18,6 +18,14 @@
 					      	<option value="0" th:selected="${searchForm.status==0?true:false}">Delete</option>
 					      </select>
 				  	</div>
+				  	&nbsp;
+				  	<div class="form-group">
+					      <select class="form-control" name="isPaid" >
+					      	<option value="-1" >--Paid--</option>
+					      	<option value="0" th:selected="${searchForm.isPaid==0?true:false}">Unpaid</option>
+					      	<option value="2" th:selected="${searchForm.isPaid==2?true:false}">Paid</option>
+					      </select>
+				  	</div>
 				  	<div class="form-group">
 					      <select class="form-control"  name="salesId" >
 					      	<option value="-1" >--Select--</option>
