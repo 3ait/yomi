@@ -11,12 +11,13 @@
 			</div>
 			<div class="row">
 				<div class="col-sm-2 col-xs-6 product-list" v-for="(item, index) in recommendProductList" style="">
+					<p style="position: absolute;">
+							<span class="label label-danger">{{item.label}}</span>
+				     </p>
 					<a :href="'/product/'+ item.id" target="_blank" @click="addHistory(item.id,item.productName,item.productNameAlias,item.defaultSrc,item.price1)" >
 						<img :src="'/' + item.defaultSrc" :alt="item.productNameAlias" class="img-responsive" style="height: 160px;">
 					</a>
-				<p style="position: absolute;">
-							<span class="label label-danger">{{item.label}}</span>
-				     </p>
+				
 				       <div class="caption" >
 				        <p>
 							<span v-if="item.price3==0">
