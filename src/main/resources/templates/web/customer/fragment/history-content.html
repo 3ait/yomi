@@ -31,7 +31,7 @@
 						<a href="javascript:void(0)" th:onclick="|viewOrder(${order.id})|" target="_blank" th:if="${order!=null}"><span   th:text="${order.id}" ></span></a>
 					</td>
 					<td >
-						<span  th:text="${order.trackingNum}" ></span>
+						<a target="_blank" href="http://www.ftd.nz/"><span th:text="${order.trackingNum}" >trackingNum</span></a>
 					</td>
 							
 					<td th:text="${order.isPaid==2?'已经支付': '未支付'}"></td>
