@@ -163,12 +163,12 @@ public class CartLogic{
 				}
 				
 				UserCompany userCompany = userCompanyRepository.findOne(1L);
-				
+				order.setDiscount(customer.getDiscount());
 				order.setCustomerByCustomerId(customer);
 				order.setIsPaid(OrderRepository.ispaid_no);
 				order.setSettled(0);
-				order.setTotalProductPrice(totalPrice);
-				order.setTotalFreight(placeOrderForm.getTotalFreight());
+				
+				
 				order.setStatus(OrderRepository.status_new);
 				order.setCreateTime(Calendar.getInstance().getTime());
 				order.setModifyTime(Calendar.getInstance().getTime());
@@ -210,6 +210,13 @@ public class CartLogic{
 				//检查coupon ID,如果有效则更新价格,
 				if(placeOrderForm.getCouponId()!=null){
 					order.setTotalProductPrice(couponLogic.getDiscountPirceByCouponId(placeOrderForm.getCouponId(),order,customer, totalPrice));
+				}
+				if(customer.getDiscount()>0 && customer.getDiscount()<1){
+					order.setTotalProductPrice(totalPrice*customer.getDiscount());
+					order.setTotalFreight(placeOrderForm.getTotalFreight()*customer.getDiscount());
+				}else{
+					order.setTotalProductPrice(totalPrice);
+					order.setTotalFreight(placeOrderForm.getTotalFreight());
 				}
 				orderRepository.save(order);
 				

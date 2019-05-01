@@ -45,11 +45,17 @@
 		
 		<div class="row">
 			<div class="col-sm-12 text-right">
+				<h4 >
+					产品:&nbsp;<span class="color"> ${{totalAmount}}</span>
+				</h4>
 				<h4>
 					运费: &nbsp;<span class="color"> ${{freight}}</span>
 				</h4>
 				<h4>
-					合计: &nbsp;<span class="color"> ${{totalAmount}}</span>
+					用户折扣: &nbsp;<span class="color"> ${{customer.discount}}</span>
+				</h4>
+				<h4>
+					合计: &nbsp;<span class="color"> ${{((parseFloat(totalAmount) +  parseFloat(freight))*parseFloat(customer.discount)).toFixed(2) }}</span>
 				</h4>
 			</div>
 		</div>
@@ -76,6 +82,7 @@
 				totalNum:0,
 				totalAmount:0,
 				freight:0,
+				customer:{},
 			},
 			created: function() {
 				var ShoppingCart = utils.getParam("ShoppingCart");
@@ -91,6 +98,7 @@
 						  
 					  }
 				}
+				_this.customer = [[${customer}]];
 				_this.totalNum = getTotalNumber();
 				_this.totalAmount = getTotalAmount();
 				_this.freight = getFreight(cart.getproductlist());

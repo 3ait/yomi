@@ -1,7 +1,6 @@
 /**
  * 运费计算
  */
-
 function getFreight(productList){
 	//基础费用
 	var basePrice = 5;

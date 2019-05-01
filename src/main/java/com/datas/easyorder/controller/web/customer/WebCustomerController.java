@@ -182,8 +182,7 @@ public class WebCustomerController extends BaseController<Customer>{
 	@RequestMapping(value="/cart/next")
 	public ModelAndView cartNext(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView("web/cart/order");
-		Customer customer = (Customer) request.getSession().getAttribute(SESSION_CUSTOMER);
-		modelAndView.addObject("customer", customer);
+		modelAndView.addObject("customer",super.getLoginCustomer(request));	
 		return modelAndView;
 	}
 	
