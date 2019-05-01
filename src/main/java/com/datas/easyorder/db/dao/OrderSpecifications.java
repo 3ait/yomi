@@ -45,6 +45,7 @@ public class OrderSpecifications {
 				Path<String> toTel = root.get("toTel");
 				Path<Date> createTime = root.get("createTime");
 				Path<Integer> status = root.get("status");
+				Path<Integer> isPaid = root.get("isPaid");
 				Path<Long> salesId = root.join("customerBySalesId", JoinType.LEFT).get("id");
 
 				List<Predicate> list = new ArrayList<>();
@@ -72,6 +73,10 @@ public class OrderSpecifications {
 				
 				if(searchForm.getStatus()!=-1){
 					Predicate predicate = criteriaBuilder.equal(status, searchForm.getStatus());
+					list.add(predicate);
+				}
+				if(searchForm.getIsPaid()!=-1){
+					Predicate predicate = criteriaBuilder.equal(isPaid, searchForm.getIsPaid());
 					list.add(predicate);
 				}
 				if(searchForm.getSalesId()!=-1){
