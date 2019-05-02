@@ -58,6 +58,9 @@
 						 <hr />
 							<input id="buyQty" type="number" min="1" max="10000" style="width: 50px; " value="1" >
 							<span id="remindTxt" style="color: #e4393c;display: none;" >已添加</span>
+							
+						<!-- 购物车 -->
+						<div th:if="${productEditView.product.stock>0}">
 						<p style="margin-top: 5px;">
 							<span th:if="${productEditView.product.price2==0}">
 								<button  class="btn btn-default"   th:onclick="|addToCart(${productEditView.product.id}, '${productEditView.product.productName}', '${productEditView.product.productNameAlias}', '${productEditView.product.location}', '${productEditView.product.weight}', '${productEditView.product.defaultSrc}', ${productEditView.product.price3})|">加入购物车</button>
@@ -73,6 +76,14 @@
 							&nbsp;<button  th:if="${productEditView.product.price2 &gt; 0}"  class="btn btn-primary" th:onclick="|buyNow(${productEditView.product.id}, '${productEditView.product.productName}', '${productEditView.product.productNameAlias}', '${productEditView.product.location}', '${productEditView.product.weight}', '${productEditView.product.defaultSrc}', ${productEditView.product.price2})|" >立即购买</button>
 							</span>
 						</p>
+						</div>
+						<div th:if="${productEditView.product.stock<=0}">
+							<p style="margin-top: 5px;">
+							<button class="btn btn-primary"  >已售完</button>
+							</p>
+						</div>
+						
+						<!-- /购物车 -->
 
 					</div>
 				</div>

@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -52,11 +51,9 @@ public class IEMoney implements IPayment {
 		return getPayUrl(total_fee, goods, goods_detail, out_trade_no, "IE0021",getAlipayPcReturnUrl(), getAlipayPcNotifyUrl());
 	}
 
-
-
 	@Override
 	public String aliMobilePay(String total_fee, String goods, String goods_detail, String out_trade_no) {
-		return getPayUrl(total_fee, goods, goods_detail, out_trade_no, "IE0013",getAlipayPcReturnUrl(), getAlipayPcNotifyUrl());
+		return getPayUrl(total_fee, goods, goods_detail, out_trade_no, "IE0011",getAlipayPcReturnUrl(), getAlipayPcNotifyUrl());
 	}
 
 	@Override
