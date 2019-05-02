@@ -159,6 +159,9 @@ public class CartLogic{
 					
 					p.setSoldNum(p.getSoldNum()+pJson.getInt("num"));
 					p.setStock(p.getStock()-oi.getNum());
+					if(p.getStock()<=0){
+						p.setStatus(ProductRepository.status_out_stock);
+					}
 					productRepository.save(p);
 				}
 				
