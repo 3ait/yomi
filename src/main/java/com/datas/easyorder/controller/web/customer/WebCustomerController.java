@@ -449,11 +449,12 @@ public class WebCustomerController extends BaseController<Customer>{
 	 */
 	@RequestMapping(value="/payment/alipay/{orderId}",produces = {"text/html;charset=utf-8"})
 	@ResponseBody
-	public ResponseEntity<String> getAliPayUrl(@PathVariable("orderId") Long orderId) throws IOException{
+	public void getAliPayUrl(@PathVariable("orderId") Long orderId,HttpServletResponse response) throws IOException, WriterException{
 		
 		Order order = orderLogic.getOrderById(orderId);
-		String payUrl = iEMoney.aliPcPay((order.getTotalProductPrice()+ order.getTotalFreight())+"", order.getId()+"", order.getToCustomerName()+order.getToPhone(),order.getId()+ "-" + DateHelper.getYYYYMMDDhhmmss());
-		return new ResponseEntity<String>(payUrl,HttpStatus.OK);
+		String payUrl = iEMoney.aliMobilePay((order.getTotalProductPrice()+ order.getTotalFreight())+"", order.getId()+"", order.getToCustomerName()+order.getToPhone(),order.getId()+ "-" + DateHelper.getYYYYMMDDhhmmss());
+		QrCode.createZxing(payUrl, response.getOutputStream());
+		response.flushBuffer();
 		
 	}
 	

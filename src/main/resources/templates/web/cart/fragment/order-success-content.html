@@ -17,14 +17,15 @@
 			<div class="col-sm-3 col-xs-6 text-center" >
 				<div class="create_btn">
 <!-- 					<a v-on:click="wechatPay()" style="cursor: pointer;"  >微信支付</a><br/><br/> -->
-					<a  style="cursor: pointer;"  >微信支付</a><br/><br/>
+					<a   >微信支付</a><br/><br/>
 					<img  th:src="|@{/customer/payment/wechat/}${order.id}|"   width="150" height="150"/><br />
 				</div>
 			</div>
 			
 			<div class="col-sm-3 col-xs-6 text-center">
 				<div class="create_btn">
-					<a v-on:click="alipayPay()" style="cursor: pointer;"  >支付宝支付</a>
+					<a  >支付宝支付</a><br/><br/>
+					<img  th:src="|@{/customer/payment/alipay/}${order.id}|"   width="150" height="150"/><br />
 				</div>
 			</div>
 		</div>
