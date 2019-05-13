@@ -176,9 +176,9 @@ public class CartLogic{
 				order.setCreateTime(Calendar.getInstance().getTime());
 				order.setModifyTime(Calendar.getInstance().getTime());
 				
-				order.setFromName(userCompany.getName());
-				order.setFromPhone(userCompany.getMobile());
-				order.setFromAddress(userCompany.getAddress());
+				order.setFromName(customer.getName() + " " + customer.getCompanyName());
+				order.setFromPhone(customer.getPhone()+ " " + customer.getMobile());
+				order.setFromAddress(customer.getAddress());
 				
 				
 				order.setToCustomerName(placeOrderForm.getToCustomerName());

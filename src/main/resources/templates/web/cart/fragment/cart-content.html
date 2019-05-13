@@ -52,7 +52,7 @@
 					运费: &nbsp;<span class="color"> ${{freight}}</span>
 				</h4>
 				<h4>
-					用户折扣: &nbsp;<span class="color"> ${{customer.discount}}</span>
+					用户折扣: &nbsp;<span class="color"> {{customer.discount}}</span>
 				</h4>
 				<h4>
 					合计: &nbsp;<span class="color"> ${{((parseFloat(totalAmount) +  parseFloat(freight))*parseFloat(customer.discount)).toFixed(2) }}</span>

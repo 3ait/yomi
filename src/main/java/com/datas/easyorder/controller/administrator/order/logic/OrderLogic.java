@@ -638,9 +638,9 @@ public class OrderLogic extends BaseLogic<Order> {
 			order.setCreateTime(Calendar.getInstance().getTime());
 			order.setModifyTime(Calendar.getInstance().getTime());
 			
-			order.setFromName(userCompany.getName());
-			order.setFromPhone(userCompany.getMobile());
-			order.setFromAddress(userCompany.getAddress());
+			order.setFromName(customer.getName());
+			order.setFromPhone(customer.getPhone());
+			order.setFromAddress(customer.getAddress());
 			
 			order.setToCustomerName(customer.getName());
 			order.setToCustomerCompanyName(customer.getCompanyName());
