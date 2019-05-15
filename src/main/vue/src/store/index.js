@@ -9,7 +9,8 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    baseUrl: 'http://www.ulife.co.nz/'
+    baseUrl: 'http://yomi.co.nz/'
+    // baseUrl: 'http://www.ulife.co.nz/'
     // baseUrl: 'http://localhost:8080/'
   },
   modules: {
