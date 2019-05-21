@@ -23,7 +23,7 @@ const routes = [
     path: '/scanner',
     component: () => import('./views/home/scanner'),
     meta: {
-      title: '优惠券'
+      title: '扫码'
     }
   },
   {

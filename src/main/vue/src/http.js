@@ -6,7 +6,8 @@ import { router } from './router';
 // axios 配置
 axios.defaults.timeout = 5000;
 // axios.defaults.baseURL = 'http://localhost:8080';
-axios.defaults.baseURL = 'http://www.ulife.co.nz';
+// axios.defaults.baseURL = 'http://www.ulife.co.nz';
+axios.defaults.baseURL = 'http://yomi.co.nz';
 axios.defaults.withCredentials = true;
 // axios.defaults.mode = 'no-cors';
 // axios.defaults.credentials = 'same-origin';
