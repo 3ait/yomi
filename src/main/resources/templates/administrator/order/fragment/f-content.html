@@ -29,8 +29,8 @@
 				 			<th onclick="colomnSort('status')" class="sort-colomn">Status</th>
 				 			<th onclick="colomnSort('isPaid')" class="sort-colomn">Paid</th>
 				 			<th onclick="colomnSort('invoiced')" class="sort-colomn">Invoiced</th>
-				 			<th>Customer Msg</th>
-				 			<th>Admin Msg</th>
+				 			<th style="max-width: 150px;">Customer Msg</th>
+				 			<th style="max-width: 150px;word-spacing: normal;">Admin Msg</th>
 				 			<th>Create Time<br/>Modify Time</th>
 				 			<th><span onclick="colomnSort('customerBySalesId.id')" class="sort-colomn">Sales</span><br/>Commission</th>
 				 			<th>
@@ -67,9 +67,9 @@
 				 				<a class="isPaid" data-type="select" th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="isPaid"  href="#"    th:text="${order.isPaid==0?'Unpaid': 'Paid'}" >status</a>
 				 			</td>
 				 			<td th:text="${order.invoiced ==1?'Invoiced' :'None' }" id="invoiceTd">Invoice</td>
-				 			<td th:text="${order.customerMsg}">Customer Msg</td>
-				 			<td >
-				 				<a data-type="textarea" data-placement="bottom" th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="adminMsg"  href="#"  class="edit-name"  th:text="${order.adminMsg}" >Admin Msg</a>
+				 			<td th:text="${order.customerMsg}" style="max-width: 150px;">Customer Msg</td>
+				 			<td style="max-width: 150px;">
+				 				<a  data-type="textarea" data-placement="bottom" th:attr="data-pk=${order.id}, data-url=|@{/management/order/update/colomn/}|" data-name="adminMsg"  href="#"  class="edit-name"  th:text="${order.adminMsg}" >Admin Msg</a>
 				 			</td>
 				 			<td>
 				 				<span th:text="${#dates.format(order.createTime, 'HH:mm dd/MM/yyyy')}"></span><br/>

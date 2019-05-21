@@ -43,7 +43,7 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
 	public static final Integer status_complete = 4;
 	
 	/**
-	 * 4：已发货，
+	 * 5 back order
 	 */
 	public static final Integer status_backorder = 5;
 
