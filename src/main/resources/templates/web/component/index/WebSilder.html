@@ -47,6 +47,7 @@
 				    }
 				  }).then(function (response){
 					  _this.sliderData = response.data;
+					  $(".slideNext").click();
 				   
 				  }).catch(function (error) {
 				    console.log(error);
