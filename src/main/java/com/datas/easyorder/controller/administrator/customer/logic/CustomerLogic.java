@@ -455,6 +455,7 @@ public class CustomerLogic extends BaseLogic<Customer>{
 			customer.setBalance(0D);
 			customer.setCustomerType(CustomerRepository.customerType_customer);
 			customer.setName(customer.getCompanyName());
+			customer.setDiscount(1D);
 			customer.setBranch(customerView.getCustomer().getBranch());
 			customerRepository.save(customer);
 		}

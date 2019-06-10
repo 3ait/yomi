@@ -6,8 +6,10 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.datas.easyorder.controller.administrator.user.logic.UserLogic;
 
@@ -38,6 +40,21 @@ public class AdminIndexController{
 		logger.debug("index");
 		ModelAndView modelAndView = new ModelAndView("administrator/index");
 		return modelAndView;
+	}
+
+	/**
+	 * 
+	 * @param page
+	 * @param size
+	 * @param orderBy
+	 * @param order
+	 * @return
+	 */
+	@RequestMapping(value={"/login"},method=RequestMethod.GET)
+	public ModelAndView login(HttpServletRequest request) {
+		
+		logger.debug("index");
+		return new ModelAndView(new RedirectView("/management",true));
 	}
 
 

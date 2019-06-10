@@ -31,7 +31,7 @@
 								<span v-html="p.mpn + ' # ' + p.productName"></span>
 							</td>
 							<td>
-								Default: ${{p.price}}<br/>
+								Cost: ${{p.cost}}<br/>
 							<!-- 
 								<span v-for="rankPrice in p.rankPriceList">
 									{{rankPrice.rankLevel}}: ${{rankPrice.price}} <br/>
@@ -84,6 +84,16 @@
 				</div>
 			</div>
 			
+			<div class="row">
+				<div class="col-sm-2 text-right">
+					<label>Scan</label>
+				</div>
+				<div class="col-sm-8">
+					<div class="form-group input-group" >
+						<input class="form-control"  v-model="scanQ"  placeholder="Barcode" type="text"  @keyup.enter="scanSubmit" />
+					</div>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-sm-2 text-right">
 					<label>Product</label>
@@ -157,6 +167,8 @@
 				gst: 0,
 				
 				checkSubmit: true,
+				
+				scanQ:'',
 				
 				productNameQ:'',
 			},
@@ -280,6 +292,7 @@
 					_this.gstCaculate();
 					
 				},
+				
 			},
 			computed : {
 				getTotalprice :function(){
@@ -293,9 +306,45 @@
 				}
 			},
 			methods:{
-				getCustomer : function(){
+				//扫描barcode
+				scanSubmit: function(){
+					var _this = this;
+					var availableTags = new Array();
+					new Promise(function(resolve, reject){
+						axios.get([[@{/api/management/order/new/product/q}]], {
+							params: {
+								q:_this.scanQ,
+								size:20,
+						    }
+						  })
+						  .then(function (response){
+								resolve(response.data);
+						   	}).catch(function (error) {
+						    	console.log(error);
+						  });
+						
+					}).then(function(value){
+						
+						  var productList = value;
+						  if(productList.length==1){
+							  
+								productList[0].product.qty = 1;
+								productList[0].product.price = productList[0].product.price1;
+								
+								for(var j=0;j<productList[0].rankPriceList.length;j++){
+									if(productList[0].rankPriceList[j].rankCustomerId==_this.rankCustomerId){
+										productList[0].product.price1 = productList[0].rankPriceList[j].price;
+										break;
+									}
+								}
+								productList[0].product.rankPriceList = productList[0].rankPriceList;
+								_this.products.push(productList[0].product);
+								_this.scanQ = "";
+						  }
+							
+					});
 					
-					
+					_this.gstCaculate();
 				},
 				
 				//删除产品
