@@ -309,7 +309,6 @@
 				//扫描barcode
 				scanSubmit: function(){
 					var _this = this;
-					var availableTags = new Array();
 					new Promise(function(resolve, reject){
 						axios.get([[@{/api/management/order/new/product/q}]], {
 							params: {

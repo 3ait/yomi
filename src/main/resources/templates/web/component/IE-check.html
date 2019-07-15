@@ -1,0 +1,56 @@
+<!-- header -->
+<div th:fragment="ie-check">
+	
+	<div id="modal" class="modal fade" tabindex="-1" role="dialog" style="margin-top: 10%;"   >
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title"><img width="120" th:src="@{/static/templates/web/logo.png}"  /></h4>
+				</div>
+				<div class="modal-body">
+						<div class="form-group">
+							<label for="aliasId" class="control-label">浏览器IE8内核（及以下）由于存在安全风险，已被本站禁止，请升级到IE11或使用Chrome浏览器。</label>
+							<br/>
+							<a th:href="@{/static/ChromeStandaloneSetup.exe}">点击下载安装谷歌浏览器</a> 
+						</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			var DEFAULT_VERSION = 8.0;  
+		    var ua = navigator.userAgent.toLowerCase();  
+		    var isIE = ua.indexOf("msie")>-1;  
+		    var safariVersion;  
+		    if(isIE){  
+		    	safariVersion =  ua.match(/msie ([\d.]+)/)[1];  
+		    }  
+		    if(safariVersion <= DEFAULT_VERSION ){  
+		    	$("#modal").draggable();
+				
+				$('#modal').modal('show').on('shown.bs.modal', function (e) {
+					 
+				}); 
+		    }else{
+				
+				$('#modal').modal('show').on('shown.bs.modal', function (e) {
+					 
+				}); 
+		    } 
+			
+		/*]]>*/	
+		</script>
+		
+		
+</div>
