@@ -1,0 +1,61 @@
+	<th:block th:fragment="content" >
+		<script src="#" type="text/javascript" th:src="@{/static/plugin/vue/vue.js}" charset="utf-8"></script>
+		<script src="#" type="text/javascript" th:src="@{/static/plugin/vue/axios.min.js}" charset="utf-8"></script>
+		<script src="#" type="text/javascript" th:src="@{/static/plugin/vue/vue-form.js}" charset="utf-8"></script>
+		
+			<link th:href="@{/static/templates/web/index/css/fwslider.css}" rel="stylesheet" href="css/fwslider.css" media="all" />
+	<script th:src="@{/static/templates/web/index/js/fwslider.js}" src="js/fwslider.js"></script>
+		
+	<div id="slider" class="wow fadeIn delay-1s" >
+	
+		<!-- start slider -->
+			<div id="fwslider" >
+				<div class="slider_container" >
+					<!-- Slide image -->
+					<div class="slide" v-for="item in sliderData">
+						<a  :href="item.href">
+						<img  :src="'/' + item.filePath" class="img-responsive" alt="" />
+						</a>
+					</div>
+					<!--/slide -->
+				</div>
+				<div class="timers"></div>
+				<div class="slidePrev">
+					<span></span>
+				</div>
+				<div class="slideNext">
+					<span></span>
+				</div>
+			</div>
+		<!-- end  slider -->
+				
+	</div>
+
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+			new Vue({
+			el : '#slider',
+			data : {
+				sliderData:[
+				]
+			},
+			created: function() {
+				var _this = this;
+				axios.get([[@{/api/web/slider/indexSlider}]], {
+				    params: {
+				     
+				    }
+				  }).then(function (response){
+					  _this.sliderData = response.data;
+					  $(".slideNext").click();
+				   
+				  }).catch(function (error) {
+				    console.log(error);
+				  }); 
+			}
+		})
+		/*]]>*/
+	</script>
+	
+
+</th:block>
