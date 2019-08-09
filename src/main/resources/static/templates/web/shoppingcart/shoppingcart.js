@@ -319,5 +319,11 @@ cart = {
 		localStorage.setItem("totalNumber", jsonstr.totalNumber);
 		localStorage.setItem("totalAmount", jsonstr.totalAmount);
 		utils.setParam("ShoppingCart", "'" + JSON.stringify(jsonstr));
+		
+		if(jsonstr.productlist.length == 0){
+			 localStorage.setItem('totalNumber',0);
+			 localStorage.setItem('totalAmount',0);
+			 localStorage.removeItem('ShoppingCart');
+		}
 	}
 };
